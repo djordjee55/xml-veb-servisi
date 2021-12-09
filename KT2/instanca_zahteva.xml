@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Zahtev xmlns="htttp://www.xws.org/zahtev"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="htttp://www.xws.org/zahtev zahtev.xsd">
+    <Podnosilac>
+        <Ime>Marko</Ime>
+        <Prezime>Marković</Prezime>
+        <Datum_rodjenja>1987-05-25</Datum_rodjenja>
+        <Pol>Muško</Pol>
+        <JMBG>2339472340742</JMBG>
+        <Broj_pasosa>123432</Broj_pasosa>
+    </Podnosilac>
+    <Razlog>Neki razlog</Razlog>
+    <Mesto>Novi Sad</Mesto>
+    <Datum>2021-08-20</Datum>
+</Zahtev>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" targetNamespace="htttp://www.xws.org/zahtev"
+    xmlns:zahtev="htttp://www.xws.org/zahtev">
+
+    <xs:element name="Zahtev">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Podnosilac" type="zahtev:TLice"/>
+                <xs:element name="Razlog" type="xs:string" nillable="false"/>
+                <xs:element name="Mesto" type="xs:string"/>
+                <xs:element name="Datum" type="xs:date"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="TLice">
+        <xs:sequence>
+            <xs:element name="Ime" type="xs:string"/>
+            <xs:element name="Prezime" type="xs:string"/>
+            <xs:element name="Datum_rodjenja" type="xs:date"/>
+            <xs:element name="Pol" type="xs:string"/>
+            <xs:element name="JMBG">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="13"/>
+                        <xs:pattern value="[0-9]{13}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="Broj_pasosa" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

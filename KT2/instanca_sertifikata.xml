@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Sertifikat xmlns="http://www.xws.org/sertifikat"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xws.org/sertifikat sertifikat.xsd"
+    broj_sertifikata="32452">
+    <Qr_kod>url do kog treba da vodi qr kod</Qr_kod>
+    <Primalac>
+        <Ime>Marko</Ime>
+        <Prezime>Marković</Prezime>
+        <Pol>Muško</Pol>
+        <Datum_rodjenja>1987-05-20</Datum_rodjenja>
+        <JMBG>2005987183925</JMBG>
+        <Broj_pasosa>312342</Broj_pasosa>
+    </Primalac>
+    <Vakcinacija>
+        <Doza redni_broj="1">
+            <Tip>Pfizer-BioNTech</Tip>
+            <Proizvodjac>BIONTECH MANUFACTURING GMBH</Proizvodjac>
+            <Serija>21344</Serija>
+            <Datum>2021-08-20</Datum>
+            <Zdravstvena_ustanova>Klinički centar Zvezdara</Zdravstvena_ustanova>
+        </Doza>
+    </Vakcinacija>
+    <Testovi>
+    </Testovi>
+    <Datum_vreme>2021-10-20T09:00:00</Datum_vreme>
+</Sertifikat>

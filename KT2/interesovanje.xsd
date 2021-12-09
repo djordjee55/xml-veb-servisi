@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" targetNamespace="http://www.xws.org/interesovanje"
+    xmlns:interesovanje="http://www.xws.org/interesovanje">
+
+    <xs:element name="Interesovanje">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Drzavljanstvo">
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:element name="Drzavljanin_Republike_Srbije"/>
+                            <xs:element name="Strani_drzavljanin_sa_boravkom_u_RS"/>
+                            <xs:element name="Strani_drzavljanin_bez_boravka_u_RS"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="JMBG">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="(\d{13})?"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Ime" type="xs:string"/>
+                <xs:element name="Prezime" type="xs:string"/>
+                <xs:element name="Adresa_elektronske_poste">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-zA-Z0-9\.]+@[a-zA-Z\.]+.[a-zA-Z]+"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Mobilni_telefon">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="(06)[0-9]+"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Fiksni_telefon">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="([0-9]+)?"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Zeljena_opstina_vakcinacije" type="xs:string"/>
+                <xs:element name="Zeljena_vakcina">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="Pfizer-BioNTech"/>
+                            <xs:element name="Sputnik_V"/>
+                            <xs:element name="Sinopharm"/>
+                            <xs:element name="AstraZeneca"/>
+                            <xs:element name="Moderna"/>
+                            <xs:element name="Bilo_koja"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:choice>
+                    <xs:element name="Dobrovoljan_davalac_krvi" minOccurs="0"/>
+                </xs:choice>
+                <xs:element name="Datum" type="xs:date"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

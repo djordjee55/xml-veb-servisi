@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Saglasnost xmlns="http://www.xws.org/saglasnost"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="obrazac_o_saglasnosti_za_sprovodjenje_preporucene_imunizacije file:/C:/Users/djord/Desktop/XML%20i%20veb%20servisi/Projekat/obrazac_o_saglasnosti.xsd">
+    <Pacijent>
+        <Drzavljanstvo>
+            <JMBG>1234567890123</JMBG>
+        </Drzavljanstvo>
+        <Ime>Pera</Ime>
+        <Prezime>Peric</Prezime>
+        <Ime_roditelja>Zika</Ime_roditelja>
+        <Pol>
+            <M></M>
+        </Pol>
+        <Datum_rodjenja>1999-09-05</Datum_rodjenja>
+        <Mesto_rodjenja>Subotica</Mesto_rodjenja>
+        <Adresa>
+            <Opstina>Subotica</Opstina>
+            <Naselje>Subotica</Naselje>
+            <Ulica>Kumanovska</Ulica>
+            <Broj>5/9</Broj>
+        </Adresa>
+        <Kontakt>
+            <Fiksni_telefon>024555555</Fiksni_telefon>
+            <Mobilni_telefon>060123456789</Mobilni_telefon>
+            <Imejl>pera@peric.com</Imejl>
+        </Kontakt>
+        <Radni_status>
+            <Student></Student>
+        </Radni_status>
+        <Saglasnost>
+            <Naziv_imunoloskog_leka>Naziv</Naziv_imunoloskog_leka>
+        </Saglasnost>
+    </Pacijent>
+    <Datum>2021-11-26</Datum>
+    <Evidencija_o_vakcinaciji>
+        <Zdravstvena_ustanova>Opsta bolnica Novi Sad</Zdravstvena_ustanova>
+        <Vakcinacijski_punkt>Punkt broj 1</Vakcinacijski_punkt>
+        <Lekar>
+            <Ime>Steva</Ime>
+            <Prezime>Stevic</Prezime>
+            <Broj_telefona>060123456789</Broj_telefona>
+        </Lekar>
+        <Vakcine>
+            <Vakcina>
+                <Naziv>AstraZeneca</Naziv>
+                <Datum_davanja>2021-11-21</Datum_davanja>
+                <Nacin_davanja>IM</Nacin_davanja>
+                <Ekstremitet>
+                    <LR></LR>
+                </Ekstremitet>
+                <Serija>Serija 1</Serija>
+                <Proizvodjac>AstraZeneca</Proizvodjac>
+                <Nezeljena_reakcija></Nezeljena_reakcija>
+            </Vakcina>
+        </Vakcine>
+        <Privremene_kontraindikacije></Privremene_kontraindikacije>
+    </Evidencija_o_vakcinaciji>
+</Saglasnost>

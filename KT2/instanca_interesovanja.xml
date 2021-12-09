@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Interesovanje xmlns="http://www.xws.org/interesovanje"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="iskazivanje_interesovanja_za_vakcinisanje_protiv_COVID-19 file:/C:/Users/djord/Desktop/XML%20i%20veb%20servisi/Projekat/obrazac_o_interesovanju.xsd">
+    <Drzavljanstvo>
+        <Strani_drzavljanin_bez_boravka_u_RS></Strani_drzavljanin_bez_boravka_u_RS>
+    </Drzavljanstvo>
+    <JMBG></JMBG>
+    <Ime>John</Ime>
+    <Prezime>Smith</Prezime>
+    <Adresa_elektronske_poste>john@smith.com</Adresa_elektronske_poste>
+    <Mobilni_telefon>06012312312</Mobilni_telefon>
+    <Fiksni_telefon>011222555</Fiksni_telefon>
+    <Zeljena_opstina_vakcinacije>Beograd</Zeljena_opstina_vakcinacije>
+    <Zeljena_vakcina>
+        <Sputnik_V></Sputnik_V>
+        <Pfizer-BioNTech></Pfizer-BioNTech>
+    </Zeljena_vakcina>
+    <Dobrovoljan_davalac_krvi></Dobrovoljan_davalac_krvi>
+    <Datum>2021-12-05</Datum>
+</Interesovanje>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" targetNamespace="http://www.xws.org/potvrda"
+    xmlns:potvrda="http://www.xws.org/potvrda">
+
+    <xs:element name="Potvrda">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Qr_kod" type="xs:string"/>
+                <xs:element name="Primalac" type="potvrda:TLice"/>
+                <xs:element name="Doze" type="potvrda:TVakcinacija"/>
+                <xs:element name="Zdravstvena_ustanova" type="xs:string"/>
+                <xs:element name="Datum_izdavanja" type="xs:date"/>
+            </xs:sequence>
+            <xs:attribute name="sifra" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="TLice">
+        <xs:sequence>
+            <xs:element name="Ime" type="xs:string"/>
+            <xs:element name="Prezime" type="xs:string"/>
+            <xs:element name="Pol" type="xs:string"/>
+            <xs:element name="Datum_rodjenja" type="xs:date"/>
+            <xs:element name="JMBG">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9]{13}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TVakcinacija">
+        <xs:sequence>
+            <xs:element form="qualified" maxOccurs="unbounded" name="Doza" type="potvrda:TDoza"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TDoza">
+        <xs:sequence>
+            <xs:element name="Ustanova" type="xs:string"/>
+            <xs:element name="Naziv" type="xs:string"/>
+            <xs:element name="Datum_davanja" type="xs:date"/>
+            <xs:element name="Broj_serije" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="redni_broj" type="xs:positiveInteger" default="1"> </xs:attribute>
+    </xs:complexType>
+</xs:schema>

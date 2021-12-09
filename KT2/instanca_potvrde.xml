@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Potvrda xmlns="http://www.xws.org/potvrda"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xws.org/potvrda potvrda.xsd">
+    <Qr_kod>url na koji treba da vodi qr kod</Qr_kod>
+    <Primalac>
+        <Ime>Marko</Ime>
+        <Prezime>Marković</Prezime>
+        <Pol>Muško</Pol>
+        <Datum_rodjenja>1987-05-23</Datum_rodjenja>
+        <JMBG>1233242343214</JMBG>
+    </Primalac>
+    <Doze>
+        <Doza redni_broj="1">
+            <Ustanova>Klinički centar Zvezdara</Ustanova>
+            <Naziv>Pfizer</Naziv>
+            <Datum_davanja>2021-08-20</Datum_davanja>
+            <Broj_serije>234453</Broj_serije>
+        </Doza>
+    </Doze>
+    <Zdravstvena_ustanova>Klinički centar Zvezdara</Zdravstvena_ustanova>
+    <Datum_izdavanja>2021-09-20</Datum_izdavanja>
+</Potvrda>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Izvestaj xmlns="http://www.xws.org/izvestaj"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="izvestaj_o_imunizaciji file:/C:/Users/djord/Desktop/XML%20i%20veb%20servisi/Projekat/izvestaj_o_imuniazciji.xsd">
+    <Period>
+        <Od>2021-10-01</Od>
+        <Do>2021-11-01</Do>
+    </Period>
+    <Broj_podnetih_dokumenata_o_interesovanju>900</Broj_podnetih_dokumenata_o_interesovanju>
+    <Broj_primljenih_zahteva_za_digitalni_zeleni_sertifikat>500</Broj_primljenih_zahteva_za_digitalni_zeleni_sertifikat>
+    <Broj_izdatih_zahteva_za_digitalni_zeleni_sertifikat>450</Broj_izdatih_zahteva_za_digitalni_zeleni_sertifikat>
+    <Ukupan_broj_datih_doza_vakcine>300</Ukupan_broj_datih_doza_vakcine>
+    <Doze>
+        <Doza redni_broj="1">
+            <Broj_datih_doza>200</Broj_datih_doza>
+        </Doza>
+        <Doza redni_broj="2">
+            <Broj_datih_doza>50</Broj_datih_doza>
+        </Doza>
+        <Doza redni_broj="3">
+            <Broj_datih_doza>50</Broj_datih_doza>
+        </Doza>
+    </Doze>
+    <Raspodela_po_proizvodjacima>
+        <Proizvodjac>
+            <Naziv>Pfizer</Naziv>
+            <Broj_doza>150</Broj_doza>
+        </Proizvodjac>
+        <Proizvodjac>
+            <Naziv>AstraZeneca</Naziv>
+            <Broj_doza>150</Broj_doza>
+        </Proizvodjac>
+    </Raspodela_po_proizvodjacima>
+    <Datum_izdavanja>2021-11-02</Datum_izdavanja>
+</Izvestaj>
