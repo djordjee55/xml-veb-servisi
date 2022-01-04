@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" targetNamespace="http://www.xws.org/interesovanje"
+    xmlns:interesovanje="http://www.xws.org/interesovanje" xmlns:tip="http://www.xws.org/tipovi">
+
+    <xs:import namespace="http://www.xws.org/tipovi" schemaLocation="tipovi.xsd"/>
+
+    <xs:element name="Interesovanje">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Drzavljanstvo">
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:element name="Drzavljanin_Republike_Srbije"/>
+                            <xs:element name="Strani_drzavljanin_sa_boravkom_u_RS"/>
+                            <xs:element name="Strani_drzavljanin_bez_boravka_u_RS"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Zeljena_opstina_vakcinacije" type="xs:string"/>
+                <xs:element name="Zeljena_vakcina">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="Pfizer-BioNTech"/>
+                            <xs:element name="Sputnik_V"/>
+                            <xs:element name="Sinopharm"/>
+                            <xs:element name="AstraZeneca"/>
+                            <xs:element name="Moderna"/>
+                            <xs:element name="Bilo_koja"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Dobrovoljni_davalac_krvi" type="xs:boolean"/>
+                <xs:element name="Datum" type="xs:date"/>
+                <xs:element name="Primalac" type="tip:TZainteresovanoLice"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

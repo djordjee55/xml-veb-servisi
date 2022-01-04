@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" targetNamespace="http://www.xws.org/izvestaj"
+    xmlns:izvestaj="http://www.xws.org/izvestaj" xmlns:tip="http://www.xws.org/tipovi">
+
+    <xs:import namespace="http://www.xws.org/tipovi" schemaLocation="tipovi.xsd"/>
+    
+    <xs:element name="Izvestaj">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Period">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Od" type="xs:date"/>
+                            <xs:element name="Do" type="xs:date"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Broj_podnetih_dokumenata_o_interesovanju"
+                    type="xs:nonNegativeInteger"/>
+                <xs:element name="Broj_primljenih_zahteva_za_digitalni_zeleni_sertifikat"
+                    type="xs:nonNegativeInteger"/>
+                <xs:element name="Broj_izdatih_zahteva_za_digitalni_zeleni_sertifikat"
+                    type="xs:nonNegativeInteger"/>
+                <xs:element name="Ukupan_broj_datih_doza_vakcine" type="xs:nonNegativeInteger"/>
+                <xs:element name="Doze">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="Doza">
+                                <xs:complexType>
+                                    <xs:sequence maxOccurs="1">
+                                        <xs:element name="Broj_datih_doza"
+                                            type="xs:nonNegativeInteger"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="redni_broj" type="xs:positiveInteger"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Raspodela_po_proizvodjacima">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="Proizvodjac">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Naziv" type="tip:TVakcina"/>
+                                        <xs:element name="Broj_doza" type="xs:positiveInteger"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Datum_izdavanja" type="xs:date"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

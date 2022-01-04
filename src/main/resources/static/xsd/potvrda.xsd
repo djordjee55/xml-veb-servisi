@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" targetNamespace="http://www.xws.org/potvrda"
+    xmlns:potvrda="http://www.xws.org/potvrda" xmlns:tip="http://www.xws.org/tipovi">
+
+    <xs:import namespace="http://www.xws.org/tipovi" schemaLocation="tipovi.xsd"/>
+
+    <xs:element name="Potvrda">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Qr_kod" type="xs:string"/>
+                <xs:element name="Primalac" type="tip:TPrimalacPotvrde"/>
+                <xs:element name="Doze" type="potvrda:TVakcinacija"/>
+                <xs:element name="Zdravstvena_ustanova" type="tip:TZdravstvenaUstanova"/>
+                <xs:element name="Datum_izdavanja" type="xs:date"/>
+            </xs:sequence>
+            <xs:attribute name="sifra" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="TVakcinacija">
+        <xs:sequence>
+            <xs:element form="qualified" maxOccurs="unbounded" name="Doza" type="potvrda:TDoza"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TDoza">
+        <xs:sequence>
+            <xs:element name="Tip_vakcine" type="tip:TVakcina"/>
+            <xs:element name="Datum_davanja" type="xs:date"/>
+            <xs:element name="Broj_serije" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="redni_broj" type="xs:positiveInteger" default="1"> </xs:attribute>
+    </xs:complexType>
+</xs:schema>

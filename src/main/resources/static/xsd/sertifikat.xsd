@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" targetNamespace="http://www.xws.org/sertifikat"
+    xmlns:sertifikat="http://www.xws.org/sertifikat" xmlns:tip="http://www.xws.org/tipovi">
+
+    <xs:import namespace="http://www.xws.org/tipovi" schemaLocation="tipovi.xsd"/>
+
+    <xs:element name="Sertifikat">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Qr_kod" type="xs:string"/>
+                <xs:element name="Primalac" type="tip:TVakcinisanoLice"/>
+                <xs:element name="Vakcinacija" type="sertifikat:TVakcinacija"/>
+                <xs:element name="Testovi" type="sertifikat:TTestovi"/>
+                <xs:element name="Datum_vreme" type="xs:dateTime"/>
+            </xs:sequence>
+            <xs:attribute name="broj_sertifikata" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="TVakcinacija">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="Doza" type="sertifikat:TDoza"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TDoza">
+        <xs:sequence>
+            <xs:element name="Tip_vakcine" type="xs:string"/>
+            <xs:element name="Proizvodjac" type="xs:string"/>
+            <xs:element name="Serija" type="xs:string"/>
+            <xs:element name="Datum" type="xs:date"/>
+            <xs:element name="Zdravstvena_ustanova" type="tip:TZdravstvenaUstanova"/>
+        </xs:sequence>
+        <xs:attribute name="redni_broj" type="xs:positiveInteger"> </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="TTestovi">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="Test" type="sertifikat:TTest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TTest">
+        <xs:sequence>
+            <xs:element name="Tip_testa" type="xs:string"/>
+            <xs:element name="Vrsta_uzorka" type="xs:string"/>
+            <xs:element name="Proizvodjac" type="xs:string"/>
+            <xs:element name="Datum_vreme_uzorkovanja" type="xs:dateTime" nillable="false"/>
+            <xs:element name="Datum_vreme_izdavanja" type="xs:dateTime" nillable="false"/>
+            <xs:element name="Rezultat" type="xs:boolean" nillable="false"/>
+            <xs:element name="Laboratorija" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
