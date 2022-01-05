@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Saglasnost xmlns="http://www.xws.org/saglasnost"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xws.org/saglasnost ../xsd/saglasnost.xsd">
+    <Pacijent>
+        <Ime xmlns="http://www.xws.org/tipovi">Njegos</Ime>
+        <Prezime xmlns="http://www.xws.org/tipovi">Blagojevic</Prezime>
+        <Datum_rodjenja xmlns="http://www.xws.org/tipovi">1999-04-29</Datum_rodjenja>
+        <Drzavljanstvo><JMBG>2904999183925</JMBG></Drzavljanstvo>
+        <Ime_roditelja></Ime_roditelja>
+        <Pol>M</Pol>
+        <Mesto_rodjenja>Zvornik</Mesto_rodjenja>
+        <Adresa>
+            <Opstina>Zvornik</Opstina>
+            <Naselje>Zvornik</Naselje>
+            <Ulica>Svetog Save</Ulica>
+            <Broj>12</Broj>
+        </Adresa>
+        <Kontakt>
+            <E_mail xmlns="http://www.xws.org/tipovi">blagojevic.njegos1999@gmail.com</E_mail>
+            <Mobilni_telefon xmlns="http://www.xws.org/tipovi">0644790823</Mobilni_telefon>
+            <Fiksni_telefon xmlns="http://www.xws.org/tipovi"></Fiksni_telefon>
+        </Kontakt>
+        <Radni_status><Student></Student></Radni_status>
+        <Korisnik_ustanove_socijalne_zasttite>
+            <Sediste>
+                <Naziv></Naziv>
+                <Opstina></Opstina>
+            </Sediste>
+        </Korisnik_ustanove_socijalne_zasttite>
+        <Saglasnost>
+            <Naziv_imunoloskog_leka>Pfizer</Naziv_imunoloskog_leka>
+        </Saglasnost>
+    </Pacijent>
+    <Datum>2021-12-12</Datum>
+    <Evidencija_o_vakcinaciji>
+        <Zdravstvena_ustanova>Zvezdara</Zdravstvena_ustanova>
+        <Vakcinacijski_punkt>123</Vakcinacijski_punkt>
+        <Lekar>
+            <Ime>Pera</Ime>
+            <Prezime>Peric</Prezime>
+            <Broj_telefona>064412385</Broj_telefona>
+        </Lekar>
+        <Vakcine>
+            <Vakcina>
+                <Naziv>Pfizer</Naziv>
+                <Datum_davanja>2021-12-20</Datum_davanja>
+                <Nacin_davanja></Nacin_davanja>
+                <Ekstremitet><DR></DR></Ekstremitet>
+                <Serija></Serija>
+                <Proizvodjac></Proizvodjac>
+                <Nezeljena_reakcija></Nezeljena_reakcija>
+            </Vakcina>
+        </Vakcine>
+        <Privremene_kontraindikacije>
+            <Privremena_kontraindikacija>
+                <Datum_utvrdjivanja>2021-12-12</Datum_utvrdjivanja>
+                <Dijagnoza></Dijagnoza>
+            </Privremena_kontraindikacija>
+        </Privremene_kontraindikacije>
+        <Trajne_kontraindikacije></Trajne_kontraindikacije>
+    </Evidencija_o_vakcinaciji>
+</Saglasnost>

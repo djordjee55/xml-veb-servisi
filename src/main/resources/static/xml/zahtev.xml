@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zahtev:Zahtev xmlns:zahtev="http://www.xws.org/zahtev"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xws.org/zahtev ../xsd/zahtev.xsd">
+    <zahtev:Podnosilac>
+        <Ime xmlns="http://www.xws.org/tipovi">Njegos</Ime>
+        <Prezime xmlns="http://www.xws.org/tipovi">Blagojevic</Prezime>
+        <Datum_rodjenja xmlns="http://www.xws.org/tipovi">1999-04-29</Datum_rodjenja>
+        <Pol xmlns="http://www.xws.org/tipovi">M</Pol>
+        <JMBG xmlns="http://www.xws.org/tipovi">2904999183925</JMBG>
+        <Broj_pasosa xmlns="http://www.xws.org/tipovi"></Broj_pasosa>
+    </zahtev:Podnosilac>
+    <zahtev:Razlog></zahtev:Razlog>
+    <zahtev:Mesto></zahtev:Mesto>
+    <zahtev:Datum>2021-12-20</zahtev:Datum>
+</zahtev:Zahtev>

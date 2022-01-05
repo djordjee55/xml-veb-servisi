@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Izvestaj xmlns="http://www.xws.org/izvestaj"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xws.org/izvestaj ../xsd/izvestaj.xsd">
+    <Period>
+        <Od>2021-07-07</Od>
+        <Do>2021-08-08</Do>
+    </Period>
+    <Broj_podnetih_dokumenata_o_interesovanju>123</Broj_podnetih_dokumenata_o_interesovanju>
+    <Broj_primljenih_zahteva_za_digitalni_zeleni_sertifikat>123</Broj_primljenih_zahteva_za_digitalni_zeleni_sertifikat>
+    <Broj_izdatih_zahteva_za_digitalni_zeleni_sertifikat>123</Broj_izdatih_zahteva_za_digitalni_zeleni_sertifikat>
+    <Ukupan_broj_datih_doza_vakcine>123</Ukupan_broj_datih_doza_vakcine>
+    <Doze>
+        <Doza>
+            <Broj_datih_doza>123</Broj_datih_doza>
+        </Doza>
+    </Doze>
+    <Raspodela_po_proizvodjacima>
+        <Proizvodjac>
+            <Naziv>Pfizer-BioNTech</Naziv>
+            <Broj_doza>123</Broj_doza>
+        </Proizvodjac>
+    </Raspodela_po_proizvodjacima>
+    <Datum_izdavanja>2021-08-08</Datum_izdavanja>
+</Izvestaj>

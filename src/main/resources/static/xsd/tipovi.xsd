@@ -46,7 +46,7 @@
     </xs:simpleType>
     <xs:simpleType name="TZdravstvenaUstanova">
         <xs:restriction base="xs:string">
-            <xs:length value="150"/>
+            <xs:maxLength value="150"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="TVakcina">

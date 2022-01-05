@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Potvrda xmlns="http://www.xws.org/potvrda"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xws.org/potvrda ../xsd/potvrda.xsd">
+    <Qr_kod>sadasfds</Qr_kod>
+    <Primalac>
+        <Ime xmlns="http://www.xws.org/tipovi">Njegos</Ime>
+        <Prezime xmlns="http://www.xws.org/tipovi">Blagojevic</Prezime>
+        <Datum_rodjenja xmlns="http://www.xws.org/tipovi">2021-12-20</Datum_rodjenja>
+        <Pol xmlns="http://www.xws.org/tipovi">M</Pol>
+        <JMBG xmlns="http://www.xws.org/tipovi">2904999183925</JMBG>
+    </Primalac>
+    <Doze>
+        <Doza>
+            <Tip_vakcine>Pfizer-BioNTech</Tip_vakcine>
+            <Datum_davanja>2021-12-20</Datum_davanja>
+            <Broj_serije></Broj_serije>
+        </Doza>
+    </Doze>
+    <Zdravstvena_ustanova>Zvezdara</Zdravstvena_ustanova>
+    <Datum_izdavanja>2021-12-21</Datum_izdavanja>
+</Potvrda>

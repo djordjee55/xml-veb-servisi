@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Interesovanje xmlns="http://www.xws.org/interesovanje"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xws.org/interesovanje ../xsd/interesovanje.xsd">
+    <Drzavljanstvo><Drzavljanin_Republike_Srbije></Drzavljanin_Republike_Srbije></Drzavljanstvo>
+    <Zeljena_opstina_vakcinacije>Novi Sad</Zeljena_opstina_vakcinacije>
+    <Zeljena_vakcina><Sputnik_V></Sputnik_V></Zeljena_vakcina>
+    <Dobrovoljni_davalac_krvi>false</Dobrovoljni_davalac_krvi>
+    <Datum>2021-12-22</Datum>
+    <Primalac>
+        <Ime xmlns="http://www.xws.org/tipovi"></Ime>
+        <Prezime xmlns="http://www.xws.org/tipovi"></Prezime>
+        <Datum_rodjenja xmlns="http://www.xws.org/tipovi">1999-04-29</Datum_rodjenja>
+        <Kontakt xmlns="http://www.xws.org/tipovi"></Kontakt>
+    </Primalac>
+</Interesovanje>

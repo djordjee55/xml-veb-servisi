@@ -45,6 +45,55 @@
 			<version>2.3.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>net.sf.xmldb-org</groupId>
+			<artifactId>xmldb-api</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.14.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.ws.commons</groupId>
+			<artifactId>ws-commons-util</artifactId>
+			<version>1.0.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.exist-db/exist-core -->
+		<dependency>
+			<groupId>org.exist-db</groupId>
+			<artifactId>exist-core</artifactId>
+			<version>5.3.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.evolvedbinary.j8fu/j8fu -->
+		<dependency>
+			<groupId>com.evolvedbinary.j8fu</groupId>
+			<artifactId>j8fu</artifactId>
+			<version>1.23.0</version>
+		</dependency>
+
 
 	</dependencies>
 
