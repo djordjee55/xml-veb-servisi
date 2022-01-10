@@ -1,4 +1,6 @@
 package com.tim123.vaccinationmain.service;
 
-public interface ZahtevService extends CRUDService{
+import com.tim123.vaccinationmain.model.zahtev.Zahtev;
+
+public interface ZahtevService extends CRUDService, MarshallUnmarshallService<Zahtev>{
 }

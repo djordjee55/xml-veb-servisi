@@ -1,4 +1,6 @@
 package com.tim123.vaccinationmain.service;
 
-public interface SaglasnostService extends CRUDService{
+import com.tim123.vaccinationmain.model.saglasnost.Saglasnost;
+
+public interface SaglasnostService extends CRUDService, MarshallUnmarshallService<Saglasnost>{
 }

@@ -1,4 +1,6 @@
 package com.tim123.vaccinationmain.service;
 
-public interface SertifikatService extends CRUDService{
+import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
+
+public interface SertifikatService extends CRUDService, MarshallUnmarshallService<Sertifikat>{
 }

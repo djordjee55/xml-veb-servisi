@@ -1,11 +1,15 @@
 package com.tim123.vaccinationmain;
 
+import com.tim123.vaccinationmain.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationmain.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.xmldb.api.modules.XMLResource;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -26,8 +30,10 @@ public class Test implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //writeFilesTest();
+        writeFilesTest();
         readFilesTest();
+        System.out.println("####################################################################");
+        test();
     }
 
     private String readFile(String path)
@@ -110,4 +116,16 @@ public class Test implements CommandLineRunner {
         if(resource != null)
             System.out.println(resource.getContent());
     }
+
+
+    void test() throws Exception {
+        Interesovanje i = interesovanjeService.unmarshall("1.xml");
+        if(i!=null)
+            System.out.println(i.getZeljenaOpstinaVakcinacije());
+
+        System.out.println(interesovanjeService.marshall(i));
+
+
+    }
+
 }

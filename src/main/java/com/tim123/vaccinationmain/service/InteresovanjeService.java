@@ -1,4 +1,6 @@
 package com.tim123.vaccinationmain.service;
 
-public interface InteresovanjeService extends CRUDService{
+import com.tim123.vaccinationmain.model.interesovanje.Interesovanje;
+
+public interface InteresovanjeService extends CRUDService, MarshallUnmarshallService<Interesovanje>{
 }

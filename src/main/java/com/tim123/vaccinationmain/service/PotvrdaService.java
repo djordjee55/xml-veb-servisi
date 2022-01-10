@@ -1,4 +1,6 @@
 package com.tim123.vaccinationmain.service;
 
-public interface PotvrdaService extends CRUDService{
+import com.tim123.vaccinationmain.model.potvrda.Potvrda;
+
+public interface PotvrdaService extends CRUDService,MarshallUnmarshallService<Potvrda>{
 }
