@@ -1,8 +1,10 @@
 package com.tim123.vaccinationmain.service;
 
-import org.xmldb.api.modules.XMLResource;
+import java.util.Optional;
 
-public interface CRUDService {
-    void save(String documentId, String xmlData) throws Exception;
-    XMLResource findByDocumentId(String documentId) throws Exception;
+public interface CRUDService<T> {
+    T save(T entity) throws Exception;
+    Optional<T> findById(String id) throws Exception;
+    T update(T entity);
+    void delete(String id);
 }
