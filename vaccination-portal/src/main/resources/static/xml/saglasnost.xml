@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Saglasnost  xmlns:tip="http://www.xws.org/tipovi"
+             xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+             xmlns="http://www.xws.org/saglasnost"
+             xmlns:pred="http://www.xws.org/predicate"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.xws.org/saglasnost file:../xsd/saglasnost.xsd"
+             id="d68ae50a-7cca-4684-9500-f2ea908013f3"
+             about="http://www.xws.org/saglasnost#d68ae50a-7cca-4684-9500-f2ea908013f3">
+    <Datum property="pred:datumIzdavanja" datatype="xs:date">2006-05-04</Datum>
+    <Pacijent>
+        <tip:Ime>Ime0</tip:Ime>
+        <tip:Prezime>Prezime0</tip:Prezime>
+        <tip:Datum_rodjenja>2006-05-04</tip:Datum_rodjenja>
+        <Drzavljanstvo>
+            <Naziv_stranog_drzavljanstva>Naziv_stranog_drzavljanstva0</Naziv_stranog_drzavljanstva>
+            <Broj_pasosa rel="pred:identifikatorKorisnika" href="http://www.xws.org/korisnici#921909aa-8ff1-47f4-b761-4cbac06929ad">Broj_pasosa0</Broj_pasosa>
+        </Drzavljanstvo>
+        <Ime_roditelja>Ime_roditelja0</Ime_roditelja>
+        <Pol>M</Pol>
+        <Mesto_rodjenja>Mesto_rodjenja0</Mesto_rodjenja>
+        <Adresa>
+            <Opstina>Opstina0</Opstina>
+            <Naselje>Naselje0</Naselje>
+            <Ulica>Ulica0</Ulica>
+            <Broj>0</Broj>
+        </Adresa>
+        <Kontakt/>
+        <Radni_status>
+            <Penzioner>
+            </Penzioner>
+        </Radni_status>
+    </Pacijent>
+    <Evidencija_o_vakcinaciji>
+        <Zdravstvena_ustanova>Zdravstvena_ustanova0</Zdravstvena_ustanova>
+        <Vakcinacijski_punkt>Vakcinacijski_punkt0</Vakcinacijski_punkt>
+        <Lekar>
+            <Ime>Ime0</Ime>
+            <Prezime>Prezime0</Prezime>
+            <Broj_telefona>0</Broj_telefona>
+        </Lekar>
+        <Vakcine>
+        </Vakcine>
+        <Privremene_kontraindikacije>
+        </Privremene_kontraindikacije>
+    </Evidencija_o_vakcinaciji>
+</Saglasnost>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Zahtev  xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+         xmlns="http://www.xws.org/zahtev"
+         xmlns:tip="http://www.xws.org/tipovi"
+         xmlns:pred="http://www.xws.org/predicate"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.xws.org/zahtev file:../xsd/zahtev.xsd"
+         id="bda26206-5c66-4771-a038-cee3a4600c02"
+         about="http://www.xws.org/zahtev#bda26206-5c66-4771-a038-cee3a4600c02">
+    <Datum property="pred:datumIzdavanja" datatype="xs:date">2006-05-04</Datum>
+    <Podnosilac>
+        <tip:Ime>Ime0</tip:Ime>
+        <tip:Prezime>Prezime0</tip:Prezime>
+        <tip:Datum_rodjenja>2006-05-04</tip:Datum_rodjenja>
+        <tip:Pol>M</tip:Pol>
+        <tip:JMBG rel="pred:identifikatorKorisnika" href="http://www.xws.org/korisnici#921909aa-8ff1-47f4-b761-4cbac06929ad">0000000000000</tip:JMBG>
+        <tip:Broj_pasosa rel="pred:identifikatorKorisnika" href="http://www.xws.org/korisnici#921909aa-8ff1-47f4-b761-4cbac06929ad">Broj_pasosa0</tip:Broj_pasosa>
+    </Podnosilac>
+    <Razlog>Razlog0</Razlog>
+    <Mesto>Mesto0</Mesto>
+</Zahtev>

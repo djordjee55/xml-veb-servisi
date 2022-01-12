@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.0" targetNamespace="http://www.xws.org/zahtev"
+    xmlns:zahtev="http://www.xws.org/zahtev" xmlns:tip="http://www.xws.org/tipovi"
+    xmlns:pred="http://www.xws.org/predicate">
+
+    <xs:import namespace="http://www.xws.org/tipovi" schemaLocation="tipovi.xsd"/>
+    <xs:element name="Zahtev">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Datum" type="tip:TDatumKreiranja"/>
+                <xs:element name="Podnosilac" type="tip:TVakcinisanoLice"/>
+                <xs:element name="Razlog" type="xs:string" nillable="false"/>
+                <xs:element name="Mesto" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="about" type="xs:string" use="required"/>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
