@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
-    vc:minVersion="1.1" targetNamespace="http://www.xws.org/potvrda"
-    xmlns:potvrda="http://www.xws.org/potvrda" xmlns:tip="http://www.xws.org/tipovi">
+    vc:minVersion="1.0" targetNamespace="http://www.xws.org/potvrda"
+    xmlns:potvrda="http://www.xws.org/potvrda" xmlns:tip="http://www.xws.org/tipovi"
+    xmlns:pred="http://www.xws.org/predicate">
 
     <xs:import namespace="http://www.xws.org/tipovi" schemaLocation="tipovi.xsd"/>
 
     <xs:element name="Potvrda">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="Datum_izdavanja" type="tip:TDatumKreiranja"/>
                 <xs:element name="Qr_kod" type="xs:string"/>
                 <xs:element name="Primalac" type="tip:TPrimalacPotvrde"/>
                 <xs:element name="Doze" type="potvrda:TVakcinacija"/>
                 <xs:element name="Zdravstvena_ustanova" type="tip:TZdravstvenaUstanova"/>
-                <xs:element name="Datum_izdavanja" type="xs:date"/>
             </xs:sequence>
             <xs:attribute name="sifra" type="xs:string"/>
+            <xs:attribute name="about" type="xs:string" use="required"/>
+            <xs:attribute name="id" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TVakcinacija">
@@ -25,10 +28,10 @@
     </xs:complexType>
     <xs:complexType name="TDoza">
         <xs:sequence>
-            <xs:element name="Tip_vakcine" type="tip:TVakcina"/>
-            <xs:element name="Datum_davanja" type="xs:date"/>
+            <xs:element name="Tip_vakcine" type="tip:TCVakcina"/>
+            <xs:element name="Datum_davanja" type="tip:TDatumVakcinacije"/>
             <xs:element name="Broj_serije" type="xs:string"/>
+            <xs:element name="Redni_broj" type="tip:TCRedniBrojVakcine"/>
         </xs:sequence>
-        <xs:attribute name="redni_broj" type="xs:positiveInteger" default="1"> </xs:attribute>
     </xs:complexType>
 </xs:schema>

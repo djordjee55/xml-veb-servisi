@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
-    vc:minVersion="1.1" targetNamespace="http://www.xws.org/izvestaj"
-    xmlns:izvestaj="http://www.xws.org/izvestaj" xmlns:tip="http://www.xws.org/tipovi">
+    vc:minVersion="1.0" targetNamespace="http://www.xws.org/izvestaj"
+    xmlns:izvestaj="http://www.xws.org/izvestaj" xmlns:tip="http://www.xws.org/tipovi"
+    xmlns:pred="http://www.xws.org/predicate">
 
     <xs:import namespace="http://www.xws.org/tipovi" schemaLocation="tipovi.xsd"/>
-    
+
     <xs:element name="Izvestaj">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="Datum_izdavanja" type="xs:date"/>
                 <xs:element name="Period">
                     <xs:complexType>
                         <xs:sequence>
@@ -53,9 +55,8 @@
                         </xs:choice>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="Datum_izdavanja" type="xs:date"/>
             </xs:sequence>
-            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="id" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

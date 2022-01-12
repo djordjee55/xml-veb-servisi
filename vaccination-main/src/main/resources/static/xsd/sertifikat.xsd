@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
-    vc:minVersion="1.1" targetNamespace="http://www.xws.org/sertifikat"
-    xmlns:sertifikat="http://www.xws.org/sertifikat" xmlns:tip="http://www.xws.org/tipovi">
+    vc:minVersion="1.0" targetNamespace="http://www.xws.org/sertifikat"
+    xmlns:sertifikat="http://www.xws.org/sertifikat" xmlns:tip="http://www.xws.org/tipovi"
+    xmlns:pred="http://www.xws.org/predicate">
 
     <xs:import namespace="http://www.xws.org/tipovi" schemaLocation="tipovi.xsd"/>
 
     <xs:element name="Sertifikat">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="Datum_vreme">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:dateTime">
+                                <xs:attribute fixed="pred:datumIzdavanja" name="property"
+                                    use="required"/>
+                                <xs:attribute fixed="xs:dateTime" name="datatype" use="required"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="Qr_kod" type="xs:string"/>
                 <xs:element name="Primalac" type="tip:TVakcinisanoLice"/>
                 <xs:element name="Vakcinacija" type="sertifikat:TVakcinacija"/>
                 <xs:element name="Testovi" type="sertifikat:TTestovi"/>
-                <xs:element name="Datum_vreme" type="xs:dateTime"/>
             </xs:sequence>
             <xs:attribute name="broj_sertifikata" type="xs:string"/>
+            <xs:attribute name="about" type="xs:string" use="required"/>
+            <xs:attribute name="id" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TVakcinacija">

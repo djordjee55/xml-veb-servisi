@@ -1,22 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Potvrda xmlns="http://www.xws.org/potvrda"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.xws.org/potvrda ../xsd/potvrda.xsd">
-    <Qr_kod>sadasfds</Qr_kod>
+<Potvrda xmlns:tip="http://www.xws.org/tipovi"
+         xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+         xmlns="http://www.xws.org/potvrda"
+         xmlns:pred="http://www.xws.org/predicate"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.xws.org/potvrda file:../xsd/potvrda.xsd"
+         id="b9b1ba65-b61d-443d-9b4a-4b029c427b93"
+         about="http://www.xws.org/potvrda#b9b1ba65-b61d-443d-9b4a-4b029c427b93">
+    <Datum_izdavanja property="pred:datumIzdavanja" datatype="xs:date">2006-05-04</Datum_izdavanja>
+    <Qr_kod>Qr_kod0</Qr_kod>
     <Primalac>
-        <Ime xmlns="http://www.xws.org/tipovi">Njegos</Ime>
-        <Prezime xmlns="http://www.xws.org/tipovi">Blagojevic</Prezime>
-        <Datum_rodjenja xmlns="http://www.xws.org/tipovi">2021-12-20</Datum_rodjenja>
-        <Pol xmlns="http://www.xws.org/tipovi">M</Pol>
-        <JMBG xmlns="http://www.xws.org/tipovi">2904999183925</JMBG>
+        <tip:Ime>Ime0</tip:Ime>
+        <tip:Prezime>Prezime0</tip:Prezime>
+        <tip:Datum_rodjenja>2006-05-04</tip:Datum_rodjenja>
+        <tip:Pol>M</tip:Pol>
+        <tip:JMBG rel="pred:identifikatorKorisnika" href="http://www.xws.org/korisnici#921909aa-8ff1-47f4-b761-4cbac06929ad">0000000000000</tip:JMBG>
     </Primalac>
     <Doze>
         <Doza>
-            <Tip_vakcine>Pfizer-BioNTech</Tip_vakcine>
-            <Datum_davanja>2021-12-20</Datum_davanja>
-            <Broj_serije></Broj_serije>
+            <Tip_vakcine property="pred:nazivVakcine" datatype="xs:string">Pfizer-BioNTech</Tip_vakcine>
+            <Datum_davanja property="pred:datumVakcinisanja" datatype="xs:date">2006-05-04</Datum_davanja>
+            <Broj_serije>Broj_serije0</Broj_serije>
+            <Redni_broj property="pred:brojVakcine" datatype="xs:positiveInteger">50</Redni_broj>
+        </Doza>
+        <Doza>
+            <Tip_vakcine property="pred:nazivVakcine" datatype="xs:string">Pfizer-BioNTech</Tip_vakcine>
+            <Datum_davanja property="pred:datumVakcinisanja" datatype="xs:date">2006-05-04</Datum_davanja>
+            <Broj_serije>Broj_serije1</Broj_serije>
+            <Redni_broj property="pred:brojVakcine" datatype="xs:positiveInteger">50</Redni_broj>
         </Doza>
     </Doze>
-    <Zdravstvena_ustanova>Zvezdara</Zdravstvena_ustanova>
-    <Datum_izdavanja>2021-12-21</Datum_izdavanja>
+    <Zdravstvena_ustanova>Zdravstvena_ustanova0</Zdravstvena_ustanova>
 </Potvrda>

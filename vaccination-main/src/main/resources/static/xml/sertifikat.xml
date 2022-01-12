@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Sertifikat xmlns="http://www.xws.org/sertifikat"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.xws.org/sertifikat ../xsd/sertifikat.xsd">
-    <Qr_kod></Qr_kod>
+<Sertifikat  xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+             xmlns="http://www.xws.org/sertifikat"
+             xmlns:tip="http://www.xws.org/tipovi"
+             xmlns:pred="http://www.xws.org/predicate"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.xws.org/sertifikat file:../xsd/sertifikat.xsd"
+             id="48483fc3-38ef-4826-b061-e78ce0bc2cb0"
+             about="http://www.xws.org/sertifikat#48483fc3-38ef-4826-b061-e78ce0bc2cb0">
+    <Datum_vreme property="pred:datumIzdavanja" datatype="xs:dateTime">2006-05-04T18:13:51.0</Datum_vreme>
+    <Qr_kod>Qr_kod0</Qr_kod>
     <Primalac>
-        <Ime xmlns="http://www.xws.org/tipovi"></Ime>
-        <Prezime xmlns="http://www.xws.org/tipovi"></Prezime>
-        <Datum_rodjenja xmlns="http://www.xws.org/tipovi">1999-04-29</Datum_rodjenja>
-        <Pol xmlns="http://www.xws.org/tipovi">M</Pol>
-        <JMBG xmlns="http://www.xws.org/tipovi">2904999183925</JMBG>
-        <Broj_pasosa xmlns="http://www.xws.org/tipovi"></Broj_pasosa>
+        <tip:Ime>Ime0</tip:Ime>
+        <tip:Prezime>Prezime0</tip:Prezime>
+        <tip:Datum_rodjenja>2006-05-04</tip:Datum_rodjenja>
+        <tip:Pol>M</tip:Pol>
+        <tip:JMBG rel="pred:identifikatorKorisnika" href="http://www.xws.org/korisnici#921909aa-8ff1-47f4-b761-4cbac06929ad">0000000000000</tip:JMBG>
+        <tip:Broj_pasosa rel="pred:identifikatorKorisnika" href="http://www.xws.org/korisnici#921909aa-8ff1-47f4-b761-4cbac06929ad">Broj_pasosa0</tip:Broj_pasosa>
     </Primalac>
     <Vakcinacija>
         <Doza>
-            <Tip_vakcine></Tip_vakcine>
-            <Proizvodjac></Proizvodjac>
-            <Serija></Serija>
-            <Datum>2021-12-20</Datum>
-            <Zdravstvena_ustanova></Zdravstvena_ustanova>
+            <Tip_vakcine>Tip_vakcine0</Tip_vakcine>
+            <Proizvodjac>Proizvodjac0</Proizvodjac>
+            <Serija>Serija0</Serija>
+            <Datum>2006-05-04</Datum>
+            <Zdravstvena_ustanova>Zdravstvena_ustanova0</Zdravstvena_ustanova>
+        </Doza>
+        <Doza>
+            <Tip_vakcine>Tip_vakcine1</Tip_vakcine>
+            <Proizvodjac>Proizvodjac1</Proizvodjac>
+            <Serija>Serija1</Serija>
+            <Datum>2006-05-04</Datum>
+            <Zdravstvena_ustanova>Zdravstvena_ustanova1</Zdravstvena_ustanova>
         </Doza>
     </Vakcinacija>
     <Testovi>
-        
     </Testovi>
-    <Datum_vreme>2021-12-12T18:18:18</Datum_vreme>
 </Sertifikat>

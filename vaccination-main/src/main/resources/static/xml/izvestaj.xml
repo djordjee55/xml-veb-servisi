@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Izvestaj xmlns="http://www.xws.org/izvestaj"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.xws.org/izvestaj ../xsd/izvestaj.xsd">
+<Izvestaj
+         xmlns:tip="http://www.xws.org/tipovi"
+         xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+         xmlns="http://www.xws.org/izvestaj"
+         xmlns:pred="http://www.xws.org/predicate"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.xws.org/izvestaj file:../xsd/izvestaj.xsd"
+         id="7faef6a8-297e-4d35-bb77-fa71742b990c">
+    <Datum_izdavanja>2006-05-04</Datum_izdavanja>
     <Period>
-        <Od>2021-07-07</Od>
-        <Do>2021-08-08</Do>
+        <Od>2006-05-04</Od>
+        <Do>2006-05-04</Do>
     </Period>
-    <Broj_podnetih_dokumenata_o_interesovanju>123</Broj_podnetih_dokumenata_o_interesovanju>
-    <Broj_primljenih_zahteva_za_digitalni_zeleni_sertifikat>123</Broj_primljenih_zahteva_za_digitalni_zeleni_sertifikat>
-    <Broj_izdatih_zahteva_za_digitalni_zeleni_sertifikat>123</Broj_izdatih_zahteva_za_digitalni_zeleni_sertifikat>
-    <Ukupan_broj_datih_doza_vakcine>123</Ukupan_broj_datih_doza_vakcine>
+    <Broj_podnetih_dokumenata_o_interesovanju>50</Broj_podnetih_dokumenata_o_interesovanju>
+    <Broj_primljenih_zahteva_za_digitalni_zeleni_sertifikat>50</Broj_primljenih_zahteva_za_digitalni_zeleni_sertifikat>
+    <Broj_izdatih_zahteva_za_digitalni_zeleni_sertifikat>50</Broj_izdatih_zahteva_za_digitalni_zeleni_sertifikat>
+    <Ukupan_broj_datih_doza_vakcine>50</Ukupan_broj_datih_doza_vakcine>
     <Doze>
         <Doza>
-            <Broj_datih_doza>123</Broj_datih_doza>
+            <Broj_datih_doza>50</Broj_datih_doza>
+        </Doza>
+        <Doza>
+            <Broj_datih_doza>50</Broj_datih_doza>
         </Doza>
     </Doze>
     <Raspodela_po_proizvodjacima>
         <Proizvodjac>
             <Naziv>Pfizer-BioNTech</Naziv>
-            <Broj_doza>123</Broj_doza>
+            <Broj_doza>50</Broj_doza>
+        </Proizvodjac>
+        <Proizvodjac>
+            <Naziv>Pfizer-BioNTech</Naziv>
+            <Broj_doza>50</Broj_doza>
         </Proizvodjac>
     </Raspodela_po_proizvodjacima>
-    <Datum_izdavanja>2021-08-08</Datum_izdavanja>
 </Izvestaj>
