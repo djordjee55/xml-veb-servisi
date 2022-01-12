@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Interesovanje
+         xmlns="http://www.xws.org/interesovanje"
+         xmlns:tip="http://www.xws.org/tipovi"
+         xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema#"
+         xmlns:pred="http://www.xws.org/vacc/#"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.xws.org/interesovanje file:../xsd/interesovanje.xsd"
+         id="99350e11-8a92-4c53-a55d-bc4545b02e90"
+         about="http://www.xws.org/interesovanje#99350e11-8a92-4c53-a55d-bc4545b02e90">
+    <Datum property="pred:datumIzdavanja" datatype="xs:date">2006-05-04</Datum>
+    <Drzavljanstvo>
+        <Drzavljanin_Republike_Srbije property="pred:drzavljanin" datatype="xs:string">Drzavljanin_Republike_Srbije</Drzavljanin_Republike_Srbije>
+    </Drzavljanstvo>
+    <Zeljena_opstina_vakcinacije>Zeljena_opstina_vakcinacije0</Zeljena_opstina_vakcinacije>
+    <Zeljena_vakcina>
+        <Sputnik_V property="pred:zeljenaVakcina" datatype="xs:string">Sputnik_V</Sputnik_V>
+        <Moderna property="pred:zeljenaVakcina" datatype="xs:string">Moderna</Moderna>
+    </Zeljena_vakcina>
+    <Dobrovoljni_davalac_krvi property="pred:davalacKrvi" datatype="xs:boolean">false</Dobrovoljni_davalac_krvi>
+    <Primalac>
+        <tip:Ime>Ime0</tip:Ime>
+        <tip:Prezime>Prezime0</tip:Prezime>
+        <tip:Datum_rodjenja>2006-05-04</tip:Datum_rodjenja>
+        <tip:Kontakt/>
+        <tip:JMBG rel="pred:identifikatorKorisnika" href="http://www.xws.org/korisnici#921909aa-8ff1-47f4-b761-4cbac06929ad">0000000000000</tip:JMBG>
+    </Primalac>
+</Interesovanje>

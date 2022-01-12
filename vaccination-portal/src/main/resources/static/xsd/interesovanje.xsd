@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.0" targetNamespace="http://www.xws.org/interesovanje"
+    xmlns:interesovanje="http://www.xws.org/interesovanje" xmlns:tip="http://www.xws.org/tipovi"
+    xmlns:pred="http://www.xws.org/vacc/#">
+
+    <xs:import namespace="http://www.xws.org/tipovi" schemaLocation="tipovi.xsd"/>
+
+    <xs:element name="Interesovanje">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Datum" type="tip:TDatumKreiranja"/>
+                <xs:element name="Drzavljanstvo">
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:element name="Drzavljanin_Republike_Srbije"
+                                fixed="Drzavljanin_Republike_Srbije">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute fixed="pred:drzavljanin" name="property"
+                                                use="required"/>
+                                            <xs:attribute fixed="xs:string" name="datatype"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Strani_drzavljanin_sa_boravkom_u_RS"
+                                fixed="Strani_drzavljanin_sa_boravkom_u_RS">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute fixed="pred:drzavljanin" name="property"
+                                                use="required"/>
+                                            <xs:attribute fixed="xs:string" name="datatype"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Strani_drzavljanin_bez_boravka_u_RS"
+                                fixed="Strani_drzavljanin_bez_boravka_u_RS">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute fixed="pred:drzavljanin" name="property"
+                                                use="required"/>
+                                            <xs:attribute fixed="xs:string" name="datatype"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Zeljena_opstina_vakcinacije" type="xs:string"/>
+                <xs:element name="Zeljena_vakcina">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="Pfizer-BioNTech" fixed="Pfizer-BioNTech">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute fixed="pred:zeljenaVakcina"
+                                                name="property" use="required"/>
+                                            <xs:attribute fixed="xs:string" name="datatype"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Sputnik_V" fixed="Sputnik_V">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute fixed="pred:zeljenaVakcina"
+                                                name="property" use="required"/>
+                                            <xs:attribute fixed="xs:string" name="datatype"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Sinopharm" fixed="Sinopharm">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute fixed="pred:zeljenaVakcina"
+                                                name="property" use="required"/>
+                                            <xs:attribute fixed="xs:string" name="datatype"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="AstraZeneca" fixed="AstraZeneca">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute fixed="pred:zeljenaVakcina"
+                                                name="property" use="required"/>
+                                            <xs:attribute fixed="xs:string" name="datatype"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Moderna" fixed="Moderna">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute fixed="pred:zeljenaVakcina"
+                                                name="property" use="required"/>
+                                            <xs:attribute fixed="xs:string" name="datatype"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Bilo_koja" fixed="Bilo_koja">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute fixed="pred:zeljenaVakcina"
+                                                name="property" use="required"/>
+                                            <xs:attribute fixed="xs:string" name="datatype"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Dobrovoljni_davalac_krvi">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:boolean">
+                                <xs:attribute fixed="pred:davalacKrvi" name="property"
+                                    use="required"/>
+                                <xs:attribute fixed="xs:boolean" name="datatype" use="required"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Primalac" type="tip:TZainteresovanoLice"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="about" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
