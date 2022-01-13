@@ -1,7 +1,6 @@
 package com.tim123.vaccinationmain.repository;
 
 import com.tim123.vaccinationmain.util.AuthenticationUtilities;
-import com.tim123.vaccinationmain.util.MarshallUnmarshallFactory;
 import org.exist.xmldb.EXistResource;
 import org.springframework.stereotype.Component;
 import org.xmldb.api.DatabaseManager;
@@ -11,19 +10,10 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
 
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.io.StringWriter;
 
 @Component
 public class RepositoryUtil {
-
-    public String marshall(Object object, Class<?> objectClass) throws JAXBException {
-        var marshaller = MarshallUnmarshallFactory.getMarshaller(objectClass);
-        var stringWriter = new StringWriter();
-        marshaller.marshal(object, stringWriter);
-        return stringWriter.toString();
-    }
 
     public void save(String collectionId, String documentId, String xmlData) throws Exception {
         AuthenticationUtilities.ConnectionProperties props = AuthenticationUtilities.loadProperties();

@@ -27,7 +27,7 @@ public class RDFServiceImpl implements RDFService {
         model.read(new ByteArrayInputStream(rdfData.getBytes()), null);
         var out = new ByteArrayOutputStream();
         model.write(out, SparqlUtil.NTRIPLES);
-        model.write(System.out, SparqlUtil.RDF_XML);
+        // model.write(System.out, SparqlUtil.RDF_XML);
 
         var sparqlUpdate = SparqlUtil.insertData(conn.dataEndpoint + graphPath, out.toString());
         var updateRequest = UpdateFactory.create(sparqlUpdate);

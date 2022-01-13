@@ -9,20 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/vaccine")
+@RequestMapping("/api/vakcina")
 @RequiredArgsConstructor
 public class VakcinaController {
 
     private final VakcinaService vakcinaService;
 
-    @PostMapping(path = "/update", consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<String> updateVaccineQuantity(@RequestBody AzurirajVakcinuDTO azurirajVakcinuDTO) {
+    @PostMapping(path = "/azuriraj", consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> azurirajVakcinu(@RequestBody AzurirajVakcinuDTO azurirajVakcinuDTO) {
         vakcinaService.azurirajKolicinu(azurirajVakcinuDTO.getVakcina(), azurirajVakcinuDTO.getKolicina());
         return ResponseEntity.ok("Uspesno azurirano");
     }
 
-    @GetMapping(path = "/get-quantity/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<Vakcina> getVaccineQuantity(@PathVariable String id) {
+    @GetMapping(path = "/kolicina/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<Vakcina> dobaviVakcinu(@PathVariable String id) {
         return ResponseEntity.ok(vakcinaService.dobaviVakcinu(id));
     }
 }

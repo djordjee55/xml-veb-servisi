@@ -14,13 +14,13 @@ public class InteresovanjeController {
 
     private final InteresovanjeService interesovanjeService;
 
-    @PostMapping(value = "/interesovanje", consumes = MediaType.APPLICATION_XML_VALUE)
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> dodajInteresovanje(@RequestBody Interesovanje interesovanje) {
         interesovanjeService.dodajInteresovanje(interesovanje);
         return ResponseEntity.ok("Interesovanje uspesno dodato");
     }
 
-    @GetMapping(value = "/interesovanje/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Interesovanje> dobaviInteresovanje(@PathVariable String id) {
         var interesovanje = interesovanjeService.dobaviInteresovanje(id);
         return ResponseEntity.ok(interesovanje);
