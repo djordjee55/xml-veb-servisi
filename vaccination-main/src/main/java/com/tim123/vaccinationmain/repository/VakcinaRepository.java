@@ -20,7 +20,7 @@ public class VakcinaRepository implements CRUDRepository<Vakcina> {
     @Override
     public Vakcina save(Vakcina entity) throws Exception {
         String documentId = entity.getNaziv().name().toLowerCase();
-        repositoryUtil.save(vakcinaCollection, documentId, repositoryUtil.convertToXmlString(entity, Vakcina.class));
+        repositoryUtil.save(vakcinaCollection, documentId, repositoryUtil.marshall(entity, Vakcina.class));
         return entity;
     }
 

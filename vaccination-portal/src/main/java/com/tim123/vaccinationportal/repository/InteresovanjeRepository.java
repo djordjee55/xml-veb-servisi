@@ -29,7 +29,7 @@ public class InteresovanjeRepository implements CRUDRepository<Interesovanje> {
         entity.setId(documentId);
         // Za RDF
         entity.setAbout(String.format("%s#%s", interesovanjeBase, documentId));
-        repositoryUtil.save(interesovanjeCollection, documentId, repositoryUtil.convertToXmlString(entity, Interesovanje.class));
+        repositoryUtil.save(interesovanjeCollection, documentId, repositoryUtil.marshall(entity, Interesovanje.class));
         return entity;
     }
 

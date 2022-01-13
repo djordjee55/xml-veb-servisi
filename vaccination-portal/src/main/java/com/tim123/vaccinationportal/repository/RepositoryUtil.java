@@ -18,7 +18,7 @@ import java.io.StringWriter;
 @Component
 public class RepositoryUtil {
 
-    public String convertToXmlString(Object object, Class<?> objectClass) throws JAXBException {
+    public String marshall(Object object, Class<?> objectClass) throws JAXBException {
         var marshaller = MarshallUnmarshallFactory.getMarshaller(objectClass);
         var stringWriter = new StringWriter();
         marshaller.marshal(object, stringWriter);
