@@ -32,7 +32,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     public Interesovanje dodajInteresovanje(Interesovanje interesovanje) {
         try {
             var i = this.save(interesovanje);
-            terminService.kreirajNoviTermin("DOM_ZDRAVLJA_???", LocalDate.now().plusWeeks(2));
+            //terminService.kreirajNoviTermin("DOM_ZDRAVLJA_???", LocalDate.now().plusWeeks(2));//refaktorisati
             //posalji mejl o terminu
             rdfService.extractMetadata(interesovanje, Interesovanje.class, interesovanjePath);
             return i;
