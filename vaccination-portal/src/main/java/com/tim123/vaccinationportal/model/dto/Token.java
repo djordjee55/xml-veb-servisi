@@ -5,14 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.xml.bind.annotation.XmlElement;
-
+import javax.xml.bind.annotation.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@XmlRootElement(name = "Token")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {
+        "token"
+})
 public class Token {
-    @XmlElement(name = "Token")
+    @XmlValue
     private String token;
 }
