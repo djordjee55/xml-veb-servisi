@@ -5,8 +5,6 @@ import com.tim123.vaccinationportal.model.enumi.Uloga;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +12,6 @@ import java.util.List;
 
 public class JWTUserDetails implements UserDetails {
     private final Korisnik korisnik;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     public JWTUserDetails(Korisnik korisnik) {
@@ -31,7 +28,6 @@ public class JWTUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        //return passwordEncoder.encode(korisnik.getLozinka());
         return korisnik.getLozinka();
     }
 

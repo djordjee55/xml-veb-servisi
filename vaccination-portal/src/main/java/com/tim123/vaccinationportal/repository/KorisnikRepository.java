@@ -48,6 +48,9 @@ public class KorisnikRepository implements CRUDRepository<Korisnik>{
             ResourceSet result = xPathService.executeXPath(korisnikCollection, String.format("//Korisnik[Email='%s']", email), "");
             resultSet = converterService.convert(result, Korisnik.class);
 
+            if(resultSet.isEmpty())
+                return null;
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -20,7 +20,9 @@ public class KorisnikServiceImpl extends CRUDServiceImpl<Korisnik> implements Ko
     @Override
     public Korisnik registrujKorisnika(Korisnik korisnik) {
 
-        //TODO proveri da li vec postoji neko sa ovim mailom..... :D
+        Korisnik k = korisnikRepository.findByEmail(korisnik.getEmail());
+        if(k != null)
+            return null;
 
         String psw = passwordEncoder.encode(korisnik.getLozinka());
         korisnik.setLozinka(psw);

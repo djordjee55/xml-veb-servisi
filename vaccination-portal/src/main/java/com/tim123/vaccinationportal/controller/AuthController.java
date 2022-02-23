@@ -34,7 +34,11 @@ public class AuthController {
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<?> registracija(@RequestBody Korisnik korisnik) {
-        korisnikService.registrujKorisnika(korisnik);
+        Korisnik k = korisnikService.registrujKorisnika(korisnik);
+        if(k == null)
+        {
+            return new ResponseEntity<>("Korisnik sa datim emailom je vec registrovan!", HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.ok("Korisnik uspesno registrovan!");
     }
 
@@ -46,9 +50,6 @@ public class AuthController {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     login.getEmail(), login.getLozinka()));
         }catch (Exception e){
-            System.out.println("GRESKAA---------------------------------------------------");
-            e.printStackTrace();
-            System.out.println("GRESKAA---------------------------------------------------");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
