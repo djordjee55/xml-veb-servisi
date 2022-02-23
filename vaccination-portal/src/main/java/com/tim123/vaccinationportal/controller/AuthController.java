@@ -46,6 +46,9 @@ public class AuthController {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     login.getEmail(), login.getLozinka()));
         }catch (Exception e){
+            System.out.println("GRESKAA---------------------------------------------------");
+            e.printStackTrace();
+            System.out.println("GRESKAA---------------------------------------------------");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
@@ -58,6 +61,8 @@ public class AuthController {
         var user = (JWTUserDetails) authentication.getPrincipal();
 
         String jwt = tokenUtils.generateToken(user.getUsername(), claims);
+
+        System.out.println("success login");
         return ResponseEntity.ok(new Token(jwt));
     }
 

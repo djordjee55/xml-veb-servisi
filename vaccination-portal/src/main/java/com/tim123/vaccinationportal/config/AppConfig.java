@@ -16,6 +16,7 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowedMethods("GET", "PUT", "POST", "DELETE", "OPTIONS", "PATCH");
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
