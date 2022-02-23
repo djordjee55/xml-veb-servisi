@@ -5,4 +5,5 @@ public class Constants {
     public static final String interesovanjeBase = String.format("%s/interesovanje", base);
     public static final String interesovanjePath = "/fuseki/interesovanje";
     public static final String interesovanjeCollection = "db/vakcinisanje/interesovanje";
+    public static final String korisnikCollection = "db/vakcinisanje/korisnik";
 }
