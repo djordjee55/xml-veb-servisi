@@ -1,5 +1,6 @@
 package com.tim123.vaccinationportal.service.impl;
 
+import com.tim123.vaccinationportal.exception.InterestAlreadyExists;
 import com.tim123.vaccinationportal.model.Korisnik;
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayInputStream;
-import java.time.LocalDate;
 
 import static com.tim123.vaccinationportal.util.Constants.interesovanjePath;
 
@@ -32,6 +32,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     private final KorisnikService korisnikService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
+    private final EmailService emailService;
 
     @Override
     protected CRUDRepository<Interesovanje> getRepository() {
@@ -41,11 +42,14 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     @Override
     public Interesovanje dodajInteresovanje(Interesovanje interesovanje, String email) {
         postaviInfoOKorisniku(interesovanje, email);
+        if (interesovanjeRepository.findForUser(korisnikService.findByEmail(email).getJmbg()) != null)
+            throw new InterestAlreadyExists(String.format("Korisnik %s je vec podneo interesovanje!", email));
+
         try {
             var i = this.save(interesovanje);
+            interesovanjePrimljenoEmail(i, email);
             //terminService.kreirajNoviTermin("DOM_ZDRAVLJA_???", LocalDate.now().plusWeeks(2));//refaktorisati
             //posalji mejl o terminu
-            //TODO: ovo baca gresku!
             rdfService.extractMetadata(interesovanje, Interesovanje.class, interesovanjePath);
             return i;
         } catch (Exception e) {
@@ -88,5 +92,9 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
         tZainteresovanoLice.setDatumRodjenja(korisnik.getDatumRodjenja());
         tZainteresovanoLice.setKontakt(interesovanje.getPrimalac().getKontakt());
         interesovanje.setPrimalac(tZainteresovanoLice);
+    }
+
+    private void interesovanjePrimljenoEmail(Interesovanje interesovanje, String email) {
+        emailService.sendEmail("", email, "Interesovanje primljeno", "Ovo se mora srediti");
     }
 }

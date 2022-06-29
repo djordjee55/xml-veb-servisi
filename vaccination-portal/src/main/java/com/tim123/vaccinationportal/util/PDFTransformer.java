@@ -25,7 +25,7 @@ import java.io.IOException;
 @Component
 public class PDFTransformer {
 
-    public static final String FOX_XCONF = "classpath:static/xsl-fo/fop.xconf";
+    public static final String FOX_XCONF = "classpath:static/fop.xconf";
     public static String XSL_FILE;
     private final FopFactory fopFactory;
     private final TransformerFactory transformerFactory;

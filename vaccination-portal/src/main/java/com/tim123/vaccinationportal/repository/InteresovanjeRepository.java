@@ -1,10 +1,15 @@
 package com.tim123.vaccinationportal.repository;
 
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
+import com.tim123.vaccinationportal.service.ConverterService;
 import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
+import com.tim123.vaccinationportal.service.XPathService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.xmldb.api.base.ResourceSet;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.tim123.vaccinationportal.util.Constants.interesovanjeBase;
@@ -15,16 +20,15 @@ import static com.tim123.vaccinationportal.util.Constants.interesovanjeCollectio
 public class InteresovanjeRepository implements CRUDRepository<Interesovanje> {
 
     private final RepositoryUtil repositoryUtil;
+    private final XPathService xPathService;
     private final MarshallUnmarshallService<Interesovanje> marshallUnmarshallService;
+    private final ConverterService<Interesovanje> converterService;
 
     @Override
     public Interesovanje save(Interesovanje entity) throws Exception {
         UUID uuid = UUID.randomUUID();
-        // Naziv dokumenta
         String documentId = uuid.toString();
-        // Koji je ujedno i njegov ID;
         entity.setId(documentId);
-        // Za RDF
         entity.setAbout(String.format("%s#%s", interesovanjeBase, documentId));
         repositoryUtil.save(interesovanjeCollection, documentId, marshallUnmarshallService.marshall(entity, Interesovanje.class));
         return entity;
@@ -35,4 +39,21 @@ public class InteresovanjeRepository implements CRUDRepository<Interesovanje> {
         var result = repositoryUtil.findByDocumentId(interesovanjeCollection, id);
         return marshallUnmarshallService.unmarshall(result, Interesovanje.class);
     }
+
+    public Interesovanje findForUser(String jmbg) {
+        List<Interesovanje> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(interesovanjeCollection, String.format("//Interesovanje[Primalac[JMBG='%s']]", jmbg), "");
+            resultSet = converterService.convert(result, Interesovanje.class);
+
+            if (resultSet.isEmpty())
+                return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet.get(0);
+    }
+
+
 }
