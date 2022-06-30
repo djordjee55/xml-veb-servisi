@@ -18,14 +18,14 @@
         <tip:Broj_pasosa rel="pred:identifikatorKorisnika" href="http://www.xws.org/korisnici#921909aa-8ff1-47f4-b761-4cbac06929ad">Broj_pasosa0</tip:Broj_pasosa>
     </Primalac>
     <Vakcinacija>
-        <Doza>
+        <Doza redni_broj="1">
             <Tip_vakcine>Tip_vakcine0</Tip_vakcine>
             <Proizvodjac>Proizvodjac0</Proizvodjac>
             <Serija>Serija0</Serija>
             <Datum>2006-05-04</Datum>
             <Zdravstvena_ustanova>Zdravstvena_ustanova0</Zdravstvena_ustanova>
         </Doza>
-        <Doza>
+        <Doza redni_broj="2">
             <Tip_vakcine>Tip_vakcine1</Tip_vakcine>
             <Proizvodjac>Proizvodjac1</Proizvodjac>
             <Serija>Serija1</Serija>
