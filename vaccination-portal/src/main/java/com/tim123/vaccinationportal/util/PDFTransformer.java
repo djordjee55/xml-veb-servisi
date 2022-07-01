@@ -2,6 +2,7 @@ package com.tim123.vaccinationportal.util;
 
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
+import com.tim123.vaccinationportal.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import net.sf.saxon.TransformerFactoryImpl;
 import org.apache.fop.apps.FOUserAgent;
@@ -42,6 +43,8 @@ public class PDFTransformer {
             XSL_FILE = "classpath:static/xsl-fo/saglasnost_fo.xsl";
         else if (classOfDocument.equals(Zahtev.class))
             XSL_FILE = "classpath:static/xsl-fo/zahtev_fo.xsl";
+        else if (classOfDocument.equals(Sertifikat.class))
+            XSL_FILE = "classpath:static/xsl-fo/sertifikat-fo.xsl";
 
     }
 
