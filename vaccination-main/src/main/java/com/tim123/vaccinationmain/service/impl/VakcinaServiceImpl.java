@@ -22,8 +22,8 @@ public class VakcinaServiceImpl extends CRUDServiceImpl<Vakcina> implements Vakc
     }
 
     @Override
-    public void azurirajKolicinu(TipVakcine tipVakcine, int kolicina) {
-        var vakcina = new Vakcina(tipVakcine, kolicina);
+    public void azurirajKolicinu(TipVakcine tipVakcine, int kolicina, String opstina, String id) {
+        var vakcina = new Vakcina(tipVakcine, kolicina, opstina, id);
         try {
             this.save(vakcina);
         } catch (Exception e) {
@@ -38,6 +38,22 @@ public class VakcinaServiceImpl extends CRUDServiceImpl<Vakcina> implements Vakc
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vakcina nije pronadjena");
         }
         return vak.get();
+    }
+
+    @Override
+    public Boolean dostupnaVakcina(String vakcina, String ustanova) {
+        return vakcinaRepository.checkQuantityForVaccine(vakcina, ustanova) > 0;
+    }
+
+    @Override
+    public void smanjiKolicinu(String value, String id) {
+        Vakcina vakcina = vakcinaRepository.getVakcinaZaUstanovu(value, id);
+        vakcina.setKolicina(vakcina.getKolicina() - 1);
+        try {
+            save(vakcina);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

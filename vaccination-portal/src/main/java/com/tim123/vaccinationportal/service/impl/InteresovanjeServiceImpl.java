@@ -1,8 +1,10 @@
 package com.tim123.vaccinationportal.service.impl;
 
+import com.tim123.vaccinationportal.clients.TerminClient;
 import com.tim123.vaccinationportal.exception.InterestAlreadyExists;
 import com.tim123.vaccinationportal.model.Korisnik;
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
+import com.tim123.vaccinationportal.model.termin.Termin;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.model.tipovi.TZainteresovanoLice;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
@@ -10,7 +12,6 @@ import com.tim123.vaccinationportal.repository.InteresovanjeRepository;
 import com.tim123.vaccinationportal.service.InteresovanjeService;
 import com.tim123.vaccinationportal.service.KorisnikService;
 import com.tim123.vaccinationportal.service.RDFService;
-import com.tim123.vaccinationportal.service.TerminService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +28,12 @@ import static com.tim123.vaccinationportal.util.Constants.interesovanjePath;
 public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> implements InteresovanjeService {
 
     private final InteresovanjeRepository interesovanjeRepository;
-    private final TerminService terminService;
     private final RDFService rdfService;
     private final KorisnikService korisnikService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
     private final EmailService emailService;
+    private final TerminClient terminClient;
 
     @Override
     protected CRUDRepository<Interesovanje> getRepository() {
@@ -47,9 +48,12 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
 
         try {
             var i = this.save(interesovanje);
-            interesovanjePrimljenoEmail(i, email);
-            //terminService.kreirajNoviTermin("DOM_ZDRAVLJA_???", LocalDate.now().plusWeeks(2));//refaktorisati
-            //posalji mejl o terminu
+            Termin termin = terminClient.dodeliTermin(i, email);
+            if(termin == null)
+                interesovanjePrimljenoEmail(i, email);
+            else
+                interesovanjePrimljenoEmail(i, email, termin);
+
             rdfService.extractMetadata(interesovanje, Interesovanje.class, interesovanjePath);
             return i;
         } catch (Exception e) {
@@ -96,5 +100,9 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
 
     private void interesovanjePrimljenoEmail(Interesovanje interesovanje, String email) {
         emailService.sendEmail("", email, "Interesovanje primljeno", "Ovo se mora srediti");
+    }
+
+    private void interesovanjePrimljenoEmail(Interesovanje interesovanje, String email, Termin termin) {
+        emailService.sendEmail("", email, "Interesovanje primljeno sa terminom", "Ovo se mora srediti");
     }
 }

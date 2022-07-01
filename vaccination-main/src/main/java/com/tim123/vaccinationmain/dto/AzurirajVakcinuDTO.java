@@ -12,4 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class AzurirajVakcinuDTO {
     private TipVakcine vakcina;
     private int kolicina;
+    private String opstina;
+    private String id;
 }

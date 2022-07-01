@@ -17,7 +17,7 @@ public class VakcinaController {
 
     @PostMapping(path = "/azuriraj", consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> azurirajVakcinu(@RequestBody AzurirajVakcinuDTO azurirajVakcinuDTO) {
-        vakcinaService.azurirajKolicinu(azurirajVakcinuDTO.getVakcina(), azurirajVakcinuDTO.getKolicina());
+        vakcinaService.azurirajKolicinu(azurirajVakcinuDTO.getVakcina(), azurirajVakcinuDTO.getKolicina(), azurirajVakcinuDTO.getOpstina(), azurirajVakcinuDTO.getId());
         return ResponseEntity.ok("Uspesno azurirano");
     }
 
