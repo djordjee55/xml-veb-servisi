@@ -30,6 +30,5 @@ public abstract class CRUDServiceImpl<T> implements CRUDService<T> {
 
     @Override
     public void delete(String id) {
-
     }
 }

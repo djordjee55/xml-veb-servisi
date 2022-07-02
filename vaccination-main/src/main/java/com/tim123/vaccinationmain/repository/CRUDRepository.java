@@ -9,5 +9,4 @@ public interface CRUDRepository<T> {
 
     T save(T entity) throws Exception;
     T findById(String id) throws Exception;
-
 }
