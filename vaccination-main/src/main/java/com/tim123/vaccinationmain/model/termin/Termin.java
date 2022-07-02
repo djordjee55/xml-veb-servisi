@@ -1,4 +1,4 @@
-package com.tim123.vaccinationmain.model.vakcina;
+package com.tim123.vaccinationmain.model.termin;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,19 +8,21 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "Vakcina")
+@NoArgsConstructor
+@XmlRootElement(name="Termin")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Vakcina {
-    private TipVakcine naziv;
-    private int kolicina;
+public class Termin {
+    @XmlAttribute(name = "datum_vreme")
+    private XMLGregorianCalendar datumVreme;
 
     @XmlAttribute
-    private String ustanova;
+    private String pacijent;
 
     @XmlAttribute
-    private String id;
+    private String vakcina;
+
 }
