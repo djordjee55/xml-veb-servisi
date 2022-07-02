@@ -38,7 +38,7 @@ public class ZdravstvenaUstanovaRepository implements CRUDRepository<Zdravstvena
         List<ZdravstvenaUstanova> resultSet = new ArrayList<>();
         try {
             ResourceSet result = xPathService.executeXPath(ustanoveCollection,
-                    String.format("//ZdravstvenaUstanova[opstina='%s']", opstina), "");
+                    String.format("//ZdravstvenaUstanova[@opstina='%s']", opstina), "");
 
             resultSet = converterService.convert(result, ZdravstvenaUstanova.class);
 
@@ -49,5 +49,22 @@ public class ZdravstvenaUstanovaRepository implements CRUDRepository<Zdravstvena
             e.printStackTrace();
         }
         return resultSet;
+    }
+
+    public String getOpstinaForUstanova(String ustanova) {
+        List<ZdravstvenaUstanova> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(ustanoveCollection,
+                    String.format("//ZdravstvenaUstanova[@id='%s']", ustanova), "");
+
+            resultSet = converterService.convert(result, ZdravstvenaUstanova.class);
+
+            if (resultSet.isEmpty())
+                return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet.get(0).getOpstina();
     }
 }

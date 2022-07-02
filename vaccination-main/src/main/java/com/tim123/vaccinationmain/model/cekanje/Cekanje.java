@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Cekanje {
     @XmlElement(name="ZeljeneVakcine")
     private List<ZeljenaVakcina> zeljeneVakcine;
@@ -26,5 +25,8 @@ public class Cekanje {
 
     @XmlAttribute
     private String id;
+
+    @XmlAttribute
+    private boolean obradjen;
 
 }

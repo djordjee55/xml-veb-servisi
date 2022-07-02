@@ -99,10 +99,10 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     }
 
     private void interesovanjePrimljenoEmail(Interesovanje interesovanje, String email) {
-        emailService.sendEmail("", email, "Interesovanje primljeno", "Ovo se mora srediti");
+//        emailService.sendEmail("", email, "Interesovanje primljeno", "Ovo se mora srediti");
     }
 
     private void interesovanjePrimljenoEmail(Interesovanje interesovanje, String email, Termin termin) {
-        emailService.sendEmail("", email, "Interesovanje primljeno sa terminom", "Ovo se mora srediti");
+//        emailService.sendEmail("", email, "Interesovanje primljeno sa terminom", "Ovo se mora srediti");
     }
 }

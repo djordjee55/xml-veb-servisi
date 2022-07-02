@@ -4,11 +4,14 @@ import com.tim123.vaccinationmain.model.vakcina.TipVakcine;
 import com.tim123.vaccinationmain.model.vakcina.Vakcina;
 import com.tim123.vaccinationmain.repository.CRUDRepository;
 import com.tim123.vaccinationmain.repository.VakcinaRepository;
+import com.tim123.vaccinationmain.service.CekanjeService;
 import com.tim123.vaccinationmain.service.VakcinaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +25,9 @@ public class VakcinaServiceImpl extends CRUDServiceImpl<Vakcina> implements Vakc
     }
 
     @Override
-    public void azurirajKolicinu(TipVakcine tipVakcine, int kolicina, String opstina, String id) {
-        var vakcina = new Vakcina(tipVakcine, kolicina, opstina, id);
+    public void azurirajKolicinu(TipVakcine tipVakcine, int kolicina, String ustanova, String id) {
+        if(id == null) id = UUID.randomUUID().toString();
+        var vakcina = new Vakcina(tipVakcine, kolicina, ustanova, id);
         try {
             this.save(vakcina);
         } catch (Exception e) {
