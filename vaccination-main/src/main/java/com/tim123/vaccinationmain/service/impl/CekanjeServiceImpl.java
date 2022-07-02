@@ -1,6 +1,7 @@
 package com.tim123.vaccinationmain.service.impl;
 
 import com.tim123.vaccinationmain.model.cekanje.Cekanje;
+import com.tim123.vaccinationmain.model.vakcina.Vakcina;
 import com.tim123.vaccinationmain.model.vakcina.ZeljeneVakcine;
 import com.tim123.vaccinationmain.repository.CRUDRepository;
 import com.tim123.vaccinationmain.repository.CekanjeRepository;
@@ -40,6 +41,10 @@ public class CekanjeServiceImpl extends CRUDServiceImpl<Cekanje> implements Ceka
                         terminService.napraviTermin(zdravstvenaUstanovaRepository.findById(ustanova), cekanje.getPacijent(), vakcina.getValue());
                         cekanje.setObradjen(true);
                         cekanjeRepository.save(cekanje);
+
+                        Vakcina vakcina1 = vakcinaRepository.getVakcinaZaUstanovu(vakcina.getValue(), ustanova);
+                        vakcina1.setKolicina(vakcina1.getKolicina() - 1);
+                        vakcinaRepository.save(vakcina1);
                     } catch (Exception e) {
                         System.out.println("Problem prilikom pravvljenja termina!");
                     }

@@ -4,7 +4,6 @@ import com.tim123.vaccinationportal.model.dto.ZeljenaVakcinaDto;
 import com.tim123.vaccinationportal.model.dto.ZeljeneVakcineDto;
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.termin.Termin;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 

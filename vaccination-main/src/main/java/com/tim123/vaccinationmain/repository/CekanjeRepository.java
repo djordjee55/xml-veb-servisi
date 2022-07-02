@@ -1,8 +1,6 @@
 package com.tim123.vaccinationmain.repository;
 
 import com.tim123.vaccinationmain.model.cekanje.Cekanje;
-import com.tim123.vaccinationmain.model.vakcina.Vakcina;
-import com.tim123.vaccinationmain.model.zdravstvenaUstanova.ZdravstvenaUstanova;
 import com.tim123.vaccinationmain.service.ConverterService;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
 import com.tim123.vaccinationmain.service.XPathService;
@@ -14,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.tim123.vaccinationmain.util.Constants.cekanjeCollection;
-import static com.tim123.vaccinationmain.util.Constants.vakcinaCollection;
 
 @Repository
 @RequiredArgsConstructor
