@@ -25,11 +25,24 @@
             <Ulica>Ulica0</Ulica>
             <Broj>0</Broj>
         </Adresa>
-        <Kontakt/>
+        <Kontakt>
+            <tip:E_mail>djordjenjegic@email.com</tip:E_mail>
+            <tip:Fiksni_telefon>023456789</tip:Fiksni_telefon>
+            <tip:Mobilni_telefon>060123456789</tip:Mobilni_telefon>
+        </Kontakt>
         <Radni_status>
             <Penzioner>
             </Penzioner>
         </Radni_status>
+        <Korisnik_ustanove_socijalne_zasttite>
+            <Sediste>
+                <Naziv></Naziv>
+                <Opstina></Opstina>
+            </Sediste>
+        </Korisnik_ustanove_socijalne_zasttite>
+        <Saglasnost>
+            <Naziv_imunoloskog_leka>neki naziv</Naziv_imunoloskog_leka>
+        </Saglasnost>
     </Pacijent>
     <Evidencija_o_vakcinaciji>
         <Zdravstvena_ustanova>Zdravstvena_ustanova0</Zdravstvena_ustanova>
@@ -40,8 +53,28 @@
             <Broj_telefona>0</Broj_telefona>
         </Lekar>
         <Vakcine>
+            <Vakcina>
+                <Naziv>naziv vakcine</Naziv>
+                <Datum_davanja>neki datum</Datum_davanja>
+                <Nacin_davanja>neki nacin</Nacin_davanja>
+                <Ekstremitet>
+                    <LR></LR>
+                </Ekstremitet>
+                <Serija>neka serija</Serija>
+                <Proizvodjac>neki proizvodjac</Proizvodjac>
+                <Nezeljena_reakcija></Nezeljena_reakcija>
+            </Vakcina>
         </Vakcine>
         <Privremene_kontraindikacije>
+            <Privremena_kontraindikacija>
+                <Datum_utvrdjivanja>datum1</Datum_utvrdjivanja>
+                <Dijagnoza>nesto1</Dijagnoza>
+            </Privremena_kontraindikacija>
+            <Privremena_kontraindikacija>
+                <Datum_utvrdjivanja>datum2</Datum_utvrdjivanja>
+                <Dijagnoza>nesto2</Dijagnoza>
+            </Privremena_kontraindikacija>
         </Privremene_kontraindikacije>
+        <Trajne_kontraindikacije></Trajne_kontraindikacije>
     </Evidencija_o_vakcinaciji>
 </Saglasnost>
