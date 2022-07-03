@@ -20,6 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayInputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
 
 import static com.tim123.vaccinationportal.util.Constants.interesovanjePath;
 
@@ -118,6 +122,30 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
         //Interesovanje interesovanje = dobaviInteresovanje(id);
         //return pdfTransformer.generatePDF(interesovanje.toString(), Interesovanje.class);
         return pdfTransformer.generatePDF(dobaviInteresovanje2(), Interesovanje.class);
+    }
+
+    @Override
+    public int prebrojInteresovanjaZaPeriod(String startDate, String endDate) throws ParseException {
+
+        List<Interesovanje> interesovanja =  interesovanjeRepository.findAll();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar intervalStart = Calendar.getInstance();
+        intervalStart.setTime(formatter.parse(startDate));
+        Calendar intervalEnd = Calendar.getInstance();
+        intervalStart.setTime(formatter.parse(endDate));
+
+        int numberOfDocumentsInPeriod = 0;
+        
+        for (Interesovanje interesovanje : interesovanja) {
+
+            Calendar documentDate = interesovanje.getDatum().getValue().toGregorianCalendar();
+            if (documentDate.compareTo(intervalStart) > 0 && documentDate.compareTo(intervalEnd) < 0) {
+                numberOfDocumentsInPeriod++;
+            }
+
+        }
+        return numberOfDocumentsInPeriod;
     }
 
     private void postaviInfoOKorisniku(Interesovanje interesovanje, String email) {

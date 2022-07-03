@@ -2,14 +2,144 @@ package com.tim123.vaccinationmain.service.impl;
 
 import com.tim123.vaccinationmain.model.izvestaj.Izvestaj;
 import com.tim123.vaccinationmain.repository.CRUDRepository;
+import com.tim123.vaccinationmain.repository.IzvestajRepository;
 import com.tim123.vaccinationmain.service.IzvestajService;
+import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
+import com.tim123.vaccinationmain.service.PotvrdaService;
+import com.tim123.vaccinationmain.service.SertifikatService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements IzvestajService {
+
+    private final MarshallUnmarshallService<Izvestaj> marshallUnmarshallService;
+    private final IzvestajRepository izvestajRepository;
+    private final RestTemplate restTemplate;
+    private final SertifikatService sertifikatService;
+    private final PotvrdaService potvdraService;
 
     @Override
     protected CRUDRepository<Izvestaj> getRepository() {
         return null;
+    }
+
+    @Override
+    public String getIzvestajForPeriod(String startDate, String endDate) throws Exception {
+
+        Izvestaj existingIzvestaj = izvestajRepository.findByPeriod(startDate, endDate);
+        if (existingIzvestaj != null) {
+            return marshallUnmarshallService.marshall(existingIzvestaj, Izvestaj.class);
+        }
+
+        XMLGregorianCalendar currentDate = getCurrentDate();
+        Izvestaj.Period period = Izvestaj.Period.builder()
+                .od(extractDateFromString(startDate))
+                ._do(extractDateFromString(endDate))
+                .build();
+
+        BigInteger countInteresovanje = countInteresovanjeForPeriod(startDate, endDate);
+        BigInteger countZahtevi = countZahteviForPeriod(startDate, endDate);
+        BigInteger countSertifikat = countSertifikatForPeriod(startDate, endDate);
+
+        List<Izvestaj.Doze.Doza> doze = getDosesNoDistribution(startDate, endDate);
+        int dozeSum = doze.stream().mapToInt(doza -> doza.getBrojDatihDoza().intValue()).sum();
+
+        Izvestaj.RaspodelaPoProizvodjacima vaccineDistribution = new Izvestaj.RaspodelaPoProizvodjacima(); //TODO dobavi raspodelu iz druge app
+
+        Izvestaj izvestaj = Izvestaj.builder()
+                .datumIzdavanja(currentDate)
+                .period(period)
+                .brojPodnetihDokumenataOInteresovanju(countInteresovanje)
+                .brojPrimljenihZahtevaZaDigitalniZeleniSertifikat(countZahtevi)
+                .brojIzdatihZahtevaZaDigitalniZeleniSertifikat(countSertifikat)
+                .ukupanBrojDatihDozaVakcine(BigInteger.valueOf(dozeSum))
+                .doze(Izvestaj.Doze.builder()
+                        .doza(doze)
+                        .build())
+                .raspodelaPoProizvodjacima(vaccineDistribution)
+                .build();
+
+        izvestajRepository.save(izvestaj);
+
+        return marshallUnmarshallService.marshall(izvestaj, Izvestaj.class);
+    }
+
+    private List<Izvestaj.Doze.Doza> getDosesNoDistribution(String startDate, String endDate) throws ParseException {
+
+        Izvestaj.Doze.Doza dose1 = Izvestaj.Doze.Doza.builder()
+                .redniBroj(BigInteger.valueOf(1))
+                .brojDatihDoza(BigInteger.valueOf(potvdraService.countDozeByNo(1, startDate, endDate)))
+                .build();
+
+        Izvestaj.Doze.Doza dose2 = Izvestaj.Doze.Doza.builder()
+                .redniBroj(BigInteger.valueOf(2))
+                .brojDatihDoza(BigInteger.valueOf(potvdraService.countDozeByNo(2, startDate, endDate)))
+                .build();
+
+        return List.of(dose1, dose2);
+    }
+
+    private XMLGregorianCalendar getCurrentDate() {
+
+        try {
+            GregorianCalendar calendar = new GregorianCalendar();
+
+            return DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
+        } catch (DatatypeConfigurationException ignored) {
+        }
+
+        return null;
+    }
+
+    private XMLGregorianCalendar extractDateFromString(String date) {
+
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            GregorianCalendar calendar = new GregorianCalendar();
+            Date periodOdDate = formatter.parse(date);
+            calendar.setTime(periodOdDate);
+
+            return DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
+        } catch (ParseException | DatatypeConfigurationException ignored) {
+        }
+
+        return null;
+    }
+
+    private BigInteger countInteresovanjeForPeriod(String startDate, String endDate) {
+
+        ResponseEntity<Integer> response = restTemplate.getForEntity("http://localhost:8082/api/interesovanje/count/" + startDate + "/" + endDate, Integer.class);
+
+        return BigInteger.valueOf(response.getBody());
+    }
+
+    private BigInteger countZahteviForPeriod(String startDate, String endDate) {
+
+        ResponseEntity<Integer> response = restTemplate.getForEntity("http://localhost:8082/api/zahtev/count/" + startDate + "/" + endDate, Integer.class);
+
+        return BigInteger.valueOf(response.getBody());
+    }
+
+    private BigInteger countSertifikatForPeriod(String startDate, String endDate) throws ParseException {
+
+        int numberOfDocuments = sertifikatService.prebrojSertifikateZaPeriod(startDate, endDate);
+
+        return BigInteger.valueOf(numberOfDocuments);
     }
 }

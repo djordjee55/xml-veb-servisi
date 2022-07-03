@@ -13,5 +13,4 @@ public interface SertifikatService {
     Sertifikat getSertifikatById(String id);
 
     String dobaviSertifikat(String id);
-
 }

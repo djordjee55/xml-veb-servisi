@@ -1,5 +1,6 @@
 package com.tim123.vaccinationportal.service.impl;
 
+import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.ZahtevRepository;
@@ -9,6 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
 
 import static com.tim123.vaccinationportal.util.Constants.zahtevPath;
 
@@ -44,5 +50,29 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zahtev nije pronadjen");
         }
         return zahtev.get();
+    }
+
+    @Override
+    public int prebrojZahteveZaPeriod(String startDate, String endDate) throws ParseException {
+
+        List<Zahtev> zahtevi =  zahtevRepository.findAll();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar intervalStart = Calendar.getInstance();
+        intervalStart.setTime(formatter.parse(startDate));
+        Calendar intervalEnd = Calendar.getInstance();
+        intervalStart.setTime(formatter.parse(endDate));
+
+        int numberOfDocumentsInPeriod = 0;
+
+        for (Zahtev zahtev : zahtevi) {
+
+            Calendar documentDate = zahtev.getDatum().getValue().toGregorianCalendar();
+            if (documentDate.compareTo(intervalStart) > 0 && documentDate.compareTo(intervalEnd) < 0) {
+                numberOfDocumentsInPeriod++;
+            }
+
+        }
+        return numberOfDocumentsInPeriod;
     }
 }

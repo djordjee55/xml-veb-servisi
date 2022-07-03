@@ -56,4 +56,15 @@ public class InteresovanjeRepository implements CRUDRepository<Interesovanje> {
     }
 
 
+    public List<Interesovanje> findAll() {
+        List<Interesovanje> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(interesovanjeCollection, "//*", "");
+            resultSet = converterService.convert(result, Interesovanje.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
 }

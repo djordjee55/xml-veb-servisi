@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import com.tim123.vaccinationmain.model.tipovi.TVakcina;
+import lombok.Builder;
 
 
 /**
@@ -102,6 +103,7 @@ import com.tim123.vaccinationmain.model.tipovi.TVakcina;
  * 
  * 
  */
+@Builder
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "datumIzdavanja",
@@ -387,6 +389,7 @@ public class Izvestaj {
      * 
      * 
      */
+    @Builder
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
         "doza"
@@ -446,6 +449,7 @@ public class Izvestaj {
          * 
          * 
          */
+        @Builder
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
             "brojDatihDoza"
@@ -532,6 +536,7 @@ public class Izvestaj {
      * 
      * 
      */
+    @Builder
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
         "od",

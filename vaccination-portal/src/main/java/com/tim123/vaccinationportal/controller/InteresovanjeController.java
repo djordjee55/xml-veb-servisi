@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.UUID;
 
 @RestController
@@ -42,5 +43,10 @@ public class InteresovanjeController {
     public InputStreamResource generisiPDF(@PathVariable UUID id) throws Exception {
         //TODO zavrsiti
         return null;
+    }
+
+    @GetMapping(value = "/count/{startDate}/{endDate}", produces = MediaType.APPLICATION_XML_VALUE)
+    public int prebrojInteresovanjaZaPeriod(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
+        return interesovanjeService.prebrojInteresovanjaZaPeriod(startDate, endDate);
     }
 }

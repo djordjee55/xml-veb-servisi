@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/zahtev")
@@ -23,5 +25,10 @@ public class ZahtevController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Zahtev> dobaviZahtev(@PathVariable String id) {
         return ResponseEntity.ok(zahtevService.dobaviZahtev(id));
+    }
+
+    @GetMapping(value = "/count/{startDate}/{endDate}", produces = MediaType.APPLICATION_XML_VALUE)
+    public int prebrojZahteveZaPeriod(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
+        return zahtevService.prebrojZahteveZaPeriod(startDate, endDate);
     }
 }
