@@ -1,5 +1,6 @@
 package com.tim123.vaccinationportal.service;
 
+import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 
 import java.io.ByteArrayInputStream;
@@ -10,4 +11,6 @@ public interface SaglasnostService extends CRUDService<Saglasnost> {
     Saglasnost dobaviSaglasnost(String id);
     ByteArrayInputStream generisiHTML(String id);
     ByteArrayInputStream generisiPDF(String id);
+
+    void dopuniEvidenciju(DopuniEvidencijuDto dopuniEvidencijuDto);
 }

@@ -1,5 +1,6 @@
 package com.tim123.vaccinationportal.service.impl;
 
+import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
@@ -65,6 +66,11 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         //Saglasnost saglasnost = dobaviSaglasnost(id);
         //return pdfTransformer.generatePDF(saglasnost.toString(), Saglasnost.class);
         return pdfTransformer.generatePDF(dobaviSaglanost2(), Saglasnost.class);
+    }
+
+    @Override
+    public void dopuniEvidenciju(DopuniEvidencijuDto dopuniEvidencijuDto) {
+
     }
 
     private String dobaviSaglanost2() {
