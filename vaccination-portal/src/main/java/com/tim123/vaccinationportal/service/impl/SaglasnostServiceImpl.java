@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 
 import static com.tim123.vaccinationportal.util.Constants.saglasnostPath;
 
@@ -65,6 +66,11 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         //Saglasnost saglasnost = dobaviSaglasnost(id);
         //return pdfTransformer.generatePDF(saglasnost.toString(), Saglasnost.class);
         return pdfTransformer.generatePDF(dobaviSaglanost2(), Saglasnost.class);
+    }
+
+    @Override
+    public List<Saglasnost> dobaviZaKorisnika(String email) {
+        return saglasnostRepository.getForUserEmail(email);
     }
 
     private String dobaviSaglanost2() {
