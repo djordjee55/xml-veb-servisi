@@ -1,6 +1,8 @@
 package com.tim123.vaccinationportal.controller;
 
 import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
+import com.tim123.vaccinationportal.model.dto.vakcine.GetUstanovaStringDto;
+import com.tim123.vaccinationportal.model.dto.vakcine.GetVakcinaStringDto;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.service.SaglasnostService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,4 +44,20 @@ public class SaglasnostController {
         }
         return ResponseEntity.ok("Evidencija uspesno dopunjena");
     }
+
+    @GetMapping(value = "/vakcina-by-user/{userEmail}", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<?> vakcinaByUsername(@PathVariable String userEmail) {
+            List<String> retVal = saglasnostService.vakcinaByUsername(userEmail);
+        return ResponseEntity.ok(new GetVakcinaStringDto(retVal));
+
+    }
+
+    @GetMapping(value = "/ustanova-za-vakcinisanje/{userEmail}", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<?> ustanovaByUsername(@PathVariable String userEmail) {
+        List<String> retVal = saglasnostService.ustanovaByUsername(userEmail);
+        return ResponseEntity.ok(new GetUstanovaStringDto(retVal));
+
+    }
+
+
 }
