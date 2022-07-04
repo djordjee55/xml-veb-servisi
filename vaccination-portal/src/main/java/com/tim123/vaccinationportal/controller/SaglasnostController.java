@@ -26,9 +26,14 @@ public class SaglasnostController {
         return ResponseEntity.ok(saglasnostService.dobaviSaglasnost(id));
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<?> dopuniEvidenciju(@RequestBody DopuniEvidencijuDto dopuniEvidencijuDto) {
-        saglasnostService.dopuniEvidenciju(dopuniEvidencijuDto);
-        return ResponseEntity.ok("Saglasnost uspesno dodata");
+    @PostMapping(value = "/evidencija/{id}", consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<?> dopuniEvidenciju(@PathVariable String id, @RequestBody DopuniEvidencijuDto dopuniEvidencijuDto) {
+        try {
+            saglasnostService.dopuniEvidenciju(id, dopuniEvidencijuDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+        return ResponseEntity.ok("Evidencija uspesno dopunjena");
     }
 }

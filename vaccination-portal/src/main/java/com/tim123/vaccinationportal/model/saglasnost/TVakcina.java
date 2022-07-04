@@ -281,6 +281,7 @@ public class TVakcina {
         @XmlElement(name = "LR")
         protected Object lr;
 
+
         /**
          * Gets the value of the dr property.
          * 

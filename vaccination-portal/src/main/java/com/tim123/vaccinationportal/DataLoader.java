@@ -1,124 +1,26 @@
-package com.tim123.vaccinationportal.service.impl;
+package com.tim123.vaccinationportal;
 
-import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
-import com.tim123.vaccinationportal.model.saglasnost.TEvidencija;
-import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
-import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.SaglasnostRepository;
-import com.tim123.vaccinationportal.service.RDFService;
+import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import com.tim123.vaccinationportal.service.SaglasnostService;
-import com.tim123.vaccinationportal.util.HTMLTransformer;
-import com.tim123.vaccinationportal.util.PDFTransformer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.ByteArrayInputStream;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import static com.tim123.vaccinationportal.util.Constants.saglasnostPath;
-
-@Service
 @RequiredArgsConstructor
-public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implements SaglasnostService {
+@Component
+public class DataLoader implements CommandLineRunner {
 
+    private final SaglasnostService saglasnostService;
     private final SaglasnostRepository saglasnostRepository;
-    private final RDFService rdfService;
-    private final PDFTransformer pdfTransformer;
-    private final HTMLTransformer htmlTransformer;
+    private final MarshallUnmarshallService<Saglasnost> saglasnostmarshallUnmarshallService;
 
     @Override
-    protected CRUDRepository<Saglasnost> getRepository() {
-        return saglasnostRepository;
-    }
-
-    @Override
-    public Saglasnost dodajSaglasnost(Saglasnost saglasnost) {
-        //da li postoji termin, i da nije izvrsena vec vakcinacija u okviru njega
-        try {
-            var i = this.save(saglasnost);
-            rdfService.extractMetadata(saglasnost, Saglasnost.class, saglasnostPath);
-            return i;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Losa saglasnost");
-        }
-    }
-
-    @Override
-    public Saglasnost dobaviSaglasnost(String id) {
-
-        var saglasnost = this.findById(id);
-        if (saglasnost.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saglasnost nije pronadjena");
-        }
-        return saglasnost.get();
-    }
-
-    @Override
-    public ByteArrayInputStream generisiHTML(String id) {
-        //Saglasnost saglasnost = dobaviSaglasnost(id);
-        //return htmlTransformer.generateHTML(saglasnost.toString(), Saglasnost.class);
-        return htmlTransformer.generateHTML(dobaviSaglanost2(), Saglasnost.class);
-    }
-
-    @Override
-    public ByteArrayInputStream generisiPDF(String id) {
-        //Saglasnost saglasnost = dobaviSaglasnost(id);
-        //return pdfTransformer.generatePDF(saglasnost.toString(), Saglasnost.class);
-        return pdfTransformer.generatePDF(dobaviSaglanost2(), Saglasnost.class);
-    }
-
-    @Override
-    public void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto) throws Exception {
-        Saglasnost saglasnost = dobaviSaglasnost(id);
-        GregorianCalendar gc = new GregorianCalendar();
-        gc.setTime(new Date());
-        XMLGregorianCalendar xmlgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
-
-        TVakcina.Ekstremitet ekstremitet = new TVakcina.Ekstremitet();
-        ekstremitet.setDR(dopuniEvidencijuDto.REkstremitet);
-        ekstremitet.setDR(dopuniEvidencijuDto.LEkstremitet);
-
-        TVakcina vakcina = new TVakcina();
-        vakcina.setDatumDavanja(xmlgc);
-        vakcina.setNaziv(dopuniEvidencijuDto.NazivVakcine);
-        vakcina.setProizvodjac(dopuniEvidencijuDto.Proizvodjac);
-        vakcina.setSerija(dopuniEvidencijuDto.Serija);
-        vakcina.setNacinDavanja(dopuniEvidencijuDto.NacinDavanja);
-        vakcina.setNezeljenaReakcija(dopuniEvidencijuDto.NezeljenaReakcija);
-        vakcina.setEkstremitet(ekstremitet);
+    public void run(String... args) throws Exception {
 
 
-
-        saglasnost.getEvidencijaOVakcinaciji().setZdravstvenaUstanova(dopuniEvidencijuDto.ZdravstvenaUstanova);
-        saglasnost.getEvidencijaOVakcinaciji().setVakcinacijskiPunkt(dopuniEvidencijuDto.VakcinacijskiPunkt);
-        saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(vakcina);
-        if(dopuniEvidencijuDto.Kontraindikacije != null && !dopuniEvidencijuDto.Kontraindikacije.isBlank())
-        {
-            TEvidencija.PrivremeneKontraindikacije.PrivremenaKontraindikacija ki =
-                    new TEvidencija.PrivremeneKontraindikacije.PrivremenaKontraindikacija();
-            ki.setDijagnoza(dopuniEvidencijuDto.Kontraindikacije);
-            ki.setDatumUtvrdjivanja(dopuniEvidencijuDto.DatumKontraindikacije);
-
-            saglasnost.getEvidencijaOVakcinaciji().getPrivremeneKontraindikacije().getPrivremenaKontraindikacija().add(ki);
-        }
-
-        saglasnostRepository.save(saglasnost);
-
-
-
-    }
-
-    private String dobaviSaglanost2() {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+        String saglasnostString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<Saglasnost  xmlns:tip=\"http://www.xws.org/tipovi\"\n" +
                 "             xmlns:vc=\"http://www.w3.org/2007/XMLSchema-versioning\"\n" +
                 "             xmlns=\"http://www.xws.org/saglasnost\"\n" +
@@ -192,5 +94,14 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
                 "        <Trajne_kontraindikacije></Trajne_kontraindikacije>\n" +
                 "    </Evidencija_o_vakcinaciji>\n" +
                 "</Saglasnost>\n";
+
+
+        Saglasnost saglasnost = saglasnostmarshallUnmarshallService.unmarshall(saglasnostString, Saglasnost.class);
+        saglasnostService.save(saglasnost);
+
+
+
+
+
     }
 }
