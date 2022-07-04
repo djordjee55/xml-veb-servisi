@@ -20,7 +20,9 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import com.tim123.vaccinationmain.model.tipovi.TVakcina;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -104,6 +106,8 @@ import lombok.Builder;
  * 
  */
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "datumIzdavanja",
@@ -390,6 +394,8 @@ public class Izvestaj {
      * 
      */
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
         "doza"
@@ -450,6 +456,8 @@ public class Izvestaj {
          * 
          */
         @Builder
+        @NoArgsConstructor
+        @AllArgsConstructor
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
             "brojDatihDoza"
@@ -537,6 +545,8 @@ public class Izvestaj {
      * 
      */
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
         "od",
@@ -632,6 +642,9 @@ public class Izvestaj {
      * 
      * 
      */
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
         "proizvodjac"
@@ -691,6 +704,9 @@ public class Izvestaj {
          * 
          * 
          */
+        @Builder
+        @NoArgsConstructor
+        @AllArgsConstructor
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
             "naziv",
