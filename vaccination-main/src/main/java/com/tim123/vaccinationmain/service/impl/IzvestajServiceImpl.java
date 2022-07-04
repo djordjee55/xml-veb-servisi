@@ -1,6 +1,7 @@
 package com.tim123.vaccinationmain.service.impl;
 
 import com.tim123.vaccinationmain.model.izvestaj.Izvestaj;
+import com.tim123.vaccinationmain.model.tipovi.TVakcina;
 import com.tim123.vaccinationmain.repository.CRUDRepository;
 import com.tim123.vaccinationmain.repository.IzvestajRepository;
 import com.tim123.vaccinationmain.service.IzvestajService;
@@ -58,7 +59,7 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
         List<Izvestaj.Doze.Doza> doze = getDosesNoDistribution(startDate, endDate);
         int dozeSum = doze.stream().mapToInt(doza -> doza.getBrojDatihDoza().intValue()).sum();
 
-        Izvestaj.RaspodelaPoProizvodjacima vaccineDistribution = new Izvestaj.RaspodelaPoProizvodjacima(); //TODO dobavi raspodelu iz druge app
+        Izvestaj.RaspodelaPoProizvodjacima vaccineDistribution = getVaccineManufacturerDistribution(startDate, endDate);
 
         Izvestaj izvestaj = Izvestaj.builder()
                 .datumIzdavanja(currentDate)
@@ -76,6 +77,38 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
         izvestajRepository.save(izvestaj);
 
         return marshallUnmarshallService.marshall(izvestaj, Izvestaj.class);
+    }
+
+    private Izvestaj.RaspodelaPoProizvodjacima getVaccineManufacturerDistribution(String startDate, String endDate) throws ParseException {
+
+        Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac1 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
+                .naziv(TVakcina.SPUTNIK_V)
+                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.SPUTNIK_V, startDate, endDate)))
+                .build();
+
+        Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac2 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
+                .naziv(TVakcina.ASTRA_ZENECA)
+                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.ASTRA_ZENECA, startDate, endDate)))
+                .build();
+
+        Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac3 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
+                .naziv(TVakcina.MODERNA)
+                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.MODERNA, startDate, endDate)))
+                .build();
+
+        Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac4 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
+                .naziv(TVakcina.PFIZER_BIO_N_TECH)
+                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.PFIZER_BIO_N_TECH, startDate, endDate)))
+                .build();
+
+        Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac5 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
+                .naziv(TVakcina.SINOPHARM)
+                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.SINOPHARM, startDate, endDate)))
+                .build();
+
+        return Izvestaj.RaspodelaPoProizvodjacima.builder()
+                .proizvodjac(List.of(proizvodjac1, proizvodjac2, proizvodjac3, proizvodjac4, proizvodjac5))
+                .build();
     }
 
     private List<Izvestaj.Doze.Doza> getDosesNoDistribution(String startDate, String endDate) throws ParseException {
@@ -124,7 +157,9 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
 
     private BigInteger countInteresovanjeForPeriod(String startDate, String endDate) {
 
+        System.out.println("SALJEM");
         ResponseEntity<Integer> response = restTemplate.getForEntity("http://localhost:8082/api/interesovanje/count/" + startDate + "/" + endDate, Integer.class);
+        System.out.println("POSLATO");
 
         return BigInteger.valueOf(response.getBody());
     }

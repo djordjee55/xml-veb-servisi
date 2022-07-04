@@ -66,7 +66,7 @@ public class InteresovanjeController {
                 .body(new InputStreamResource(stream));
     }
 
-    @GetMapping(value = "/count/{startDate}/{endDate}", produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(value = "/count/{startDate}/{endDate}")
     public int prebrojInteresovanjaZaPeriod(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
         return interesovanjeService.prebrojInteresovanjaZaPeriod(startDate, endDate);
     }
