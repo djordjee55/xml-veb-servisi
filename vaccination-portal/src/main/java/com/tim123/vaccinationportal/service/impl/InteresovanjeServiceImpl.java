@@ -19,9 +19,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
 import java.util.List;
 
@@ -129,17 +133,17 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
 
         List<Interesovanje> interesovanja =  interesovanjeRepository.findAll();
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar intervalStart = Calendar.getInstance();
-        intervalStart.setTime(formatter.parse(startDate));
-        Calendar intervalEnd = Calendar.getInstance();
-        intervalStart.setTime(formatter.parse(endDate));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate intervalStart = LocalDate.parse(startDate, formatter);
+        LocalDate intervalEnd = LocalDate.parse(endDate, formatter);
 
         int numberOfDocumentsInPeriod = 0;
-        
+
         for (Interesovanje interesovanje : interesovanja) {
 
-            Calendar documentDate = interesovanje.getDatum().getValue().toGregorianCalendar();
+            LocalDate documentDate = interesovanje.getDatum().getValue().toGregorianCalendar().toZonedDateTime().toLocalDate();
+
             if (documentDate.compareTo(intervalStart) > 0 && documentDate.compareTo(intervalEnd) < 0) {
                 numberOfDocumentsInPeriod++;
             }
