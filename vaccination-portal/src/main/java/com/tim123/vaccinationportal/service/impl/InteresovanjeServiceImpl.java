@@ -57,7 +57,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
         try {
             var i = this.save(interesovanje);
             Termin termin = terminClient.dodeliTermin(i, email);
-            if(termin == null)
+            if (termin == null)
                 interesovanjePrimljenoEmail(i, email);
             else
                 interesovanjePrimljenoEmail(i, email, termin);
@@ -131,7 +131,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     @Override
     public int prebrojInteresovanjaZaPeriod(String startDate, String endDate) throws ParseException {
 
-        List<Interesovanje> interesovanja =  interesovanjeRepository.findAll();
+        List<Interesovanje> interesovanja = interesovanjeRepository.findAll();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -152,6 +152,16 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
         return numberOfDocumentsInPeriod;
     }
 
+    @Override
+    public Boolean dozvoljenoDodavanje(String name) {
+        return interesovanjeRepository.findForUser(korisnikService.findByEmail(name).getJmbg()) == null;
+    }
+
+    @Override
+    public Interesovanje dobaviZaKorisnika(String email) {
+        return interesovanjeRepository.findForUserEmail(email);
+    }
+
     private void postaviInfoOKorisniku(Interesovanje interesovanje, String email) {
         Korisnik korisnik = korisnikService.findByEmail(email);
         TCJMBG tcjmbg = new TCJMBG();
@@ -164,15 +174,37 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
         tZainteresovanoLice.setIme(korisnik.getIme());
         tZainteresovanoLice.setPrezime(korisnik.getPrezime());
         tZainteresovanoLice.setDatumRodjenja(korisnik.getDatumRodjenja());
+        interesovanje.getPrimalac().getKontakt().setEMail(email);
         tZainteresovanoLice.setKontakt(interesovanje.getPrimalac().getKontakt());
         interesovanje.setPrimalac(tZainteresovanoLice);
+        interesovanje.setDrzavljanstvo(postaviDrzavljanstvo(korisnik));
+    }
+
+    private Interesovanje.Drzavljanstvo postaviDrzavljanstvo(Korisnik korisnik) {
+        Interesovanje.Drzavljanstvo drzavljanstvo = new Interesovanje.Drzavljanstvo();
+        switch (korisnik.getDrzavljanstvo()) {
+            case DRZAVLJANIN_REPUBLIKE_SRBIJE: {
+                drzavljanstvo.setDrzavljaninRepublikeSrbije(new Interesovanje.Drzavljanstvo.DrzavljaninRepublikeSrbije());
+                break;
+            }
+            case STRANI_DRZAVLJANIN_BEZ_BORAVKA_U_RS: {
+                drzavljanstvo.setStraniDrzavljaninBezBoravkaURS(new Interesovanje.Drzavljanstvo.StraniDrzavljaninBezBoravkaURS());
+                break;
+            }
+            case STRANI_DRZAVLJANIN_SA_BORAVKOM_U_RS: {
+                drzavljanstvo.setStraniDrzavljaninSaBoravkomURS(new Interesovanje.Drzavljanstvo.StraniDrzavljaninSaBoravkomURS());
+                break;
+            }
+        }
+
+        return drzavljanstvo;
     }
 
     private void interesovanjePrimljenoEmail(Interesovanje interesovanje, String email) {
-//        emailService.sendEmail("", email, "Interesovanje primljeno", "Ovo se mora srediti");
+        emailService.sendEmail("", email, "Interesovanje primljeno", "Ovo se mora srediti");
     }
 
     private void interesovanjePrimljenoEmail(Interesovanje interesovanje, String email, Termin termin) {
-//        emailService.sendEmail("", email, "Interesovanje primljeno sa terminom", "Ovo se mora srediti");
+        emailService.sendEmail("", email, "Interesovanje primljeno sa terminom", "Ovo se mora srediti");
     }
 }

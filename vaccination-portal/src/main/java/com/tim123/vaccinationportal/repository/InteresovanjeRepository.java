@@ -11,6 +11,7 @@ import org.xmldb.api.base.ResourceSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.tim123.vaccinationportal.util.Constants.interesovanjeBase;
 import static com.tim123.vaccinationportal.util.Constants.interesovanjeCollection;
@@ -43,9 +44,9 @@ public class InteresovanjeRepository implements CRUDRepository<Interesovanje> {
     public Interesovanje findForUser(String jmbg) {
         List<Interesovanje> resultSet = new ArrayList<>();
         try {
-            ResourceSet result = xPathService.executeXPath(interesovanjeCollection, String.format("//Interesovanje[Primalac[JMBG='%s']]", jmbg), "");
+            ResourceSet result = xPathService.executeXPath(interesovanjeCollection, String.format("//*[local-name()='Interesovanje']"), "");
             resultSet = converterService.convert(result, Interesovanje.class);
-
+            resultSet = resultSet.stream().filter(r -> r.getPrimalac().getJMBG().getValue().equals(jmbg)).collect(Collectors.toList());
             if (resultSet.isEmpty())
                 return null;
 
@@ -67,4 +68,17 @@ public class InteresovanjeRepository implements CRUDRepository<Interesovanje> {
         return resultSet;
     }
 
+    public Interesovanje findForUserEmail(String email) {
+        List<Interesovanje> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(interesovanjeCollection, "//*", "");
+            resultSet = converterService.convert(result, Interesovanje.class);
+
+            resultSet = resultSet.stream().filter(res -> res.getPrimalac().getKontakt().getEMail().equals(email)).collect(Collectors.toList());
+            if (resultSet.isEmpty()) return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet.get(0);
+    }
 }
