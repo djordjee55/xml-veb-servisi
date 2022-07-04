@@ -49,8 +49,9 @@ public class SaglasnostRepository implements CRUDRepository<Saglasnost> {
     public List<Saglasnost> getForUserEmail(String email) {
         List<Saglasnost> resultSet = new ArrayList<>();
         try {
-            ResourceSet result = xPathService.executeXPath(saglasnostCollection, "//*", "");
+            ResourceSet result = xPathService.executeXPath(saglasnostCollection, "//*[local-name()='Saglasnost']", "");
             resultSet = converterService.convert(result, Saglasnost.class);
+            resultSet = resultSet.stream().filter(res -> res.getId() != null).collect(Collectors.toList());
             resultSet = resultSet.stream().filter(res -> res.getPacijent().getKontakt().getEMail().equals(email)).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();

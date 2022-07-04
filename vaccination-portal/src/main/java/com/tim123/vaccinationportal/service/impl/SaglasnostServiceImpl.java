@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -42,6 +43,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     private final RDFService rdfService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
+    private final MarshallUnmarshallServiceImpl<Saglasnost> saglasnostMarshallUnmarshallService;
 
     @Override
     protected CRUDRepository<Saglasnost> getRepository() {
@@ -87,15 +89,23 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
 
     @Override
     public ByteArrayInputStream generisiHTML(String id) {
-        //Saglasnost saglasnost = dobaviSaglasnost(id);
-        //return htmlTransformer.generateHTML(saglasnost.toString(), Saglasnost.class);
+        Saglasnost saglasnost = dobaviSaglasnost(id);
+        try {
+            return htmlTransformer.generateHTML(saglasnostMarshallUnmarshallService.marshall(saglasnost, Saglasnost.class), Saglasnost.class);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
         return htmlTransformer.generateHTML(dobaviSaglanost2(), Saglasnost.class);
     }
 
     @Override
     public ByteArrayInputStream generisiPDF(String id) {
-        //Saglasnost saglasnost = dobaviSaglasnost(id);
-        //return pdfTransformer.generatePDF(saglasnost.toString(), Saglasnost.class);
+        Saglasnost saglasnost = dobaviSaglasnost(id);
+        try {
+            return htmlTransformer.generateHTML(saglasnostMarshallUnmarshallService.marshall(saglasnost, Saglasnost.class), Saglasnost.class);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
         return pdfTransformer.generatePDF(dobaviSaglanost2(), Saglasnost.class);
     }
 

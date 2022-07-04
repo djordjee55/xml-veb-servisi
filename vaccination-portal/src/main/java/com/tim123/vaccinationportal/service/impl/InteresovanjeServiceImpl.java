@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     private final HTMLTransformer htmlTransformer;
     private final EmailService emailService;
     private final TerminClient terminClient;
+    private final MarshallUnmarshallServiceImpl<Interesovanje> interesovanjeMarshallUnmarshallService;
 
     @Override
     protected CRUDRepository<Interesovanje> getRepository() {
@@ -112,15 +114,23 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
 
     @Override
     public ByteArrayInputStream generisiHTML(String id) {
-        //Interesovanje interesovanje = dobaviInteresovanje(id);
-        //return htmlTransformer.generateHTML(interesovanje.toString(), Interesovanje.class);
+        Interesovanje interesovanje = dobaviInteresovanje(id);
+        try {
+            return htmlTransformer.generateHTML(interesovanjeMarshallUnmarshallService.marshall(interesovanje, Interesovanje.class), Interesovanje.class);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
         return htmlTransformer.generateHTML(dobaviInteresovanje2(), Interesovanje.class);
     }
 
     @Override
     public ByteArrayInputStream generisiPDF(String id) {
-        //Interesovanje interesovanje = dobaviInteresovanje(id);
-        //return pdfTransformer.generatePDF(interesovanje.toString(), Interesovanje.class);
+        Interesovanje interesovanje = dobaviInteresovanje(id);
+        try {
+            return htmlTransformer.generateHTML(interesovanjeMarshallUnmarshallService.marshall(interesovanje, Interesovanje.class), Interesovanje.class);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
         return pdfTransformer.generatePDF(dobaviInteresovanje2(), Interesovanje.class);
     }
 

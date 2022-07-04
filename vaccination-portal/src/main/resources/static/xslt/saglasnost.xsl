@@ -93,7 +93,7 @@
                 </p>
                 <p class="indent-paragraph">
                     <b>Адреса (улица и број)</b>
-                    <xsl:value-of select="concat(' ', //s:Adresa, ' ', //s:Adresa/s:Broj, ' | ')"/>
+                    <xsl:value-of select="concat(' ', //s:Adresa/s:Ulica, ' ', //s:Adresa/s:Broj, ' | ')"/>
                     <b>Место/Насеље</b>
                     <xsl:value-of select="concat(' ', //s:Adresa/s:Naselje)"/>
                 </p>

@@ -4,12 +4,17 @@ import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.service.SaglasnostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.ByteArrayInputStream;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,5 +44,30 @@ public class SaglasnostController {
             return (ResponseEntity<?>) ResponseEntity.badRequest();
         }
         return ResponseEntity.ok("Evidencija uspesno dopunjena");
+    }
+
+    @GetMapping(value = "/html/{id}")
+    public ResponseEntity<InputStreamResource> generisiHTML(@PathVariable UUID id) throws Exception {
+        ByteArrayInputStream stream = saglasnostService.generisiHTML(id.toString());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=details.html");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.TEXT_HTML)
+                .body(new InputStreamResource(stream));
+    }
+
+    @GetMapping(value = "/pdf/{id}")
+    public ResponseEntity<InputStreamResource> generisiPDF(@PathVariable UUID id) throws Exception {
+        ByteArrayInputStream stream = saglasnostService.generisiPDF(id.toString());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=details.pdf");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(stream));
     }
 }
