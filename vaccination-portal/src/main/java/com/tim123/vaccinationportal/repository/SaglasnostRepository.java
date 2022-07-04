@@ -23,9 +23,7 @@ import static com.tim123.vaccinationportal.util.Constants.*;
 public class SaglasnostRepository implements CRUDRepository<Saglasnost> {
     private final XPathService xPathService;
     private final ConverterService<Saglasnost> converterService;
-
     private final RepositoryUtil repositoryUtil;
-    private final XPathService xPathService;
     private final MarshallUnmarshallService<Saglasnost> marshallUnmarshallService;
 
 
