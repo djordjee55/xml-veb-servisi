@@ -1,5 +1,6 @@
 package com.tim123.vaccinationportal.controller;
 
+import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.service.SaglasnostService;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,16 @@ public class SaglasnostController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Saglasnost> dobaviSaglasnost(@PathVariable String id) {
         return ResponseEntity.ok(saglasnostService.dobaviSaglasnost(id));
+    }
+
+    @PostMapping(value = "/evidencija/{id}", consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<?> dopuniEvidenciju(@PathVariable String id, @RequestBody DopuniEvidencijuDto dopuniEvidencijuDto) {
+        try {
+            saglasnostService.dopuniEvidenciju(id, dopuniEvidencijuDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+        return ResponseEntity.ok("Evidencija uspesno dopunjena");
     }
 }
