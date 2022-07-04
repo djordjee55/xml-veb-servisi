@@ -32,7 +32,7 @@ public class ZahtevRepository implements CRUDRepository<Zahtev> {
     public List<Zahtev> findAll() {
         List<Zahtev> resultSet = new ArrayList<>();
         try {
-            ResourceSet result = xPathService.executeXPath(zahtevCollection, "//*", "");
+            ResourceSet result = xPathService.executeXPath(zahtevCollection, "//*[local-name()='Zahtev']", "");
             resultSet = converterService.convert(result, Zahtev.class);
         } catch (Exception e) {
             e.printStackTrace();

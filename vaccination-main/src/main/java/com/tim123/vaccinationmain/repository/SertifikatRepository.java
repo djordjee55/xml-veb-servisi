@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.xmldb.api.base.ResourceSet;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -32,7 +31,7 @@ public class SertifikatRepository implements CRUDRepository<Sertifikat> {
     public List<Sertifikat> findAll() {
 
         try {
-            ResourceSet result = xPathService.executeXPath(sertifikatCollection, "//*", "");
+            ResourceSet result = xPathService.executeXPath(sertifikatCollection, "//*[local-name()='Sertifikat']", "");
             return converterService.convert(result, Sertifikat.class);
         } catch (Exception e) {
             e.printStackTrace();

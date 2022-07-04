@@ -27,7 +27,7 @@ public class ZahtevController {
         return ResponseEntity.ok(zahtevService.dobaviZahtev(id));
     }
 
-    @GetMapping(value = "/count/{startDate}/{endDate}", produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(value = "/count/{startDate}/{endDate}")
     public int prebrojZahteveZaPeriod(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
         return zahtevService.prebrojZahteveZaPeriod(startDate, endDate);
     }

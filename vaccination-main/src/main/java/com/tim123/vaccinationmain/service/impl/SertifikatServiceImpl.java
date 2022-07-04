@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
 
@@ -28,17 +30,17 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
 
         List<Sertifikat> sertifikati =  sertifikatRepository.findAll();
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar intervalStart = Calendar.getInstance();
-        intervalStart.setTime(formatter.parse(startDate));
-        Calendar intervalEnd = Calendar.getInstance();
-        intervalStart.setTime(formatter.parse(endDate));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate intervalStart = LocalDate.parse(startDate, formatter);
+        LocalDate intervalEnd = LocalDate.parse(endDate, formatter);
 
         int numberOfDocumentsInPeriod = 0;
 
         for (Sertifikat sertifikat : sertifikati) {
 
-            Calendar documentDate = sertifikat.getDatumVreme().getValue().toGregorianCalendar();
+            LocalDate documentDate = sertifikat.getDatumVreme().getValue().toGregorianCalendar().toZonedDateTime().toLocalDate();
+
             if (documentDate.compareTo(intervalStart) > 0 && documentDate.compareTo(intervalEnd) < 0) {
                 numberOfDocumentsInPeriod++;
             }
