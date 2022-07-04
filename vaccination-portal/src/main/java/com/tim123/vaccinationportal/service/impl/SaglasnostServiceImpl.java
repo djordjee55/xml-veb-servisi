@@ -1,9 +1,12 @@
 package com.tim123.vaccinationportal.service.impl;
 
+import com.tim123.vaccinationportal.model.Korisnik;
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
+import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.SaglasnostRepository;
+import com.tim123.vaccinationportal.service.KorisnikService;
 import com.tim123.vaccinationportal.service.RDFService;
 import com.tim123.vaccinationportal.service.SaglasnostService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
@@ -15,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.Objects;
 
 import static com.tim123.vaccinationportal.util.Constants.saglasnostPath;
 
@@ -23,6 +27,7 @@ import static com.tim123.vaccinationportal.util.Constants.saglasnostPath;
 public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implements SaglasnostService {
 
     private final SaglasnostRepository saglasnostRepository;
+    private final KorisnikService korisnikService;
     private final RDFService rdfService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
@@ -33,8 +38,12 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     }
 
     @Override
-    public Saglasnost dodajSaglasnost(Saglasnost saglasnost) {
+    public Saglasnost dodajSaglasnost(Saglasnost saglasnost, String email) {
         //da li postoji termin, i da nije izvrsena vec vakcinacija u okviru njega
+        Korisnik korisnik = korisnikService.findByEmail(email);
+
+        dodajInfoOKorisniku(saglasnost, korisnik);
+
         try {
             var i = this.save(saglasnost);
             rdfService.extractMetadata(saglasnost, Saglasnost.class, saglasnostPath);
@@ -42,6 +51,17 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Losa saglasnost");
         }
+    }
+
+    private void dodajInfoOKorisniku(Saglasnost saglasnost, Korisnik korisnik) {
+        TCJMBG jmbg = new TCJMBG();
+        jmbg.setValue(korisnik.getJmbg());
+        saglasnost.getPacijent().getDrzavljanstvo().setJMBG(jmbg);
+        saglasnost.getPacijent().setIme(korisnik.getIme());
+        saglasnost.getPacijent().setPol(korisnik.getPol());
+        saglasnost.getPacijent().setPrezime(korisnik.getPrezime());
+        saglasnost.getPacijent().setDatumRodjenja(korisnik.getDatumRodjenja());
+        saglasnost.getPacijent().getKontakt().setEMail(korisnik.getEmail());
     }
 
     @Override
