@@ -13,4 +13,7 @@ public interface InteresovanjeService extends CRUDService<Interesovanje> {
     ByteArrayInputStream generisiPDF(String id);
 
     int prebrojInteresovanjaZaPeriod(String startDate, String endDate) throws ParseException;
+
+    Boolean dozvoljenoDodavanje(String name);
+    Interesovanje dobaviZaKorisnika(String email);
 }
