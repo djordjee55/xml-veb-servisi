@@ -1,11 +1,9 @@
 package com.tim123.vaccinationportal.service.impl;
 
 import com.tim123.vaccinationportal.model.Korisnik;
-import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
-import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.saglasnost.TEvidencija;
 import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
@@ -28,7 +26,6 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.Objects;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -150,6 +147,19 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
 
         saglasnostRepository.save(saglasnost);
     }
+
+    @Override
+    public List<String> vakcinaByUsername(String username) {
+        //TODO restTemplate poziv
+        return List.of("Sinopharm-WuHan Institute Of Virus");
+    }
+
+    @Override
+    public List<String> ustanovaByUsername(String userEmail) {
+        //TODO restTemplate poziv
+        return List.of("Zdravstvena Ustanova 1");
+    }
+
 
     private String dobaviSaglanost2() {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
