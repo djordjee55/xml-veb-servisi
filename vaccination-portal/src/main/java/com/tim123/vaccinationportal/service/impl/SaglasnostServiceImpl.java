@@ -4,6 +4,10 @@ import com.tim123.vaccinationportal.model.Korisnik;
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
+import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
+import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
+import com.tim123.vaccinationportal.model.saglasnost.TEvidencija;
+import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.SaglasnostRepository;
 import com.tim123.vaccinationportal.service.KorisnikService;
@@ -16,9 +20,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import static com.tim123.vaccinationportal.util.Constants.saglasnostPath;
 
@@ -91,6 +102,43 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     @Override
     public List<Saglasnost> dobaviZaKorisnika(String email) {
         return saglasnostRepository.getForUserEmail(email);
+    }
+    
+    public void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto) throws Exception {
+        Saglasnost saglasnost = dobaviSaglasnost(id);
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(new Date());
+        XMLGregorianCalendar xmlgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+
+        TVakcina.Ekstremitet ekstremitet = new TVakcina.Ekstremitet();
+        ekstremitet.setDR(dopuniEvidencijuDto.REkstremitet);
+        ekstremitet.setDR(dopuniEvidencijuDto.LEkstremitet);
+
+        TVakcina vakcina = new TVakcina();
+        vakcina.setDatumDavanja(xmlgc);
+        vakcina.setNaziv(dopuniEvidencijuDto.NazivVakcine);
+        vakcina.setProizvodjac(dopuniEvidencijuDto.Proizvodjac);
+        vakcina.setSerija(dopuniEvidencijuDto.Serija);
+        vakcina.setNacinDavanja(dopuniEvidencijuDto.NacinDavanja);
+        vakcina.setNezeljenaReakcija(dopuniEvidencijuDto.NezeljenaReakcija);
+        vakcina.setEkstremitet(ekstremitet);
+
+
+
+        saglasnost.getEvidencijaOVakcinaciji().setZdravstvenaUstanova(dopuniEvidencijuDto.ZdravstvenaUstanova);
+        saglasnost.getEvidencijaOVakcinaciji().setVakcinacijskiPunkt(dopuniEvidencijuDto.VakcinacijskiPunkt);
+        saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(vakcina);
+        if(dopuniEvidencijuDto.Kontraindikacije != null && !dopuniEvidencijuDto.Kontraindikacije.isBlank())
+        {
+            TEvidencija.PrivremeneKontraindikacije.PrivremenaKontraindikacija ki =
+                    new TEvidencija.PrivremeneKontraindikacije.PrivremenaKontraindikacija();
+            ki.setDijagnoza(dopuniEvidencijuDto.Kontraindikacije);
+            ki.setDatumUtvrdjivanja(dopuniEvidencijuDto.DatumKontraindikacije);
+
+            saglasnost.getEvidencijaOVakcinaciji().getPrivremeneKontraindikacije().getPrivremenaKontraindikacija().add(ki);
+        }
+
+        saglasnostRepository.save(saglasnost);
     }
 
     private String dobaviSaglanost2() {
