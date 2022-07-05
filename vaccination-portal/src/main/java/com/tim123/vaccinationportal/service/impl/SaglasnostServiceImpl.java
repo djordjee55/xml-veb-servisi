@@ -99,11 +99,12 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     public ByteArrayInputStream generisiPDF(String id) {
         Saglasnost saglasnost = dobaviSaglasnost(id);
         try {
-            return htmlTransformer.generateHTML(saglasnostMarshallUnmarshallService.marshall(saglasnost, Saglasnost.class), Saglasnost.class);
+            return pdfTransformer.generatePDF(saglasnostMarshallUnmarshallService.marshall(saglasnost, Saglasnost.class), Saglasnost.class);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-        return pdfTransformer.generatePDF(dobaviSaglanost2(), Saglasnost.class);
+//        return pdfTransformer.generatePDF(dobaviSaglanost2(), Saglasnost.class);
+        return null;
     }
 
     @Override

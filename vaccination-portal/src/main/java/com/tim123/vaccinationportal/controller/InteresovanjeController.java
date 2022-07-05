@@ -54,7 +54,7 @@ public class InteresovanjeController {
                 .body(new InputStreamResource(stream));
     }
 
-    @GetMapping(value = "/pdf/{id}")
+    @GetMapping(value = "/pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> generisiPDF(@PathVariable UUID id) throws Exception {
         ByteArrayInputStream stream = interesovanjeService.generisiPDF(id.toString());
         HttpHeaders headers = new HttpHeaders();
