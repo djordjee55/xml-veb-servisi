@@ -149,7 +149,8 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
         return potvrda;
     }
 
-    private TDoza makeDozaFromTVakcina(TVakcina tvakc, int redniBroj) {
+    @Override
+    public TDoza makeDozaFromTVakcina(TVakcina tvakc, int redniBroj) {
         TDoza doza = new TDoza();
 
         TDatumVakcinacije vacDatum = new TDatumVakcinacije();

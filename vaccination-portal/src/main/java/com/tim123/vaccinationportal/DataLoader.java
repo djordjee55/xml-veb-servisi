@@ -2,6 +2,7 @@ package com.tim123.vaccinationportal;
 
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
+import com.tim123.vaccinationportal.repository.InteresovanjeRepository;
 import com.tim123.vaccinationportal.repository.SaglasnostRepository;
 import com.tim123.vaccinationportal.service.InteresovanjeService;
 import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
@@ -14,8 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    private final SaglasnostService saglasnostService;
-    private final InteresovanjeService interesovanjeService;
+    private final InteresovanjeRepository interesovanjeRepository;
     private final SaglasnostRepository saglasnostRepository;
     private final MarshallUnmarshallService<Saglasnost> saglasnostmarshallUnmarshallService;
     private final MarshallUnmarshallService<Interesovanje> interesovanjemarshallUnmarshallService;
@@ -70,7 +70,7 @@ public class DataLoader implements CommandLineRunner {
 
 
         Saglasnost saglasnost = saglasnostmarshallUnmarshallService.unmarshall(saglasnostString, Saglasnost.class);
-        saglasnostService.save(saglasnost);
+        saglasnostRepository.save(saglasnost);
 
 
         String interesovanjeString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -108,6 +108,6 @@ public class DataLoader implements CommandLineRunner {
                 "</Interesovanje>\n";
 
         Interesovanje interesovanje = interesovanjemarshallUnmarshallService.unmarshall(interesovanjeString, Interesovanje.class);
-        interesovanjeService.save(interesovanje);
+        interesovanjeRepository.save(interesovanje);
     }
 }
