@@ -77,16 +77,12 @@ public class SaglasnostController {
     
     @GetMapping(value = "/vakcina-by-user/{userEmail}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<?> vakcinaByUsername(@PathVariable String userEmail) {
-            List<String> retVal = saglasnostService.vakcinaByUsername(userEmail);
-        return ResponseEntity.ok(new GetVakcinaStringDto(retVal));
-
+        return ResponseEntity.ok(saglasnostService.vakcinaByUsername(userEmail));
     }
 
     @GetMapping(value = "/ustanova-za-vakcinisanje/{userEmail}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<?> ustanovaByUsername(@PathVariable String userEmail) {
-        List<String> retVal = saglasnostService.ustanovaByUsername(userEmail);
-        return ResponseEntity.ok(new GetUstanovaStringDto(retVal));
-
+        return ResponseEntity.ok(saglasnostService.ustanovaByUsername(userEmail));
     }
 
 

@@ -50,4 +50,22 @@ public class CekanjeRepository implements CRUDRepository<Cekanje>{
         }
         return resultSet;
     }
+
+    public List<Cekanje> findByEmail(String userEmail) {
+        List<Cekanje> resultSet = new ArrayList<>();
+
+        ResourceSet result;
+        try {
+            result = xPathService.executeXPath(cekanjeCollection,
+                    String.format("//cekanje[@pacijent='%s']", userEmail), "");
+            resultSet = converterService.convert(result, Cekanje.class);
+
+            if (resultSet.isEmpty())
+                return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return resultSet;
+    }
 }

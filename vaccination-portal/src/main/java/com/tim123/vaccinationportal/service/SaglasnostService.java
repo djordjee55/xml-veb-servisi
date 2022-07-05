@@ -1,7 +1,9 @@
 package com.tim123.vaccinationportal.service;
 
 import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
+import com.tim123.vaccinationportal.model.dto.vakcine.GetVakcinaStringDto;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
+import org.springframework.http.ResponseEntity;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -20,7 +22,7 @@ public interface SaglasnostService extends CRUDService<Saglasnost> {
 
     void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto, String name) throws Exception;
 
-    List<String> vakcinaByUsername(String username);
+    GetVakcinaStringDto vakcinaByUsername(String username);
 
-    List<String> ustanovaByUsername(String userEmail);
+    GetVakcinaStringDto ustanovaByUsername(String userEmail);
 }

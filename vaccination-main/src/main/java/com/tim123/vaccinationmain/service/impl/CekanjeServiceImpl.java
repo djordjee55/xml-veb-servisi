@@ -53,6 +53,8 @@ public class CekanjeServiceImpl extends CRUDServiceImpl<Cekanje> implements Ceka
         }
     }
 
+
+
     @Override
     public void staviNaCekanje(ZeljeneVakcine zeljeneVakcine) {
         Cekanje cekanje = new Cekanje(zeljeneVakcine.getZeljeneVakcine(), zeljeneVakcine.getOpstina(),
@@ -63,5 +65,10 @@ public class CekanjeServiceImpl extends CRUDServiceImpl<Cekanje> implements Ceka
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<Cekanje> getCekanjeByEmail(String userEmail) {
+        return cekanjeRepository.findByEmail(userEmail);
     }
 }

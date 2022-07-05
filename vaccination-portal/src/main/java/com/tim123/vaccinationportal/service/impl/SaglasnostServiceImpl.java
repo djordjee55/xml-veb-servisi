@@ -1,6 +1,8 @@
 package com.tim123.vaccinationportal.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tim123.vaccinationportal.model.Korisnik;
+import com.tim123.vaccinationportal.model.dto.vakcine.GetVakcinaStringDto;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
@@ -15,7 +17,9 @@ import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.JAXBException;
@@ -169,15 +173,27 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     }
 
     @Override
-    public List<String> vakcinaByUsername(String username) {
-        //TODO restTemplate poziv
-        return List.of("Sinopharm-WuHan Institute Of Virus");
+    public GetVakcinaStringDto vakcinaByUsername(String username) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8081/api/zdravstvena-ustanova/vakcina-by-user/"+username;
+        ResponseEntity<GetVakcinaStringDto> response =
+                restTemplate.getForEntity(url, GetVakcinaStringDto.class);
+        if(!response.hasBody())
+            return null;
+
+        return response.getBody();
     }
 
     @Override
-    public List<String> ustanovaByUsername(String userEmail) {
-        //TODO restTemplate poziv
-        return List.of("Zdravstvena Ustanova 1");
+    public GetVakcinaStringDto ustanovaByUsername(String userEmail) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8081/api/zdravstvena-ustanova/ustanova-za-vakcinisanje/"+userEmail;
+        ResponseEntity<GetVakcinaStringDto> response =
+                restTemplate.getForEntity(url, GetVakcinaStringDto.class);
+        if(!response.hasBody())
+            return null;
+
+        return response.getBody();
     }
 
 

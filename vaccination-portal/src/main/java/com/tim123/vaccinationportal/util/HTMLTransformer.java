@@ -1,6 +1,7 @@
 package com.tim123.vaccinationportal.util;
 
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
+import com.tim123.vaccinationportal.model.potvrda.Potvrda;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
@@ -62,5 +63,7 @@ public class HTMLTransformer {
             XSL_FILE = "classpath:static/xslt/zahtev.xsl";
         else if (classOfDocument.equals(Sertifikat.class))
             XSL_FILE = "classpath:static/xslt/sertifikat.xsl";
+        else if (classOfDocument.equals(Potvrda.class))
+            XSL_FILE = "classpath:static/xslt/potvrda.xsl";
     }
 }

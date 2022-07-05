@@ -1,5 +1,6 @@
 package com.tim123.vaccinationmain.service.impl;
 
+import com.tim123.vaccinationmain.model.cekanje.Cekanje;
 import com.tim123.vaccinationmain.model.termin.Termin;
 import com.tim123.vaccinationmain.model.termin.TerminUstanova;
 import com.tim123.vaccinationmain.model.vakcina.ZeljenaVakcina;
@@ -55,5 +56,27 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
         }
         cekanjeService.staviNaCekanje(zeljeneVakcine);
         return null;
+    }
+
+    @Override
+    public List<String> ustanovaByUsername(String userEmail) {
+
+        List<Cekanje> cekanje = cekanjeService.getCekanjeByEmail(userEmail);
+        Cekanje finalCekanje;
+        if(cekanje == null || cekanje.size() != 1) {
+            return List.of("ZDR UST 1");
+        }
+        finalCekanje = cekanje.get(0);
+
+        return List.of("ZDR UST 1");
+
+    }
+
+    @Override
+    public List<String> vakcinaByUsername(String userEmail) {
+//        Termin termin = terminService.getTerminByUserEmail(userEmail);
+//        return List.of(termin.getVakcina());
+        return List.of("Sinopharm/WUHAN-CHINA");
+
     }
 }
