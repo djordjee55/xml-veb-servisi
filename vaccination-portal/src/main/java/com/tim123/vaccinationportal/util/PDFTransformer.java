@@ -18,10 +18,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 @Component
 public class PDFTransformer {
@@ -54,9 +51,20 @@ public class PDFTransformer {
 
             File xslFile = ResourceUtils.getFile(XSL_FILE);
             StreamSource transformSource = new StreamSource(xslFile);
-            StreamSource source = new StreamSource(new ByteArrayInputStream(documentXml.getBytes()));
+//            StreamSource source = new StreamSource(new ByteArrayInputStream(documentXml.getBytes()));
+//            FOUserAgent userAgent = fopFactory.newFOUserAgent();
+//            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+//            Transformer xslFoTransformer = transformerFactory.newTransformer(transformSource);
+//            Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outStream);
+//            Result res = new SAXResult(fop.getDefaultHandler());
+//            xslFoTransformer.transform(source, res);
+//            return new ByteArrayInputStream(outStream.toByteArray());
+
+
+            StreamSource source = new StreamSource(new StringReader(documentXml));
             FOUserAgent userAgent = fopFactory.newFOUserAgent();
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+
             Transformer xslFoTransformer = transformerFactory.newTransformer(transformSource);
             Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outStream);
             Result res = new SAXResult(fop.getDefaultHandler());

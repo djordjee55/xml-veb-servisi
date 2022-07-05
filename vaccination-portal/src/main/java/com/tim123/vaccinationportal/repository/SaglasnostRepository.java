@@ -26,7 +26,6 @@ public class SaglasnostRepository implements CRUDRepository<Saglasnost> {
     private final RepositoryUtil repositoryUtil;
     private final MarshallUnmarshallService<Saglasnost> marshallUnmarshallService;
 
-
     @Override
     public Saglasnost save(Saglasnost entity) throws Exception {
         String documentId = entity.getId();

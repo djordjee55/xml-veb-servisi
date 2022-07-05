@@ -59,7 +59,7 @@ public class HTMLTransformer {
         else if (classOfDocument.equals(Saglasnost.class))
             XSL_FILE = "classpath:static/xslt/saglasnost.xsl";
         else if (classOfDocument.equals(Zahtev.class))
-            XSL_FILE = "classpath:static/xsl/zahtev.xsl";
+            XSL_FILE = "classpath:static/xslt/zahtev.xsl";
         else if (classOfDocument.equals(Sertifikat.class))
             XSL_FILE = "classpath:static/xslt/sertifikat.xsl";
     }

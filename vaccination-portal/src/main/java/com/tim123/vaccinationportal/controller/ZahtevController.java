@@ -3,11 +3,18 @@ package com.tim123.vaccinationportal.controller;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.service.ZahtevService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.text.ParseException;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,10 +23,11 @@ public class ZahtevController {
 
     private final ZahtevService zahtevService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<?> dodajZahtev(@RequestBody Zahtev zahtev) {
-        zahtevService.dodajZahtev(zahtev);
-        return ResponseEntity.ok("Zahtev uspesno dodat");
+    @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAnyAuthority('GRADJANIN')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Zahtev dodajZahtev(@RequestBody Zahtev zahtev, Authentication authentication) {
+        return zahtevService.dodajZahtev(zahtev, authentication.getName());
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
@@ -30,5 +38,29 @@ public class ZahtevController {
     @GetMapping(value = "/count/{startDate}/{endDate}")
     public int prebrojZahteveZaPeriod(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
         return zahtevService.prebrojZahteveZaPeriod(startDate, endDate);
+    }
+
+    @GetMapping(value = "/html/{id}")
+    public ResponseEntity<InputStreamResource> generisiHTML(@PathVariable UUID id) throws Exception {
+        ByteArrayInputStream stream = zahtevService.generisiHTML(id.toString());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=details.html");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.TEXT_HTML)
+                .body(new InputStreamResource(stream));
+    }
+
+    @GetMapping(value = "/pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> generisiPDF(@PathVariable UUID id) throws Exception {
+        ByteArrayInputStream stream = zahtevService.generisiPDF(id.toString());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=details.pdf");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new InputStreamResource(stream));
     }
 }
