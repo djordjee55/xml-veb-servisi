@@ -4,6 +4,7 @@ import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationmain.service.ConverterService;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
 import com.tim123.vaccinationmain.service.XPathService;
+import com.tim123.vaccinationmain.util.RepositoryUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.xmldb.api.base.ResourceSet;
@@ -38,7 +39,8 @@ public class SertifikatRepository implements CRUDRepository<Sertifikat> {
 
     @Override
     public Sertifikat findById(String id) throws Exception {
-        return null;
+        var sertifikat = repositoryUtil.findByDocumentId(sertifikatCollection, id);
+        return marshallUnmarshallService.unmarshall(sertifikat, Sertifikat.class);
     }
 
     public List<Sertifikat> findAll() {
