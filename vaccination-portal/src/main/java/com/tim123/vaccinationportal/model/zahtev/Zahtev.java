@@ -18,6 +18,7 @@ import com.tim123.vaccinationportal.model.tipovi.TDatumKreiranja;
 import com.tim123.vaccinationportal.model.tipovi.TVakcinisanoLice;
 import com.tim123.vaccinationportal.model.tipovi.TDatumKreiranja;
 import com.tim123.vaccinationportal.model.tipovi.TVakcinisanoLice;
+import org.apache.xpath.operations.Bool;
 
 
 /**
@@ -66,6 +67,8 @@ public class Zahtev {
     protected String id;
     @XmlAttribute(name = "about", required = true)
     protected String about;
+    @XmlAttribute(name = "obradjen", required = true)
+    protected Boolean obradjen = false;
 
     /**
      * Gets the value of the datum property.
@@ -211,4 +214,27 @@ public class Zahtev {
         this.about = value;
     }
 
+    /**
+     * Gets the value of the obradjen property.
+     *
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *
+     */
+    public Boolean isObradjen() {
+        return obradjen;
+    }
+
+    /**
+     * Sets the value of the about property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setObradjen(Boolean value) {
+        this.obradjen = value;
+    }
 }

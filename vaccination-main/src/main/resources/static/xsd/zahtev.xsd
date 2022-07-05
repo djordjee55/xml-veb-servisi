@@ -14,6 +14,7 @@
                 <xs:element name="Datum" type="xs:date"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="obradjen" type="xs:boolean"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>
