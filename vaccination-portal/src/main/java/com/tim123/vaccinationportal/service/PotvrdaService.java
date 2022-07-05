@@ -9,4 +9,6 @@ public interface PotvrdaService extends CRUDService<Potvrda> {
     ByteArrayInputStream generisiHTML(String id);
 
     ByteArrayInputStream generisiPDF(String id);
+
+    Potvrda generisiPotvrdu(String saglasnostId);
 }

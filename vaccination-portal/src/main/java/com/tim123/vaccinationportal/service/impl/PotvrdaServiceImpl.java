@@ -64,8 +64,8 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
         return null;
     }
 
-
-    private Potvrda generisiPotvrdu(String saglasnostId) {
+    @Override
+    public Potvrda generisiPotvrdu(String saglasnostId) {
 
         Saglasnost saglasnost;
         TDatumKreiranja danasnjiDatum;
