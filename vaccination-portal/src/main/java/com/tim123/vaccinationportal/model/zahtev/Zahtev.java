@@ -222,7 +222,7 @@ public class Zahtev {
      *     {@link Boolean }
      *
      */
-    public Boolean IsObradjen() {
+    public Boolean isObradjen() {
         return obradjen;
     }
 

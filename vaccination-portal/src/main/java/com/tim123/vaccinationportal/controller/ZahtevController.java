@@ -33,9 +33,15 @@ public class ZahtevController {
         return zahtevService.prebrojZahteveZaPeriod(startDate, endDate);
     }
 
-    @PutMapping(value = "/reject/{requestId}", consumes = MediaType.APPLICATION_XML_VALUE)
+    @PostMapping(value = "/reject/{requestId}", consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Boolean> rejectRequest(@PathVariable String requestId, @RequestBody OdbijZahtevDto odbijZahtevDto) {
         zahtevService.odbijZahtev(requestId, odbijZahtevDto.getRazlog());
+        return ResponseEntity.ok(true);
+    }
+
+    @PostMapping(value = "/accept/{requestId}")
+        public ResponseEntity<Boolean> acceptRequest(@PathVariable String requestId) {
+        zahtevService.prihvatiZahtev(requestId);
         return ResponseEntity.ok(true);
     }
 }

@@ -1,11 +1,11 @@
 package com.tim123.vaccinationportal.service.impl;
 
 import com.tim123.vaccinationportal.model.Korisnik;
-import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
-import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
+import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.saglasnost.TEvidencija;
 import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
+import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.SaglasnostRepository;
 import com.tim123.vaccinationportal.service.KorisnikService;
@@ -19,15 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
-import java.util.List;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import static com.tim123.vaccinationportal.util.Constants.saglasnostPath;
 
