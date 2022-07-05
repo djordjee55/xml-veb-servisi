@@ -1,6 +1,7 @@
 package com.tim123.vaccinationmain.service.impl;
 
 import com.tim123.vaccinationmain.model.termin.Termin;
+import com.tim123.vaccinationmain.model.termin.TerminUstanova;
 import com.tim123.vaccinationmain.model.vakcina.ZeljenaVakcina;
 import com.tim123.vaccinationmain.model.vakcina.ZeljeneVakcine;
 import com.tim123.vaccinationmain.model.zdravstvenaUstanova.ZdravstvenaUstanova;
@@ -31,7 +32,7 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
     }
 
     @Override
-    public Termin dodeliTermin(ZeljeneVakcine zeljeneVakcine) {
+    public TerminUstanova dodeliTermin(ZeljeneVakcine zeljeneVakcine) {
         List<ZdravstvenaUstanova> zdravstveneUstanove = zdravstvenaUstanovaRepository.findAllForOpstina(zeljeneVakcine.getOpstina());
         for (ZdravstvenaUstanova zU : zdravstveneUstanove) {
             for (ZeljenaVakcina zV : zeljeneVakcine.getZeljeneVakcine()) {
@@ -43,7 +44,12 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
                         e.printStackTrace();
                     }
                     vakcinaService.smanjiKolicinu(zV.getValue(), zU.getId());
-                    return termin;
+                    TerminUstanova tU = new TerminUstanova();
+                    tU.setUstanova(zU.getNaziv() + " u " + zU.getOpstina());
+                    tU.setPacijent(termin.getPacijent());
+                    tU.setVakcina(termin.getVakcina());
+                    tU.setDatumVreme(termin.getDatumVreme());
+                    return tU;
                 }
             }
         }

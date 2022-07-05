@@ -21,15 +21,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.tim123.vaccinationportal.util.Constants.interesovanjePath;
 
@@ -213,10 +211,34 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     }
 
     private void interesovanjePrimljenoEmail(Interesovanje interesovanje, String email) {
-        emailService.sendEmail("", email, "Interesovanje primljeno", "Ovo se mora srediti");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Postovani,\nUspesno smo primili Vase interesovanje za vakcinaciju.\n");
+        stringBuilder.append("\nDobicete obavestenje cim pronadjemo slobodan termin za Vas.\n\n");
+        stringBuilder.append("Vase informacije koje ste uneli:\n\n");
+        stringBuilder.append("\tZeljena opstina vakcinacije: ").append(interesovanje.getZeljenaOpstinaVakcinacije());
+        stringBuilder.append("\n\tOdabrane vakcine:\n");
+        for (var o : interesovanje.getZeljenaVakcina().getPfizerBioNTechOrSputnikVOrSinopharm()) {
+            stringBuilder.append("\n\t\t").append(o.toString());
+        }
+        stringBuilder.append("\nDobrovoljni davalac krvi: ").append(interesovanje.getDobrovoljniDavalacKrvi().isValue() ? "Da" : "Ne");
+        stringBuilder.append("\n\n\nSrdacan pozdrav,\nSistem za imunizaciju");
+
+        emailService.sendEmail("", email, "Interesovanje primljeno", stringBuilder.toString());
     }
 
     private void interesovanjePrimljenoEmail(Interesovanje interesovanje, String email, Termin termin) {
-        emailService.sendEmail("", email, "Interesovanje primljeno sa terminom", "Ovo se mora srediti");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Postovani,\nUspesno smo primili Vase interesovanje za vakcinaciju.\n");
+        stringBuilder.append("\nVas termin je: ").append(termin.getDatumVreme()).append(" u zdravstvenoj ustanovi: ").append(termin.getUstanova()).append("\n\n");
+        stringBuilder.append("Vase informacije koje ste uneli:\n\n");
+        stringBuilder.append("\tZeljena opstina vakcinacije: ").append(interesovanje.getZeljenaOpstinaVakcinacije());
+        stringBuilder.append("\n\tOdabrane vakcine:");
+        for (var o : interesovanje.getZeljenaVakcina().getPfizerBioNTechOrSputnikVOrSinopharm()) {
+            String vakcina = Arrays.stream(Arrays.stream(o.toString().split("\\$")).collect(Collectors.toList()).get(2).split("@")).collect(Collectors.toList()).get(0);
+            stringBuilder.append("\n\t\t").append(vakcina);
+        }
+        stringBuilder.append("\n\tDobrovoljni davalac krvi: ").append(interesovanje.getDobrovoljniDavalacKrvi().isValue() ? "Da" : "Ne");
+        stringBuilder.append("\n\n\nSrdacan pozdrav,\nSistem za imunizaciju");
+        emailService.sendEmail("", email, "Interesovanje primljeno", stringBuilder.toString());
     }
 }
