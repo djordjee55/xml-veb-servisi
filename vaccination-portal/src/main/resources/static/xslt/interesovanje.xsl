@@ -67,11 +67,11 @@
                         <xsl:value-of select="//i:Primalac/tip:Ime"/>
                     </b>
                 </p>
-                <p class="indent-paragraph">Презиме:
-                    <b>
-                        <xsl:value-of select="//i:Primalac/tip:Prezime"/>
-                    </b>
-                </p>
+                    <p class="indent-paragraph">Презиме:
+                        <b>
+                            <xsl:value-of select="//i:Primalac/tip:Prezime"/>
+                        </b>
+                    </p>
                 <p class="indent-paragraph">Адреса електорнске поште:
                     <b>
                         <xsl:value-of select="//i:Primalac/tip:Kontakt/tip:E_mail"/>
