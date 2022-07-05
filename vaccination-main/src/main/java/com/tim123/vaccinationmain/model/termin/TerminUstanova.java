@@ -1,4 +1,4 @@
-package com.tim123.vaccinationportal.model.termin;
+package com.tim123.vaccinationmain.model.termin;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @NoArgsConstructor
 @XmlRootElement(name="Termin")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Termin {
+public class TerminUstanova {
     @XmlAttribute(name = "datum_vreme")
     private XMLGregorianCalendar datumVreme;
 
@@ -29,4 +29,3 @@ public class Termin {
     private String ustanova;
 
 }
-

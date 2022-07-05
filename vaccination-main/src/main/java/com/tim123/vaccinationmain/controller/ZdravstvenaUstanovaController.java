@@ -1,6 +1,7 @@
 package com.tim123.vaccinationmain.controller;
 
 import com.tim123.vaccinationmain.model.termin.Termin;
+import com.tim123.vaccinationmain.model.termin.TerminUstanova;
 import com.tim123.vaccinationmain.model.vakcina.ZeljeneVakcine;
 import com.tim123.vaccinationmain.service.ZdravstvenaUstanovaService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class ZdravstvenaUstanovaController {
     private final ZdravstvenaUstanovaService zdravstvenaUstanovaService;
 
     @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
-    public Termin dodeliTermin(@RequestBody ZeljeneVakcine zeljeneVakcine) {
+    public TerminUstanova dodeliTermin(@RequestBody ZeljeneVakcine zeljeneVakcine) {
         return zdravstvenaUstanovaService.dodeliTermin(zeljeneVakcine);
     }
 }
