@@ -1,12 +1,10 @@
 package com.tim123.vaccinationportal.service.impl;
 
 import com.tim123.vaccinationportal.model.Korisnik;
-import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
-import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
+import com.tim123.vaccinationportal.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationportal.model.tipovi.TCBrojPasosa;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.model.tipovi.TVakcinisanoLice;
-import com.tim123.vaccinationportal.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.ZahtevRepository;
@@ -23,8 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -39,12 +35,9 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
     private final KorisnikService korisnikService;
     private final EmailService emailService;
     private final RDFService rdfService;
-    private final KorisnikService korisnikService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
     private final MarshallUnmarshallService<Zahtev> marshallUnmarshallService;
-    private final PDFTransformer pdfTransformer;
-    private final HTMLTransformer htmlTransformer;
     private final MarshallUnmarshallService<Zahtev> zahtevMarshallUnmarshallService;
 
     @Override

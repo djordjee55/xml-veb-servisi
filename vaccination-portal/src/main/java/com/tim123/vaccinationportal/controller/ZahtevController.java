@@ -64,6 +64,7 @@ public class ZahtevController {
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(stream));
+    }
                 
     @PostMapping(value = "/reject/{requestId}", consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Boolean> rejectRequest(@PathVariable String requestId, @RequestBody OdbijZahtevDto odbijZahtevDto) {

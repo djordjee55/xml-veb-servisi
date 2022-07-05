@@ -1,8 +1,6 @@
 package com.tim123.vaccinationportal.repository;
 
 import com.tim123.vaccinationportal.model.Korisnik;
-import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
-import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.service.ConverterService;
 import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
@@ -16,13 +14,15 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.tim123.vaccinationportal.util.Constants.*;
+import static com.tim123.vaccinationportal.util.Constants.zahtevBase;
+import static com.tim123.vaccinationportal.util.Constants.zahtevCollection;
 
 @Repository
 @RequiredArgsConstructor
 public class ZahtevRepository implements CRUDRepository<Zahtev> {
 
     private final RepositoryUtil repositoryUtil;
+    private final KorisnikRepository korisnikRepository;
     private final XPathService xPathService;
     private final ConverterService<Zahtev> converterService;
     private final MarshallUnmarshallService<Zahtev> marshallUnmarshallService;

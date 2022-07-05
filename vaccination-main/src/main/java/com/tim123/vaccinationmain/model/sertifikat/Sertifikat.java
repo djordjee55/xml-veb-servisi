@@ -18,7 +18,10 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.datatype.XMLGregorianCalendar;
 import com.tim123.vaccinationmain.model.tipovi.TVakcinisanoLice;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -56,6 +59,8 @@ import lombok.Builder;
  * 
  */
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "datumVreme",
@@ -270,6 +275,8 @@ public class Sertifikat {
      * 
      */
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
         "value"
