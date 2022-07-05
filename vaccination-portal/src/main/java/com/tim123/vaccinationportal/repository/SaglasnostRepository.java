@@ -57,4 +57,5 @@ public class SaglasnostRepository implements CRUDRepository<Saglasnost> {
         }
         return resultSet;
     }
+
 }

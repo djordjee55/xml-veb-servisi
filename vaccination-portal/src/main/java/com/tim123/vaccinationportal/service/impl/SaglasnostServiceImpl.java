@@ -1,13 +1,12 @@
 package com.tim123.vaccinationportal.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tim123.vaccinationportal.model.Korisnik;
+import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
 import com.tim123.vaccinationportal.model.dto.vakcine.GetVakcinaStringDto;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
-import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
-import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
 import com.tim123.vaccinationportal.model.saglasnost.TEvidencija;
 import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
+import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.SaglasnostRepository;
 import com.tim123.vaccinationportal.service.KorisnikService;
@@ -26,10 +25,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.tim123.vaccinationportal.util.Constants.saglasnostPath;
 
@@ -113,9 +110,29 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     public List<Saglasnost> dobaviZaKorisnika(String email) {
         return saglasnostRepository.getForUserEmail(email);
     }
-    
+
     public void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto, String doctorEmail) throws Exception {
         Saglasnost saglasnost = dobaviSaglasnost(id);
+
+        List<Saglasnost> stareSaglasnosti = saglasnostRepository.getForUserEmail(saglasnost.getPacijent().getKontakt().getEMail());
+        //izbaci najnoviju
+        stareSaglasnosti = stareSaglasnosti.stream().filter(sgl -> sgl.getId() != id).collect(Collectors.toList());
+        //sortirano descending pa mi je najstarija na 0. poziciji...
+        Collections.sort(stareSaglasnosti, (sgl1, sgl2) -> sgl2.getDatum().getValue().compare(sgl1.getDatum().getValue()));
+        Saglasnost staraSaglasnost = stareSaglasnosti.get(0);
+
+        //ako nema jos napravi vakcine
+        if (saglasnost.getEvidencijaOVakcinaciji().getVakcine() == null) {
+            TEvidencija.Vakcine vakc = new TEvidencija.Vakcine();
+            vakc.setVakcina(new ArrayList<>());
+            saglasnost.getEvidencijaOVakcinaciji().setVakcine(vakc);
+        }
+
+        //ubacivanje svih straih vakcina
+        for(TVakcina v : staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina())
+            saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(v);
+
+
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(new Date());
         XMLGregorianCalendar xmlgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
@@ -134,24 +151,16 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         vakcina.setEkstremitet(ekstremitet);
 
 
-
         saglasnost.getEvidencijaOVakcinaciji().setZdravstvenaUstanova(dopuniEvidencijuDto.ZdravstvenaUstanova);
         saglasnost.getEvidencijaOVakcinaciji().setVakcinacijskiPunkt(dopuniEvidencijuDto.VakcinacijskiPunkt);
-        //ako nema jos napravi vakcine
-        if(saglasnost.getEvidencijaOVakcinaciji().getVakcine() == null) {
-            TEvidencija.Vakcine vakc = new TEvidencija.Vakcine();
-            vakc.setVakcina(new ArrayList<>());
-            saglasnost.getEvidencijaOVakcinaciji().setVakcine(vakc);
-        }
         saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(vakcina);
-        if(dopuniEvidencijuDto.Kontraindikacije != null && !dopuniEvidencijuDto.Kontraindikacije.isBlank())
-        {
+        if (dopuniEvidencijuDto.Kontraindikacije != null && !dopuniEvidencijuDto.Kontraindikacije.isBlank()) {
             TEvidencija.PrivremeneKontraindikacije.PrivremenaKontraindikacija ki =
                     new TEvidencija.PrivremeneKontraindikacije.PrivremenaKontraindikacija();
             ki.setDijagnoza(dopuniEvidencijuDto.Kontraindikacije);
             ki.setDatumUtvrdjivanja(dopuniEvidencijuDto.DatumKontraindikacije);
 
-            if(saglasnost.getEvidencijaOVakcinaciji().getPrivremeneKontraindikacije() == null) {
+            if (saglasnost.getEvidencijaOVakcinaciji().getPrivremeneKontraindikacije() == null) {
                 TEvidencija.PrivremeneKontraindikacije privremeneKontraindikacije = new TEvidencija.PrivremeneKontraindikacije();
                 privremeneKontraindikacije.setPrivremenaKontraindikacija(new ArrayList<>());
                 saglasnost.getEvidencijaOVakcinaciji().setPrivremeneKontraindikacije(privremeneKontraindikacije);
@@ -160,7 +169,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         }
 
         Korisnik doktor = korisnikService.findByEmail(doctorEmail);
-        if(saglasnost.getEvidencijaOVakcinaciji().getLekar()==null) {
+        if (saglasnost.getEvidencijaOVakcinaciji().getLekar() == null) {
             TEvidencija.Lekar lekar = new TEvidencija.Lekar();
             saglasnost.getEvidencijaOVakcinaciji().setLekar(lekar);
         }
@@ -175,10 +184,10 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     @Override
     public GetVakcinaStringDto vakcinaByUsername(String username) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8081/api/zdravstvena-ustanova/vakcina-by-user/"+username;
+        String url = "http://localhost:8081/api/zdravstvena-ustanova/vakcina-by-user/" + username;
         ResponseEntity<GetVakcinaStringDto> response =
                 restTemplate.getForEntity(url, GetVakcinaStringDto.class);
-        if(!response.hasBody())
+        if (!response.hasBody())
             return null;
 
         return response.getBody();
@@ -187,10 +196,10 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     @Override
     public GetVakcinaStringDto ustanovaByUsername(String userEmail) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8081/api/zdravstvena-ustanova/ustanova-za-vakcinisanje/"+userEmail;
+        String url = "http://localhost:8081/api/zdravstvena-ustanova/ustanova-za-vakcinisanje/" + userEmail;
         ResponseEntity<GetVakcinaStringDto> response =
                 restTemplate.getForEntity(url, GetVakcinaStringDto.class);
-        if(!response.hasBody())
+        if (!response.hasBody())
             return null;
 
         return response.getBody();
