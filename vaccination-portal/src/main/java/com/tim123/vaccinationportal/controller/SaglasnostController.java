@@ -39,12 +39,13 @@ public class SaglasnostController {
     }
 
     @PostMapping(value = "/evidencija/{id}", consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<?> dopuniEvidenciju(@PathVariable String id, @RequestBody DopuniEvidencijuDto dopuniEvidencijuDto) {
+    @PreAuthorize("hasAnyAuthority('ZDRAVSTVENI_RADNIK')")
+    public ResponseEntity<?> dopuniEvidenciju(@PathVariable String id, @RequestBody DopuniEvidencijuDto dopuniEvidencijuDto, Authentication authentication) {
         try {
-            saglasnostService.dopuniEvidenciju(id, dopuniEvidencijuDto);
+            saglasnostService.dopuniEvidenciju(id, dopuniEvidencijuDto, authentication.getName());
         } catch (Exception e) {
             e.printStackTrace();
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok("Evidencija uspesno dopunjena");
     }

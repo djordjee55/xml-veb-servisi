@@ -1,13 +1,14 @@
 package com.tim123.vaccinationportal.controller;
 
 
-import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
-import com.tim123.vaccinationportal.service.SaglasnostService;
+import com.tim123.vaccinationportal.service.PotvrdaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +22,14 @@ import java.util.UUID;
 @RequestMapping("/api/potvrda")
 public class PotvrdaController {
 
-    private final SaglasnostService saglasnostService;
+    private final PotvrdaService potvrdaService;
 
     @GetMapping(value = "/html/{id}")
-    public ResponseEntity<InputStreamResource> generisiHTML(@PathVariable UUID id) throws Exception {
-        ByteArrayInputStream stream = saglasnostService.generisiHTML(id.toString());
-        Saglasnost saglasnost = saglasnostService.dobaviSaglasnost(id.toString());
-
+    @PreAuthorize("hasAnyAuthority('ZDRAVSTVENI_RADNIK')")
+    public ResponseEntity<?> generisiHTML(@PathVariable UUID id) throws Exception {
+        ByteArrayInputStream stream = potvrdaService.generisiHTML(id.toString());
+        if(stream == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=details.html");
         return ResponseEntity
@@ -38,8 +40,9 @@ public class PotvrdaController {
     }
 
     @GetMapping(value = "/pdf/{id}")
+    @PreAuthorize("hasAnyAuthority('ZDRAVSTVENI_RADNIK')")
     public ResponseEntity<InputStreamResource> generisiPDF(@PathVariable UUID id) throws Exception {
-        ByteArrayInputStream stream = saglasnostService.generisiPDF(id.toString());
+        ByteArrayInputStream stream = potvrdaService.generisiPDF(id.toString());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=details.pdf");
         return ResponseEntity

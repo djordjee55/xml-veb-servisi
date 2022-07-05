@@ -11,9 +11,12 @@ import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.PotvrdaRepository;
 import com.tim123.vaccinationportal.service.PotvrdaService;
 import com.tim123.vaccinationportal.service.SaglasnostService;
+import com.tim123.vaccinationportal.util.HTMLTransformer;
+import com.tim123.vaccinationportal.util.PDFTransformer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
@@ -26,7 +29,9 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
 
     private final PotvrdaRepository potvrdaRepository;
     private final SaglasnostService saglasnostService;
-
+    private final PDFTransformer pdfTransformer;
+    private final HTMLTransformer htmlTransformer;
+    private final MarshallUnmarshallServiceImpl<Potvrda> marshallUnmarshallService;
 
     @Override
     public Potvrda save(Potvrda entity) throws Exception {
@@ -55,13 +60,28 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
 
     @Override
     public ByteArrayInputStream generisiHTML(String id) {
-        return null;
+        Potvrda potvrda = generisiPotvrdu(id);
+        if(potvrda.getDoze() == null)
+            return null;
+        try {
+            return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(potvrda, Potvrda.class), Potvrda.class);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
     @Override
     public ByteArrayInputStream generisiPDF(String id) {
-        return null;
+
+        Potvrda potvrda = generisiPotvrdu(id);
+        try {
+            return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(potvrda, Potvrda.class), Potvrda.class);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -90,31 +110,40 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
         pacijent.setPrezime(saglasnost.getPacijent().getPrezime());
         pacijent.setDatumRodjenja(saglasnost.getPacijent().getDatumRodjenja());
         pacijent.setPol(saglasnost.getPacijent().getPol());
+        //if(saglasnost.getPacijent().getDrzavljanstvo().getJMBG() == null)
+            //pacijent.setJMBG(saglasnost.getPacijent().getDrzavljanstvo().getBrojPasosa());
         pacijent.setJMBG(saglasnost.getPacijent().getDrzavljanstvo().getJMBG());
 
         //Doze vakcinacije
 
         List<TDoza> dozeList;
 
-        List<TVakcina> sveDateVakcine = saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina();
-        if (sveDateVakcine == null || sveDateVakcine.size() == 0) {
-            dozeList = new ArrayList<>();
-        } else {
-            dozeList = new ArrayList<>();
-            for(int i=0; i< sveDateVakcine.size(); i++)
-                dozeList.add(makeDozaFromTVakcina(sveDateVakcine.get(i), i+1));
-        }
-
-        TVakcinacija doze = new TVakcinacija();
-        doze.setDoza(dozeList);
-
 
         Potvrda potvrda = new Potvrda();
         potvrda.setDatumIzdavanja(danasnjiDatum);
         potvrda.setQrKod("NEMAZASAD");
         potvrda.setPrimalac(pacijent);
-        potvrda.setDoze(doze);
-        potvrda.setZdravstvenaUstanova(saglasnost.getEvidencijaOVakcinaciji().getZdravstvenaUstanova());
+
+
+        if(saglasnost.getEvidencijaOVakcinaciji().getVakcine() != null) {
+            List<TVakcina> sveDateVakcine = saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina();
+            if (sveDateVakcine == null || sveDateVakcine.size() == 0) {
+                dozeList = new ArrayList<>();
+            } else {
+                dozeList = new ArrayList<>();
+                for(int i=0; i< sveDateVakcine.size(); i++)
+                    dozeList.add(makeDozaFromTVakcina(sveDateVakcine.get(i), i+1));
+            }
+
+            TVakcinacija doze = new TVakcinacija();
+            doze.setDoza(dozeList);
+            potvrda.setDoze(doze);
+            potvrda.setZdravstvenaUstanova(saglasnost.getEvidencijaOVakcinaciji().getZdravstvenaUstanova());
+
+        }
+
+
+
 
         return potvrda;
     }

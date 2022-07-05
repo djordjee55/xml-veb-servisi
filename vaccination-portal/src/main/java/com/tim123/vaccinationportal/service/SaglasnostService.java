@@ -18,7 +18,7 @@ public interface SaglasnostService extends CRUDService<Saglasnost> {
 
     List<Saglasnost> dobaviZaKorisnika(String email);
 
-    void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto) throws Exception;
+    void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto, String name) throws Exception;
 
     List<String> vakcinaByUsername(String username);
 

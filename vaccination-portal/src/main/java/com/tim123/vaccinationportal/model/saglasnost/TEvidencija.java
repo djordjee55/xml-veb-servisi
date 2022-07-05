@@ -442,9 +442,13 @@ public class TEvidencija {
          */
         public List<PrivremenaKontraindikacija> getPrivremenaKontraindikacija() {
             if (privremenaKontraindikacija == null) {
-                privremenaKontraindikacija = new ArrayList<PrivremenaKontraindikacija>();
+                privremenaKontraindikacija = new ArrayList<>();
             }
             return this.privremenaKontraindikacija;
+        }
+
+        public void setPrivremenaKontraindikacija(List<PrivremenaKontraindikacija> pki) {
+            this.privremenaKontraindikacija = pki;
         }
 
 
@@ -586,9 +590,13 @@ public class TEvidencija {
          */
         public List<TVakcina> getVakcina() {
             if (vakcina == null) {
-                vakcina = new ArrayList<TVakcina>();
+                vakcina = new ArrayList<>();
             }
             return this.vakcina;
+        }
+
+        public void setVakcina(List<TVakcina> vakcine) {
+            this.vakcina = vakcine;
         }
 
     }

@@ -19,12 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -40,7 +38,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     private final RDFService rdfService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
-    private final MarshallUnmarshallServiceImpl<Saglasnost> saglasnostMarshallUnmarshallService;
+    private final MarshallUnmarshallServiceImpl<Saglasnost> marshallUnmarshallService;
 
     @Override
     protected CRUDRepository<Saglasnost> getRepository() {
@@ -88,7 +86,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     public ByteArrayInputStream generisiHTML(String id) {
         Saglasnost saglasnost = dobaviSaglasnost(id);
         try {
-            return htmlTransformer.generateHTML(saglasnostMarshallUnmarshallService.marshall(saglasnost, Saglasnost.class), Saglasnost.class);
+            return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(saglasnost, Saglasnost.class), Saglasnost.class);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -99,7 +97,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     public ByteArrayInputStream generisiPDF(String id) {
         Saglasnost saglasnost = dobaviSaglasnost(id);
         try {
-            return pdfTransformer.generatePDF(saglasnostMarshallUnmarshallService.marshall(saglasnost, Saglasnost.class), Saglasnost.class);
+            return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(saglasnost, Saglasnost.class), Saglasnost.class);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -112,7 +110,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         return saglasnostRepository.getForUserEmail(email);
     }
     
-    public void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto) throws Exception {
+    public void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto, String doctorEmail) throws Exception {
         Saglasnost saglasnost = dobaviSaglasnost(id);
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(new Date());
@@ -135,6 +133,12 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
 
         saglasnost.getEvidencijaOVakcinaciji().setZdravstvenaUstanova(dopuniEvidencijuDto.ZdravstvenaUstanova);
         saglasnost.getEvidencijaOVakcinaciji().setVakcinacijskiPunkt(dopuniEvidencijuDto.VakcinacijskiPunkt);
+        //ako nema jos napravi vakcine
+        if(saglasnost.getEvidencijaOVakcinaciji().getVakcine() == null) {
+            TEvidencija.Vakcine vakc = new TEvidencija.Vakcine();
+            vakc.setVakcina(new ArrayList<>());
+            saglasnost.getEvidencijaOVakcinaciji().setVakcine(vakc);
+        }
         saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(vakcina);
         if(dopuniEvidencijuDto.Kontraindikacije != null && !dopuniEvidencijuDto.Kontraindikacije.isBlank())
         {
@@ -143,8 +147,23 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
             ki.setDijagnoza(dopuniEvidencijuDto.Kontraindikacije);
             ki.setDatumUtvrdjivanja(dopuniEvidencijuDto.DatumKontraindikacije);
 
+            if(saglasnost.getEvidencijaOVakcinaciji().getPrivremeneKontraindikacije() == null) {
+                TEvidencija.PrivremeneKontraindikacije privremeneKontraindikacije = new TEvidencija.PrivremeneKontraindikacije();
+                privremeneKontraindikacije.setPrivremenaKontraindikacija(new ArrayList<>());
+                saglasnost.getEvidencijaOVakcinaciji().setPrivremeneKontraindikacije(privremeneKontraindikacije);
+            }
             saglasnost.getEvidencijaOVakcinaciji().getPrivremeneKontraindikacije().getPrivremenaKontraindikacija().add(ki);
         }
+
+        Korisnik doktor = korisnikService.findByEmail(doctorEmail);
+        if(saglasnost.getEvidencijaOVakcinaciji().getLekar()==null) {
+            TEvidencija.Lekar lekar = new TEvidencija.Lekar();
+            saglasnost.getEvidencijaOVakcinaciji().setLekar(lekar);
+        }
+        saglasnost.getEvidencijaOVakcinaciji().getLekar().setIme(doktor.getIme());
+        saglasnost.getEvidencijaOVakcinaciji().getLekar().setPrezime(doktor.getPrezime());
+        //saglasnost.getEvidencijaOVakcinaciji().getLekar().setBrojTelefona(doktor.getBrojTelefona());
+
 
         saglasnostRepository.save(saglasnost);
     }

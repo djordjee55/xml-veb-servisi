@@ -65,37 +65,6 @@ public class DataLoader implements CommandLineRunner {
                 "        </Saglasnost>\n" +
                 "    </Pacijent>\n" +
                 "    <Evidencija_o_vakcinaciji>\n" +
-                "        <Zdravstvena_ustanova>Zdravstvena_ustanova0</Zdravstvena_ustanova>\n" +
-                "        <Vakcinacijski_punkt>Vakcinacijski_punkt0</Vakcinacijski_punkt>\n" +
-                "        <Lekar>\n" +
-                "            <Ime>Ime0</Ime>\n" +
-                "            <Prezime>Prezime0</Prezime>\n" +
-                "            <Broj_telefona>0</Broj_telefona>\n" +
-                "        </Lekar>\n" +
-                "        <Vakcine>\n" +
-                "            <Vakcina>\n" +
-                "                <Naziv>naziv vakcine</Naziv>\n" +
-                "                <Datum_davanja>neki datum</Datum_davanja>\n" +
-                "                <Nacin_davanja>neki nacin</Nacin_davanja>\n" +
-                "                <Ekstremitet>\n" +
-                "                    <LR></LR>\n" +
-                "                </Ekstremitet>\n" +
-                "                <Serija>neka serija</Serija>\n" +
-                "                <Proizvodjac>neki proizvodjac</Proizvodjac>\n" +
-                "                <Nezeljena_reakcija></Nezeljena_reakcija>\n" +
-                "            </Vakcina>\n" +
-                "        </Vakcine>" +
-                "        <Privremene_kontraindikacije>\n" +
-                "            <Privremena_kontraindikacija>\n" +
-                "                <Datum_utvrdjivanja>datum1</Datum_utvrdjivanja>\n" +
-                "                <Dijagnoza>nesto1</Dijagnoza>\n" +
-                "            </Privremena_kontraindikacija>\n" +
-                "            <Privremena_kontraindikacija>\n" +
-                "                <Datum_utvrdjivanja>datum2</Datum_utvrdjivanja>\n" +
-                "                <Dijagnoza>nesto2</Dijagnoza>\n" +
-                "            </Privremena_kontraindikacija>\n" +
-                "        </Privremene_kontraindikacije>\n" +
-                "        <Trajne_kontraindikacije></Trajne_kontraindikacije>\n" +
                 "    </Evidencija_o_vakcinaciji>\n" +
                 "</Saglasnost>\n";
 
