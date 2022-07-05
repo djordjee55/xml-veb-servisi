@@ -61,6 +61,7 @@ public class ZahtevController {
         return ResponseEntity
                 .ok()
                 .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(stream));
     }
 }

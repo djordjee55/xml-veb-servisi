@@ -11,6 +11,7 @@ import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.InteresovanjeRepository;
 import com.tim123.vaccinationportal.service.InteresovanjeService;
 import com.tim123.vaccinationportal.service.KorisnikService;
+import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import com.tim123.vaccinationportal.service.RDFService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
@@ -43,7 +44,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     private final HTMLTransformer htmlTransformer;
     private final EmailService emailService;
     private final TerminClient terminClient;
-    private final MarshallUnmarshallServiceImpl<Interesovanje> interesovanjeMarshallUnmarshallService;
+    private final MarshallUnmarshallService<Interesovanje> marshallUnmarshallService;
 
     @Override
     protected CRUDRepository<Interesovanje> getRepository() {
@@ -120,7 +121,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     public ByteArrayInputStream generisiHTML(String id) {
         Interesovanje interesovanje = dobaviInteresovanje(id);
         try {
-            return htmlTransformer.generateHTML(interesovanjeMarshallUnmarshallService.marshall(interesovanje, Interesovanje.class), Interesovanje.class);
+            return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(interesovanje, Interesovanje.class), Interesovanje.class);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -131,11 +132,12 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     public ByteArrayInputStream generisiPDF(String id) {
         Interesovanje interesovanje = dobaviInteresovanje(id);
         try {
-            return htmlTransformer.generateHTML(interesovanjeMarshallUnmarshallService.marshall(interesovanje, Interesovanje.class), Interesovanje.class);
+            return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(interesovanje, Interesovanje.class), Interesovanje.class);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-        return pdfTransformer.generatePDF(dobaviInteresovanje2(), Interesovanje.class);
+//        return pdfTransformer.generatePDF(dobaviInteresovanje2(), Interesovanje.class);
+        return null;
     }
 
     @Override

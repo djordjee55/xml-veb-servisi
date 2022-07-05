@@ -24,6 +24,7 @@ import java.io.*;
 public class PDFTransformer {
 
     public static final String FOX_XCONF = "classpath:static/fop.xconf";
+    public static final String PDF_FILE = "classpath:gen/fo/out.pdf";
     public static String XSL_FILE;
     private final FopFactory fopFactory;
     private final TransformerFactory transformerFactory;
@@ -51,16 +52,6 @@ public class PDFTransformer {
 
             File xslFile = ResourceUtils.getFile(XSL_FILE);
             StreamSource transformSource = new StreamSource(xslFile);
-//            StreamSource source = new StreamSource(new ByteArrayInputStream(documentXml.getBytes()));
-//            FOUserAgent userAgent = fopFactory.newFOUserAgent();
-//            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-//            Transformer xslFoTransformer = transformerFactory.newTransformer(transformSource);
-//            Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outStream);
-//            Result res = new SAXResult(fop.getDefaultHandler());
-//            xslFoTransformer.transform(source, res);
-//            return new ByteArrayInputStream(outStream.toByteArray());
-
-
             StreamSource source = new StreamSource(new StringReader(documentXml));
             FOUserAgent userAgent = fopFactory.newFOUserAgent();
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
@@ -71,6 +62,7 @@ public class PDFTransformer {
             xslFoTransformer.transform(source, res);
             return new ByteArrayInputStream(outStream.toByteArray());
         } catch (Exception ignored) {
+            ignored.printStackTrace();
         }
         return null;
     }
