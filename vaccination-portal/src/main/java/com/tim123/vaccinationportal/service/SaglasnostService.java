@@ -9,11 +9,15 @@ import java.util.List;
 public interface SaglasnostService extends CRUDService<Saglasnost> {
 
     Saglasnost dodajSaglasnost(Saglasnost saglasnost, String email);
+
     Saglasnost dobaviSaglasnost(String id);
+
     ByteArrayInputStream generisiHTML(String id);
+
     ByteArrayInputStream generisiPDF(String id);
 
     List<Saglasnost> dobaviZaKorisnika(String email);
+
     void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto) throws Exception;
 
     List<String> vakcinaByUsername(String username);
