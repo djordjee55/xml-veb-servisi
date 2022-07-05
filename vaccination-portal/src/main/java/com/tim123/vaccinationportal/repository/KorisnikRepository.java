@@ -20,7 +20,7 @@ import static com.tim123.vaccinationportal.util.Constants.korisnikCollection;
 
 @Repository
 @RequiredArgsConstructor
-public class KorisnikRepository implements CRUDRepository<Korisnik>{
+public class KorisnikRepository implements CRUDRepository<Korisnik> {
 
     private final RepositoryUtil repositoryUtil;
     private final MarshallUnmarshallService<Korisnik> marshallUnmarshallService;
@@ -48,7 +48,56 @@ public class KorisnikRepository implements CRUDRepository<Korisnik>{
             ResourceSet result = xPathService.executeXPath(korisnikCollection, String.format("//Korisnik[Email='%s']", email), "");
             resultSet = converterService.convert(result, Korisnik.class);
 
-            if(resultSet.isEmpty())
+            if (resultSet.isEmpty())
+                return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet.get(0);
+    }
+
+    public Korisnik findByJMBG(String jmbg) {
+        // TODO use findByElementValue
+        List<Korisnik> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(korisnikCollection, String.format("//Korisnik[JMBG='%s']", jmbg), "");
+            resultSet = converterService.convert(result, Korisnik.class);
+
+            if (resultSet.isEmpty())
+                return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet.get(0);
+    }
+
+    public Korisnik findByPassport(String passport) {
+        // TODO use findByElementValue
+        List<Korisnik> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(korisnikCollection, String.format("//Korisnik[Pasos='%s']", passport), "");
+            resultSet = converterService.convert(result, Korisnik.class);
+
+            if (resultSet.isEmpty())
+                return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet.get(0);
+    }
+
+    private Korisnik findByElementValue(String elementName, String elementValue) {
+        List<Korisnik> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(
+                    korisnikCollection,
+                    String.format("//Korisnik[%s='%s']", elementName, elementValue), "");
+            resultSet = converterService.convert(result, Korisnik.class);
+
+            if (resultSet.isEmpty())
                 return null;
 
         } catch (Exception e) {

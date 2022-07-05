@@ -1,5 +1,6 @@
 package com.tim123.vaccinationportal.controller;
 
+import com.tim123.vaccinationportal.model.dto.OdbijZahtevDto;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.service.ZahtevService;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,11 @@ public class ZahtevController {
     @GetMapping(value = "/count/{startDate}/{endDate}")
     public int prebrojZahteveZaPeriod(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
         return zahtevService.prebrojZahteveZaPeriod(startDate, endDate);
+    }
+
+    @PutMapping(value = "/reject/{requestId}", consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<Boolean> rejectRequest(@PathVariable String requestId, @RequestBody OdbijZahtevDto odbijZahtevDto) {
+        zahtevService.odbijZahtev(requestId, odbijZahtevDto.getRazlog());
+        return ResponseEntity.ok(true);
     }
 }

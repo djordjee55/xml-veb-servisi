@@ -4,6 +4,7 @@ import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.ZahtevRepository;
+import com.tim123.vaccinationportal.service.KorisnikService;
 import com.tim123.vaccinationportal.service.RDFService;
 import com.tim123.vaccinationportal.service.ZahtevService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tim123.vaccinationportal.util.Constants.zahtevPath;
 
@@ -25,6 +27,8 @@ import static com.tim123.vaccinationportal.util.Constants.zahtevPath;
 public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements ZahtevService {
 
     private final ZahtevRepository zahtevRepository;
+    private final KorisnikService korisnikService;
+    private final EmailService emailService;
     private final RDFService rdfService;
 
     @Override
@@ -76,5 +80,42 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
 
         }
         return numberOfDocumentsInPeriod;
+    }
+
+    @Override
+    public void odbijZahtev(String requestId, String reason) {
+        Zahtev zahtev = this.findById(requestId).orElse(null);
+        if (zahtev == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zahtev nije pronadjen");
+        }
+
+        var jmbg = zahtev.getPodnosilac().getJMBG().getValue();
+        var pasos = zahtev.getPodnosilac().getBrojPasosa().getValue();
+
+        var k = korisnikService.findByDocumentId(jmbg, pasos);
+
+        if (k == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Korisnik nije pronadjen");
+        }
+        var email = k.getEmail();
+
+        zahtev.setObradjen(true);
+        try {
+            zahtevRepository.save(zahtev);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nije moguce sacuvati zahtev");
+        }
+
+        // Posalji mejl da je zahtev odbijen
+        odbijZahtevEmail(email, reason);
+    }
+
+    private void odbijZahtevEmail(String email, String reason) {
+        var msg = String.format("Poštovani,\n\n" +
+                "Vaš zahtev za izdavanje digitalnog zelenog sertifikata je odbijen.\n\n" +
+                "Razlog:\n" +
+                "%s\n\n" +
+                "Pozdrav\n", reason);
+        emailService.sendEmail("", email, "Odbijen zahtev", msg);
     }
 }
