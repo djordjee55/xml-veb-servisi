@@ -22,18 +22,20 @@ import static com.tim123.vaccinationportal.util.Constants.*;
 @RequiredArgsConstructor
 public class ZahtevRepository implements CRUDRepository<Zahtev> {
 
+    private final RepositoryUtil repositoryUtil;
     private final XPathService xPathService;
     private final ConverterService<Zahtev> converterService;
     private final MarshallUnmarshallService<Zahtev> marshallUnmarshallService;
-    private final RepositoryUtil repositoryUtil;
-    private final KorisnikRepository korisnikRepository;
 
     @Override
     public Zahtev save(Zahtev entity) throws Exception {
-        UUID uuid = UUID.randomUUID();
-        String documentId = uuid.toString();
-        entity.setId(documentId);
-        entity.setAbout(String.format("%s#%s", zahtevBase, documentId));
+        String documentId = entity.getId();
+        if (documentId == null || documentId.isBlank()) {
+            UUID uuid = UUID.randomUUID();
+            documentId = uuid.toString();
+            entity.setId(documentId);
+            entity.setAbout(String.format("%s#%s", zahtevBase, documentId));
+        }
         repositoryUtil.save(zahtevCollection, documentId, marshallUnmarshallService.marshall(entity, Zahtev.class));
         return entity;
     }

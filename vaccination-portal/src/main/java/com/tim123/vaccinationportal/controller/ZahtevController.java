@@ -1,5 +1,6 @@
 package com.tim123.vaccinationportal.controller;
 
+import com.tim123.vaccinationportal.model.dto.OdbijZahtevDto;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.service.ZahtevService;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +64,16 @@ public class ZahtevController {
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(stream));
+                
+    @PostMapping(value = "/reject/{requestId}", consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<Boolean> rejectRequest(@PathVariable String requestId, @RequestBody OdbijZahtevDto odbijZahtevDto) {
+        zahtevService.odbijZahtev(requestId, odbijZahtevDto.getRazlog());
+        return ResponseEntity.ok(true);
+    }
+
+    @PostMapping(value = "/accept/{requestId}")
+        public ResponseEntity<Boolean> acceptRequest(@PathVariable String requestId) {
+        zahtevService.prihvatiZahtev(requestId);
+        return ResponseEntity.ok(true);
     }
 }
