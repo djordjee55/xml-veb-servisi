@@ -1,6 +1,5 @@
 package com.tim123.vaccinationportal.service.impl;
 
-import com.tim123.vaccinationportal.exception.ExistDbException;
 import com.tim123.vaccinationportal.model.potvrda.Potvrda;
 import com.tim123.vaccinationportal.model.potvrda.TDoza;
 import com.tim123.vaccinationportal.model.potvrda.TVakcinacija;
@@ -14,7 +13,9 @@ import com.tim123.vaccinationportal.service.SaglasnostService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeFactory;
@@ -99,7 +100,6 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
             danasnjiDatum.setDatatype("xs:date");
             danasnjiDatum.setProperty("pred:datumIzdavanja");
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
 
@@ -141,10 +141,11 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
             potvrda.setZdravstvenaUstanova(saglasnost.getEvidencijaOVakcinaciji().getZdravstvenaUstanova());
 
         }
-
-
-
-
+        try {
+            potvrdaRepository.save(potvrda);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nije moguce sacuvati potvrdu");
+        }
         return potvrda;
     }
 

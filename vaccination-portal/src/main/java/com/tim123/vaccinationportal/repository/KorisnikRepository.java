@@ -5,12 +5,8 @@ import com.tim123.vaccinationportal.service.ConverterService;
 import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import com.tim123.vaccinationportal.service.XPathService;
 import lombok.RequiredArgsConstructor;
-import org.exist.xmldb.EXistResource;
 import org.springframework.stereotype.Repository;
-import org.xmldb.api.base.Resource;
-import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
-import org.xmldb.api.base.XMLDBException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +28,6 @@ public class KorisnikRepository implements CRUDRepository<Korisnik> {
         UUID uuid = UUID.randomUUID();
         String documentId = uuid.toString();
         entity.setId(documentId);
-//        entity.setAbout(String.format("%s#%s", interesovanjeBase, documentId));
         repositoryUtil.save(korisnikCollection, documentId, marshallUnmarshallService.marshall(entity, Korisnik.class));
         return entity;
     }
