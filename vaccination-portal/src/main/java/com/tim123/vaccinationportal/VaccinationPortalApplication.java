@@ -31,7 +31,7 @@ public class VaccinationPortalApplication implements CommandLineRunner {
 		//za testiranje
 //		System.out.println("Generisem html");
 //		saglasnostService.generisiHTML("1");
-		System.out.println("Generisem pdf");
-		saglasnostService.generisiPDF("1");
+//		System.out.println("Generisem pdf");
+//		saglasnostService.generisiPDF("1");
 	}
 }

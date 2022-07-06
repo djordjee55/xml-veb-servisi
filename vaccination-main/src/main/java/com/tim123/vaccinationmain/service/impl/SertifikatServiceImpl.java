@@ -1,5 +1,8 @@
 package com.tim123.vaccinationmain.service.impl;
 
+import com.tim123.vaccinationmain.dto.dokumenta.Dokument;
+import com.tim123.vaccinationmain.dto.dokumenta.ListaDokumenata;
+import com.tim123.vaccinationmain.dto.dokumenta.TipDokumenta;
 import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationmain.model.sertifikat.TTestovi;
 import com.tim123.vaccinationmain.model.sertifikat.TVakcinacija;
@@ -22,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.tim123.vaccinationmain.util.QRUtil.getQRImage;
 
@@ -104,6 +108,15 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sertifikat nije pronadjen");
         }
+    }
+
+    @Override
+    public ListaDokumenata getZaKorisnika(String jmbg, String pasos) {
+        List<Sertifikat> sertifikati = sertifikatRepository.getZaKorisnika(jmbg, pasos);
+        List<Dokument> dokumenta = sertifikati.stream().map(ser ->
+                new Dokument(TipDokumenta.SERTIFIKAT, ser.getDatumVreme().getValue(),
+                        ser.getBrojSertifikata())).collect(Collectors.toList());
+        return new ListaDokumenata(dokumenta);
     }
 
     private TVakcinacija dobaviVakcinaciju(String jmbg, String pasos) {

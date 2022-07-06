@@ -19,7 +19,7 @@ public class VaccinationMainApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		//za testiranje
-		izvestajService.generisiHTML("1");
+//		izvestajService.generisiHTML("1");
 //		System.out.println("Generisem pdf");
 //		saglasnostService.generisiPDF("1");
 	}
