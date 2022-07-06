@@ -2,7 +2,6 @@ package com.tim123.vaccinationmain.service;
 
 import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationmain.model.tipovi.TVakcinisanoLice;
-import org.xws.zahtev.Zahtev;
 
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;

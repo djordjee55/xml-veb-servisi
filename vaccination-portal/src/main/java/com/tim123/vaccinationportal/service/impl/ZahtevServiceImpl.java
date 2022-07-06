@@ -8,10 +8,7 @@ import com.tim123.vaccinationportal.model.tipovi.TVakcinisanoLice;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.ZahtevRepository;
-import com.tim123.vaccinationportal.service.KorisnikService;
-import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
-import com.tim123.vaccinationportal.service.RDFService;
-import com.tim123.vaccinationportal.service.ZahtevService;
+import com.tim123.vaccinationportal.service.*;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +34,7 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
     private final ZahtevRepository zahtevRepository;
     private final KorisnikService korisnikService;
     private final EmailService emailService;
+    private final SertifikatService sertifikatService;
     private final RDFService rdfService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
@@ -193,8 +191,14 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
         Sertifikat s = kreirajSertifikat(zahtev);
         if (s != null) {
             zahtev.setObradjen(true);
-            // I posalji mejl da je zahtev prihvacen
-            posaljiSertifikatMail(email, pdf, html);
+            var sPdf = sertifikatService.generisiPDF(s);
+            var sHtml = sertifikatService.generisiHTML(s);
+            try {
+                posaljiSertifikatMail(email, sPdf, sHtml, pdf, html);
+                zahtevRepository.save(zahtev);
+            } catch (Exception e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greska prilikom cuvanja zahteva");
+            }
         }
     }
 
@@ -238,8 +242,20 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
         emailService.sendEmail("", email, "Odbijen zahtev", msg);
     }
 
-    private void posaljiSertifikatMail(String email, ByteArrayInputStream pdf, ByteArrayInputStream html) {
-        // TODO implement
+    private void posaljiSertifikatMail(String email, ByteArrayInputStream sPdf, ByteArrayInputStream sHtml,
+                                       ByteArrayInputStream zPdf, ByteArrayInputStream zHtml) {
+        var msg =
+                "Poštovani,\n\n" +
+                "Vaš zahtev za izdavanje digitalnog zelenog sertifikata je prihvaćen.\n\n" +
+                "Srdacan pozdrav,\n" +
+                "Sistem za imunizaciju";
+        var files = new ByteArrayInputStream[] {sPdf, sHtml, zPdf, zHtml};
+        var names = new String[] {"sertifikat.pdf", "sertifikat.html", "zahtev.pdf", "zahtev.html"};
+        try {
+            emailService.sendEmailWithAttachment("", email, "Prihvacen zahtev", msg, files, names);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greska prilikom slanja mejla");
+        }
     }
 
     private Sertifikat kreirajSertifikat(Zahtev zahtev) {
