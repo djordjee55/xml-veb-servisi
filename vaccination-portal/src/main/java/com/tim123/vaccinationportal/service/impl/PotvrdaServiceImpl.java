@@ -177,4 +177,9 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
 
         return doza;
     }
+
+    @Override
+    public List<Potvrda> dobaviZaKorisnika(String email) {
+        return potvrdaRepository.getForUserEmail(email);
+    }
 }

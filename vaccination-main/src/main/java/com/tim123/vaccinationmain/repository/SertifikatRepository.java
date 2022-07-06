@@ -9,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.xmldb.api.base.ResourceSet;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.tim123.vaccinationmain.util.Constants.sertifikatBase;
 import static com.tim123.vaccinationmain.util.Constants.sertifikatCollection;
@@ -52,5 +54,19 @@ public class SertifikatRepository implements CRUDRepository<Sertifikat> {
             e.printStackTrace();
         }
         return List.of();
+    }
+
+    public List<Sertifikat> getZaKorisnika(String jmbg, String pasos) {
+        List<Sertifikat> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(sertifikatCollection, "//*[local-name()='Sertifikat']", "");
+            resultSet = converterService.convert(result, Sertifikat.class);
+            resultSet = resultSet.stream().filter(res -> res.getBrojSertifikata() != null).collect(Collectors.toList());
+            resultSet = resultSet.stream().filter(res -> res.getPrimalac().getJMBG().getValue().equals(jmbg)
+                    || res.getPrimalac().getBrojPasosa().getValue().equals(pasos)).collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 }

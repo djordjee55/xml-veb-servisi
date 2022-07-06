@@ -1,5 +1,6 @@
 package com.tim123.vaccinationmain.controller;
 
+import com.tim123.vaccinationmain.dto.dokumenta.ListaDokumenata;
 import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationmain.model.tipovi.TVakcinisanoLice;
 import com.tim123.vaccinationmain.service.SertifikatService;
@@ -36,5 +37,11 @@ public class SertifikatController {
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(stream));
+    }
+
+    @GetMapping(value = "/moji-sertifikati", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ListaDokumenata getZaKorisnika(@RequestParam(value="jmbg", required = false) String jmbg, @RequestParam(value="pasos", required = false, defaultValue = "") String pasos) {
+
+        return sertifikatService.getZaKorisnika(jmbg, pasos);
     }
 }

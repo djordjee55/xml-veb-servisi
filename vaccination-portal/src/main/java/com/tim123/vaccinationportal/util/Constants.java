@@ -13,4 +13,7 @@ public class Constants {
     public static final String zahtevBase = String.format("%s/zahtev", base);
     public static final String zahtevPath = "/fuseki/zahtev";
     public static final String zahtevCollection = "db/vakcinisanje/zahtev";
+    public static final String potvrdaBase = String.format("%s/potvrda", base);
+    public static final String potvrdaPath = "/fuseki/potvrda";
+    public static final String potvrdaCollection = "db/vakcinisanje/potvrda";
 }
