@@ -1,35 +1,38 @@
 package com.tim123.vaccinationmain.service.impl;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageConfig;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationmain.model.sertifikat.TTestovi;
+import com.tim123.vaccinationmain.model.sertifikat.TVakcinacija;
 import com.tim123.vaccinationmain.model.tipovi.TVakcinisanoLice;
 import com.tim123.vaccinationmain.repository.CRUDRepository;
 import com.tim123.vaccinationmain.repository.SertifikatRepository;
+import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
 import com.tim123.vaccinationmain.service.SertifikatService;
+import com.tim123.vaccinationmain.util.PDFTransformer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+
+import static com.tim123.vaccinationmain.util.QRUtil.getQRImage;
 
 @Service
 @RequiredArgsConstructor
 public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implements SertifikatService {
 
     private final SertifikatRepository sertifikatRepository;
+    private final MarshallUnmarshallService<Sertifikat> marshallUnmarshallService;
+    private final RestTemplate restTemplate;
+    private final PDFTransformer pdfTransformer;
 
     @Override
     protected CRUDRepository<Sertifikat> getRepository() {
@@ -67,19 +70,21 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
                 .value(CalendarUtil.toXmlGregorianCalendar(System.currentTimeMillis()))
                 .property("pred:datumIzdavanja")
                 .build();
-        var QRPath = String.format("http://localhost:8081/sertifikati/pdf/%s", broj);
+        var QRPath = String.format("http://localhost:8081/api/sertifikat/pdf/%s", broj);
         var QRImage = "";
         try {
             QRImage = getQRImage(QRPath);
         } catch (Exception ignored) {}
         var testovi = TTestovi.builder().build();
+        var vakcinacija = dobaviVakcinaciju(
+                podnosilac.getJMBG().getValue(),
+                podnosilac.getBrojPasosa().getValue());
         var sertifikat = Sertifikat.builder()
                 .brojSertifikata(broj)
                 .datumVreme(dv)
                 .primalac(podnosilac)
                 .qrKod(QRImage)
-                // TODO restTemplate poziv ka portalu
-                .vakcinacija(null)
+                .vakcinacija(vakcinacija)
                 .testovi(testovi)
                 .build();
         try {
@@ -91,16 +96,20 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
         return sertifikat;
     }
 
-    private String getQRImage(String text) throws IOException, WriterException {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 100, 100);
+    @Override
+    public ByteArrayInputStream generisiPDF(String id) {
+        try {
+            Sertifikat sertifikat = sertifikatRepository.findById(id);
+            return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(sertifikat, Sertifikat.class), Sertifikat.class);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sertifikat nije pronadjen");
+        }
+    }
 
-        ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
-        MatrixToImageConfig con = new MatrixToImageConfig( 0xFF000002 , 0xFFFFC041 ) ;
-
-        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream, con);
-        byte[] pngData = pngOutputStream.toByteArray();
-
-        return Base64.getEncoder().encodeToString(pngData);
+    private TVakcinacija dobaviVakcinaciju(String jmbg, String pasos) {
+        ResponseEntity<TVakcinacija> vakcine = restTemplate.getForEntity(
+                String.format("http://localhost:8082/api/korisnik/vakcine?jmbg=%s&pasos=%s", jmbg, pasos),
+                TVakcinacija.class);
+        return Objects.requireNonNull(vakcine.getBody());
     }
 }

@@ -1,6 +1,7 @@
 package com.tim123.vaccinationportal.service.impl;
 
 import com.tim123.vaccinationportal.model.sertifikat.Sertifikat;
+import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import com.tim123.vaccinationportal.service.SertifikatService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
@@ -15,6 +16,8 @@ public class SertifikatServiceImpl implements SertifikatService {
 
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
+
+    private final MarshallUnmarshallService<Sertifikat> marshallUnmarshallService;
 
 
     @Override
@@ -77,5 +80,23 @@ public class SertifikatServiceImpl implements SertifikatService {
                 "    <Testovi>\n" +
                 "    </Testovi>\n" +
                 "</Sertifikat>\n";
+    }
+
+    @Override
+    public ByteArrayInputStream generisiHTML(Sertifikat s) {
+        try {
+            return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(s, Sertifikat.class), Sertifikat.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public ByteArrayInputStream generisiPDF(Sertifikat s) {
+        try {
+            return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(s, Sertifikat.class), Sertifikat.class);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

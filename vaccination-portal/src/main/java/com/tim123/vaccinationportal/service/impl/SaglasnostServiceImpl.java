@@ -8,8 +8,8 @@ import com.tim123.vaccinationportal.model.saglasnost.TEvidencija;
 import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
+import com.tim123.vaccinationportal.repository.KorisnikRepository;
 import com.tim123.vaccinationportal.repository.SaglasnostRepository;
-import com.tim123.vaccinationportal.service.KorisnikService;
 import com.tim123.vaccinationportal.service.RDFService;
 import com.tim123.vaccinationportal.service.SaglasnostService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
@@ -35,7 +35,7 @@ import static com.tim123.vaccinationportal.util.Constants.saglasnostPath;
 public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implements SaglasnostService {
 
     private final SaglasnostRepository saglasnostRepository;
-    private final KorisnikService korisnikService;
+    private final KorisnikRepository korisnikRepository;
     private final RDFService rdfService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
@@ -49,7 +49,8 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     @Override
     public Saglasnost dodajSaglasnost(Saglasnost saglasnost, String email) {
         //da li postoji termin, i da nije izvrsena vec vakcinacija u okviru njega
-        Korisnik korisnik = korisnikService.findByEmail(email);
+        // TODO promeni u servis, ovo je zakrpa
+        Korisnik korisnik = korisnikRepository.findByEmail(email);
 
         dodajInfoOKorisniku(saglasnost, korisnik);
 
@@ -110,6 +111,24 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         return saglasnostRepository.getForUserEmail(email);
     }
 
+    @Override
+    public List<Saglasnost> dobaviZaKorisnika(String jmbg, String passport) {
+        var total = saglasnostRepository.findALl();
+        if (jmbg == null && passport == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identifikator mora da postoji");
+        }
+        return total.stream().filter(s ->
+                    s.getPacijent() != null &&
+                    s.getPacijent().getDrzavljanstvo() != null &&
+                            ((s.getPacijent().getDrzavljanstvo().getJMBG() != null &&
+                    s.getPacijent().getDrzavljanstvo().getJMBG().getValue().equals(jmbg)) ||
+                            (s.getPacijent().getDrzavljanstvo().getBrojPasosa() != null &&
+                    s.getPacijent().getDrzavljanstvo().getBrojPasosa().getValue().equals(passport)) ||
+                            (s.getPacijent().getDrzavljanstvo().getEBS() != null &&
+                    s.getPacijent().getDrzavljanstvo().getEBS().getValue().equals(passport))))
+                    .collect(Collectors.toList());
+    }
+
     public void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto, String doctorEmail) throws Exception {
         Saglasnost saglasnost = dobaviSaglasnost(id);
 
@@ -167,8 +186,9 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
             saglasnost.getEvidencijaOVakcinaciji().getPrivremeneKontraindikacije().getPrivremenaKontraindikacija().add(ki);
         }
 
-        Korisnik doktor = korisnikService.findByEmail(doctorEmail);
-        if (saglasnost.getEvidencijaOVakcinaciji().getLekar() == null) {
+        // TODO promeni u servis, ovo je zakrpa
+        Korisnik doktor = korisnikRepository.findByEmail(doctorEmail);
+        if(saglasnost.getEvidencijaOVakcinaciji().getLekar()==null) {
             TEvidencija.Lekar lekar = new TEvidencija.Lekar();
             saglasnost.getEvidencijaOVakcinaciji().setLekar(lekar);
         }

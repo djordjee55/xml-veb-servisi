@@ -1,5 +1,7 @@
 package com.tim123.vaccinationmain.util;
 
+import com.tim123.vaccinationmain.model.potvrda.Potvrda;
+import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
@@ -18,16 +20,17 @@ public class HTMLTransformer {
 
     public static final String HTML_FILE = "document.html";
     private static final TransformerFactory transformerFactory;
-    public static String XSL_FILE = "classpath:static/xslt/izvestaj.xsl";;
+    public static String XSL_FILE;
 
     static {
         transformerFactory = TransformerFactory.newInstance();
     }
 
-    public ByteArrayInputStream generateHTML(String documentXml) {
+    public ByteArrayInputStream generateHTML(String documentXml, Class<?> classOfDocument) {
         ByteArrayInputStream retVal = null;
         File file = null;
         try {
+            setXSLFile(classOfDocument);
 
             StreamSource transformSource = new StreamSource(ResourceUtils.getFile(XSL_FILE));
             Transformer transformer = transformerFactory.newTransformer(transformSource);
@@ -46,5 +49,12 @@ public class HTMLTransformer {
             file.delete();
         }
         return retVal;
+    }
+
+    private void setXSLFile(Class<?> classOfDocument) {
+        if (classOfDocument.equals(Sertifikat.class))
+            XSL_FILE = "classpath:static/xslt/sertifikat.xsl";
+        else if (classOfDocument.equals(Potvrda.class))
+            XSL_FILE = "classpath:static/xslt/potvrda.xsl";
     }
 }
