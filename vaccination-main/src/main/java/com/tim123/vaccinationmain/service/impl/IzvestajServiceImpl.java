@@ -50,12 +50,12 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
 
     @Override
     public ByteArrayInputStream generisiHTML(String id) throws JAXBException {
-        return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(dobaviIzvestaj(id), Izvestaj.class));
+        return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(dobaviIzvestaj(id), Izvestaj.class), Izvestaj.class);
     }
 
     @Override
     public ByteArrayInputStream generisiPDF(String id) throws JAXBException {
-        return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(dobaviIzvestaj(id), Izvestaj.class));
+        return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(dobaviIzvestaj(id), Izvestaj.class), Izvestaj.class);
     }
 
     private Izvestaj dobaviIzvestaj(String id) {
