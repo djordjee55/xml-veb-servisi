@@ -21,4 +21,6 @@ public interface ZahtevService extends CRUDService<Zahtev> {
     Korisnik dobaviKorisnikaZahteva(Zahtev zahtev);
     ByteArrayInputStream generisiPdf(Zahtev zahtev);
     ByteArrayInputStream generisiHTML(Zahtev zahtev);
+
+    String searchByString(String searchedString);
 }

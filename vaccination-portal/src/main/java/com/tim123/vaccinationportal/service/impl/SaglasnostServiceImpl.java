@@ -3,6 +3,7 @@ package com.tim123.vaccinationportal.service.impl;
 import com.tim123.vaccinationportal.model.Korisnik;
 import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
 import com.tim123.vaccinationportal.model.dto.vakcine.GetVakcinaStringDto;
+import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.saglasnost.TEvidencija;
 import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
@@ -14,6 +15,7 @@ import com.tim123.vaccinationportal.service.RDFService;
 import com.tim123.vaccinationportal.service.SaglasnostService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
+import com.tim123.vaccinationportal.util.SearchUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
     private final MarshallUnmarshallServiceImpl<Saglasnost> marshallUnmarshallService;
+    private final SearchUtil searchUtil;
 
     @Override
     protected CRUDRepository<Saglasnost> getRepository() {
@@ -113,7 +116,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
 
     @Override
     public List<Saglasnost> dobaviZaKorisnika(String jmbg, String passport) {
-        var total = saglasnostRepository.findALl();
+        var total = saglasnostRepository.findAll();
         if (jmbg == null && passport == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identifikator mora da postoji");
         }
@@ -222,5 +225,24 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
             return null;
 
         return response.getBody();
+    }
+
+    @Override
+    public String searchByString(String searchedString) {
+
+        List<Saglasnost> saglasnosti = saglasnostRepository.findAll();
+
+        saglasnosti = saglasnosti.stream().filter(saglasnost -> saglasnost.getId() != null).collect(Collectors.toList());
+
+        List<String> saglasnostiConverted = saglasnosti.stream().map(saglasnost -> {
+            try {
+                return marshallUnmarshallService.marshall(saglasnost, Saglasnost.class);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).collect(Collectors.toList());
+
+        return searchUtil.parseSearchResult(saglasnostiConverted, "saglasnost", searchedString);
     }
 }

@@ -87,5 +87,8 @@ public class SaglasnostController {
         return ResponseEntity.ok(saglasnostService.ustanovaByUsername(userEmail));
     }
 
-
+    @GetMapping(value = "/search-by-string")
+    public String searchByString(@RequestParam String searchedString) {
+        return saglasnostService.searchByString(searchedString);
+    }
 }

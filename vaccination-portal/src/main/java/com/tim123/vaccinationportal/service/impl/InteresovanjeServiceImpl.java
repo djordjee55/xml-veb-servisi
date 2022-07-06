@@ -15,6 +15,7 @@ import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import com.tim123.vaccinationportal.service.RDFService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
+import com.tim123.vaccinationportal.util.SearchUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     private final EmailService emailService;
     private final TerminClient terminClient;
     private final MarshallUnmarshallService<Interesovanje> marshallUnmarshallService;
+    private final SearchUtil searchUtil;
 
     @Override
     protected CRUDRepository<Interesovanje> getRepository() {
@@ -66,6 +68,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
             rdfService.extractMetadata(interesovanje, Interesovanje.class, interesovanjePath);
             return i;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lose interesovanje");
         }
     }
@@ -133,6 +136,25 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     @Override
     public Interesovanje dobaviZaKorisnika(String email) {
         return interesovanjeRepository.findForUserEmail(email);
+    }
+
+    @Override
+    public String searchByString(String searchedString) {
+
+        List<Interesovanje> interesovanja = interesovanjeRepository.findAll();
+
+        interesovanja = interesovanja.stream().filter(interesovanje -> interesovanje.getId() != null).collect(Collectors.toList());
+
+        List<String> interesovanjaConverted = interesovanja.stream().map(interesovanje -> {
+            try {
+                return marshallUnmarshallService.marshall(interesovanje, Interesovanje.class);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).collect(Collectors.toList());
+
+        return searchUtil.parseSearchResult(interesovanjaConverted, "interesovanje", searchedString);
     }
 
     private void postaviInfoOKorisniku(Interesovanje interesovanje, String email) {

@@ -16,4 +16,6 @@ public interface SertifikatService extends CRUDService<Sertifikat> {
     ByteArrayInputStream generisiPDF(String id);
 
     ListaDokumenata getZaKorisnika(String jmbg, String pasos);
+
+    String searchByString(String searchedString);
 }

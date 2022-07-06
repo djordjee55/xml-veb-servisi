@@ -1,6 +1,7 @@
 package com.tim123.vaccinationportal.service.impl;
 
 import com.tim123.vaccinationportal.model.Korisnik;
+import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationportal.model.tipovi.TCBrojPasosa;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
@@ -11,6 +12,7 @@ import com.tim123.vaccinationportal.repository.ZahtevRepository;
 import com.tim123.vaccinationportal.service.*;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
+import com.tim123.vaccinationportal.util.SearchUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.tim123.vaccinationportal.util.Constants.zahtevPath;
 
@@ -40,6 +43,7 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
     private final HTMLTransformer htmlTransformer;
     private final MarshallUnmarshallService<Zahtev> marshallUnmarshallService;
     private final RestTemplate restTemplate;
+    private final SearchUtil searchUtil;
 
     @Override
     protected CRUDRepository<Zahtev> getRepository() {
@@ -230,6 +234,25 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
         } catch (JAXBException e) {
             return null;
         }
+    }
+
+    @Override
+    public String searchByString(String searchedString) {
+
+        List<Zahtev> zahtevi = zahtevRepository.findAll();
+
+        zahtevi = zahtevi.stream().filter(zahtev -> zahtev.getId() != null).collect(Collectors.toList());
+
+        List<String> zahteviConverted = zahtevi.stream().map(zahtev -> {
+            try {
+                return marshallUnmarshallService.marshall(zahtev, Zahtev.class);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).collect(Collectors.toList());
+
+        return searchUtil.parseSearchResult(zahteviConverted, "zahtev", searchedString);
     }
 
     private void odbijZahtevEmail(String email, String reason) {

@@ -72,4 +72,9 @@ public class InteresovanjeController {
     public int prebrojInteresovanjaZaPeriod(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
         return interesovanjeService.prebrojInteresovanjaZaPeriod(startDate, endDate);
     }
+
+    @GetMapping(value = "/search-by-string")
+    public String searchByString(@RequestParam String searchedString) {
+        return interesovanjeService.searchByString(searchedString);
+    }
 }

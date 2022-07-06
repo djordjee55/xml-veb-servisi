@@ -28,4 +28,6 @@ public interface SaglasnostService extends CRUDService<Saglasnost> {
     GetVakcinaStringDto vakcinaByUsername(String username);
 
     GetVakcinaStringDto ustanovaByUsername(String userEmail);
+
+    String searchByString(String searchedString);
 }

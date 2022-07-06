@@ -12,6 +12,7 @@ import com.tim123.vaccinationmain.repository.SertifikatRepository;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
 import com.tim123.vaccinationmain.service.SertifikatService;
 import com.tim123.vaccinationmain.util.PDFTransformer;
+import com.tim123.vaccinationmain.util.SearchUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -37,6 +39,7 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
     private final MarshallUnmarshallService<Sertifikat> marshallUnmarshallService;
     private final RestTemplate restTemplate;
     private final PDFTransformer pdfTransformer;
+    private final SearchUtil searchUtil;
 
     @Override
     protected CRUDRepository<Sertifikat> getRepository() {
@@ -46,7 +49,7 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
     @Override
     public int prebrojSertifikateZaPeriod(String startDate, String endDate) {
 
-        List<Sertifikat> sertifikati =  sertifikatRepository.findAll();
+        List<Sertifikat> sertifikati = sertifikatRepository.findAll();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -78,7 +81,8 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
         var QRImage = "";
         try {
             QRImage = getQRImage(QRPath);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         var testovi = TTestovi.builder().build();
         var vakcinacija = dobaviVakcinaciju(
                 podnosilac.getJMBG().getValue(),
@@ -117,6 +121,25 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
                 new Dokument(TipDokumenta.SERTIFIKAT, ser.getDatumVreme().getValue(),
                         ser.getBrojSertifikata())).collect(Collectors.toList());
         return new ListaDokumenata(dokumenta);
+    }
+
+    @Override
+    public String searchByString(String searchedString) {
+
+        List<Sertifikat> sertifikati = sertifikatRepository.findAll();
+
+        sertifikati = sertifikati.stream().filter(sertifikat -> sertifikat.getBrojSertifikata() != null).collect(Collectors.toList());
+
+        List<String> sertifikatiConverted = sertifikati.stream().map(sertifikat -> {
+            try {
+                return marshallUnmarshallService.marshall(sertifikat, Sertifikat.class);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).collect(Collectors.toList());
+
+        return searchUtil.parseSearchResult(sertifikatiConverted, "sertifikat", searchedString);
     }
 
     private TVakcinacija dobaviVakcinaciju(String jmbg, String pasos) {

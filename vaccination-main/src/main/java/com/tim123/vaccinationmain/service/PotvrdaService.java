@@ -7,7 +7,9 @@ import java.text.ParseException;
 
 public interface PotvrdaService extends CRUDService<Potvrda> {
 
-    public int countDozeByNo(int numberOfDose, String startDate, String endDate) throws ParseException;
+    int countDozeByNo(int numberOfDose, String startDate, String endDate) throws ParseException;
 
-    public int countDozeByManufacturer(TVakcina manufacturer, String startDate, String endDate) throws ParseException;
+    int countDozeByManufacturer(TVakcina manufacturer, String startDate, String endDate) throws ParseException;
+
+    String searchByString(String searchedString);
 }
