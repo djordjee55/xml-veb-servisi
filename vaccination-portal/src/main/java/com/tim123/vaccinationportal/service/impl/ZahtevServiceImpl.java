@@ -1,6 +1,7 @@
 package com.tim123.vaccinationportal.service.impl;
 
 import com.tim123.vaccinationportal.model.Korisnik;
+import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationportal.model.tipovi.TCBrojPasosa;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
@@ -8,15 +9,15 @@ import com.tim123.vaccinationportal.model.tipovi.TVakcinisanoLice;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.ZahtevRepository;
-import com.tim123.vaccinationportal.service.KorisnikService;
-import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
-import com.tim123.vaccinationportal.service.RDFService;
-import com.tim123.vaccinationportal.service.ZahtevService;
+import com.tim123.vaccinationportal.service.*;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
+import com.tim123.vaccinationportal.util.SearchUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.JAXBException;
@@ -24,6 +25,8 @@ import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.tim123.vaccinationportal.util.Constants.zahtevPath;
 
@@ -34,11 +37,13 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
     private final ZahtevRepository zahtevRepository;
     private final KorisnikService korisnikService;
     private final EmailService emailService;
+    private final SertifikatService sertifikatService;
     private final RDFService rdfService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
     private final MarshallUnmarshallService<Zahtev> marshallUnmarshallService;
-    private final MarshallUnmarshallService<Zahtev> zahtevMarshallUnmarshallService;
+    private final RestTemplate restTemplate;
+    private final SearchUtil searchUtil;
 
     @Override
     protected CRUDRepository<Zahtev> getRepository() {
@@ -187,12 +192,17 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greska prilikom generisanja dokumenata");
         }
 
-        // TODO restTemplate poziv za kreiranje sertifikata
         Sertifikat s = kreirajSertifikat(zahtev);
         if (s != null) {
             zahtev.setObradjen(true);
-            // I posalji mejl da je zahtev prihvacen
-            posaljiSertifikatMail(email, pdf, html);
+            var sPdf = sertifikatService.generisiPDF(s);
+            var sHtml = sertifikatService.generisiHTML(s);
+            try {
+                posaljiSertifikatMail(email, sPdf, sHtml, pdf, html);
+                zahtevRepository.save(zahtev);
+            } catch (Exception e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greska prilikom cuvanja zahteva");
+            }
         }
     }
 
@@ -211,7 +221,7 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
     @Override
     public ByteArrayInputStream generisiPdf(Zahtev zahtev) {
         try {
-            return pdfTransformer.generatePDF(zahtevMarshallUnmarshallService.marshall(zahtev, Zahtev.class), Zahtev.class);
+            return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(zahtev, Zahtev.class), Zahtev.class);
         } catch (JAXBException e) {
             return null;
         }
@@ -220,10 +230,29 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
     @Override
     public ByteArrayInputStream generisiHTML(Zahtev zahtev) {
         try {
-            return htmlTransformer.generateHTML(zahtevMarshallUnmarshallService.marshall(zahtev, Zahtev.class), Zahtev.class);
+            return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(zahtev, Zahtev.class), Zahtev.class);
         } catch (JAXBException e) {
             return null;
         }
+    }
+
+    @Override
+    public String searchByString(String searchedString) {
+
+        List<Zahtev> zahtevi = zahtevRepository.findAll();
+
+        zahtevi = zahtevi.stream().filter(zahtev -> zahtev.getId() != null).collect(Collectors.toList());
+
+        List<String> zahteviConverted = zahtevi.stream().map(zahtev -> {
+            try {
+                return marshallUnmarshallService.marshall(zahtev, Zahtev.class);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).collect(Collectors.toList());
+
+        return searchUtil.parseSearchResult(zahteviConverted, "zahtev", searchedString);
     }
 
     private void odbijZahtevEmail(String email, String reason) {
@@ -236,14 +265,27 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
         emailService.sendEmail("", email, "Odbijen zahtev", msg);
     }
 
-    private void posaljiSertifikatMail(String email, ByteArrayInputStream pdf, ByteArrayInputStream html) {
-        // TODO implement
+    private void posaljiSertifikatMail(String email, ByteArrayInputStream sPdf, ByteArrayInputStream sHtml,
+                                       ByteArrayInputStream zPdf, ByteArrayInputStream zHtml) {
+        var msg =
+                "Poštovani,\n\n" +
+                "Vaš zahtev za izdavanje digitalnog zelenog sertifikata je prihvaćen.\n\n" +
+                "Srdacan pozdrav,\n" +
+                "Sistem za imunizaciju";
+        var files = new ByteArrayInputStream[] {sPdf, sHtml, zPdf, zHtml};
+        var names = new String[] {"sertifikat.pdf", "sertifikat.html", "zahtev.pdf", "zahtev.html"};
+        try {
+            emailService.sendEmailWithAttachment("", email, "Prihvacen zahtev", msg, files, names);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greska prilikom slanja mejla");
+        }
     }
 
     private Sertifikat kreirajSertifikat(Zahtev zahtev) {
-        // TODO restTemplate poziv
-        // Posalji zahtev main aplikaciji
-        // Ako dobro prodje vrati sertifikat, ako ne null
-        return null;
+        ResponseEntity<Sertifikat> sertifikat = restTemplate.postForEntity(
+                "http://localhost:8081/api/sertifikat/",
+                zahtev.getPodnosilac(),
+                Sertifikat.class);
+        return Objects.requireNonNull(sertifikat.getBody());
     }
 }

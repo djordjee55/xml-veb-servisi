@@ -58,4 +58,12 @@ public class SaglasnostRepository implements CRUDRepository<Saglasnost> {
         return resultSet;
     }
 
+    public List<Saglasnost> findAll() {
+        List<Saglasnost> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(saglasnostCollection, "//*[local-name()='Saglasnost']", "");
+            resultSet = converterService.convert(result, Saglasnost.class);
+        } catch (Exception ignore) {}
+        return resultSet;
+    }
 }

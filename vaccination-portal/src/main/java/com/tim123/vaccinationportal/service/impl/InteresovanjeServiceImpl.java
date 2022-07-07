@@ -15,6 +15,7 @@ import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import com.tim123.vaccinationportal.service.RDFService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
+import com.tim123.vaccinationportal.util.SearchUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     private final EmailService emailService;
     private final TerminClient terminClient;
     private final MarshallUnmarshallService<Interesovanje> marshallUnmarshallService;
+    private final SearchUtil searchUtil;
 
     @Override
     protected CRUDRepository<Interesovanje> getRepository() {
@@ -66,44 +68,9 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
             rdfService.extractMetadata(interesovanje, Interesovanje.class, interesovanjePath);
             return i;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lose interesovanje");
         }
-    }
-
-    private String dobaviInteresovanje2() {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<Interesovanje\n" +
-                "         xmlns=\"http://www.xws.org/interesovanje\"\n" +
-                "         xmlns:tip=\"http://www.xws.org/tipovi\"\n" +
-                "         xmlns:vc=\"http://www.w3.org/2007/XMLSchema-versioning\"\n" +
-                "         xmlns:xs=\"http://www.w3.org/2001/XMLSchema#\"\n" +
-                "         xmlns:pred=\"http://www.xws.org/vacc/#\"\n" +
-                "         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
-                "         xsi:schemaLocation=\"http://www.xws.org/interesovanje file:../xsd/interesovanje.xsd\"\n" +
-                "         id=\"99350e11-8a92-4c53-a55d-bc4545b02e90\"\n" +
-                "         about=\"http://www.xws.org/interesovanje#99350e11-8a92-4c53-a55d-bc4545b02e90\">\n" +
-                "    <Datum property=\"pred:datumIzdavanja\" datatype=\"xs:date\">2006-05-04</Datum>\n" +
-                "    <Drzavljanstvo>\n" +
-                "        <Drzavljanin_Republike_Srbije property=\"pred:drzavljanin\" datatype=\"xs:string\">Drzavljanin_Republike_Srbije</Drzavljanin_Republike_Srbije>\n" +
-                "    </Drzavljanstvo>\n" +
-                "    <Zeljena_opstina_vakcinacije>Zeljena_opstina_vakcinacije0</Zeljena_opstina_vakcinacije>\n" +
-                "    <Zeljena_vakcina>\n" +
-                "        <Sputnik_V property=\"pred:zeljenaVakcina\" datatype=\"xs:string\">Sputnik_V</Sputnik_V>\n" +
-                "        <Moderna property=\"pred:zeljenaVakcina\" datatype=\"xs:string\">Moderna</Moderna>\n" +
-                "    </Zeljena_vakcina>\n" +
-                "    <Dobrovoljni_davalac_krvi property=\"pred:davalacKrvi\" datatype=\"xs:boolean\">false</Dobrovoljni_davalac_krvi>\n" +
-                "    <Primalac>\n" +
-                "        <tip:Ime>Ime0</tip:Ime>\n" +
-                "        <tip:Prezime>Prezime0</tip:Prezime>\n" +
-                "        <tip:Datum_rodjenja>2006-05-04</tip:Datum_rodjenja>\n" +
-                "        <tip:Kontakt>\n" +
-                "                <tip:E_mail>djordjenjegic@email.com</tip:E_mail>\n" +
-                "                <tip:Fiksni_telefon>023456789</tip:Fiksni_telefon>\n" +
-                "                <tip:Mobilni_telefon>060123456789</tip:Mobilni_telefon>\n" +
-                "        </tip:Kontakt>\n" +
-                "        <tip:JMBG rel=\"pred:identifikatorKorisnika\" href=\"http://www.xws.org/korisnici#921909aa-8ff1-47f4-b761-4cbac06929ad\">0000000000000</tip:JMBG>\n" +
-                "    </Primalac>\n" +
-                "</Interesovanje>\n";
     }
 
     @Override
@@ -123,7 +90,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-        return htmlTransformer.generateHTML(dobaviInteresovanje2(), Interesovanje.class);
+        return null;
     }
 
     @Override
@@ -134,7 +101,6 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-//        return pdfTransformer.generatePDF(dobaviInteresovanje2(), Interesovanje.class);
         return null;
     }
 
@@ -170,6 +136,25 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     @Override
     public Interesovanje dobaviZaKorisnika(String email) {
         return interesovanjeRepository.findForUserEmail(email);
+    }
+
+    @Override
+    public String searchByString(String searchedString) {
+
+        List<Interesovanje> interesovanja = interesovanjeRepository.findAll();
+
+        interesovanja = interesovanja.stream().filter(interesovanje -> interesovanje.getId() != null).collect(Collectors.toList());
+
+        List<String> interesovanjaConverted = interesovanja.stream().map(interesovanje -> {
+            try {
+                return marshallUnmarshallService.marshall(interesovanje, Interesovanje.class);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).collect(Collectors.toList());
+
+        return searchUtil.parseSearchResult(interesovanjaConverted, "interesovanje", searchedString);
     }
 
     private void postaviInfoOKorisniku(Interesovanje interesovanje, String email) {

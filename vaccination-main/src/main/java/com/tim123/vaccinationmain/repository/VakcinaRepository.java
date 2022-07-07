@@ -4,6 +4,7 @@ import com.tim123.vaccinationmain.model.vakcina.Vakcina;
 import com.tim123.vaccinationmain.service.ConverterService;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
 import com.tim123.vaccinationmain.service.XPathService;
+import com.tim123.vaccinationmain.util.RepositoryUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.xmldb.api.base.ResourceSet;

@@ -13,4 +13,8 @@ public interface SertifikatService {
     Sertifikat getSertifikatById(String id);
 
     String dobaviSertifikat(String id);
+
+    ByteArrayInputStream generisiHTML(Sertifikat s);
+
+    ByteArrayInputStream generisiPDF(Sertifikat s);
 }

@@ -77,4 +77,9 @@ public class ZahtevController {
         zahtevService.prihvatiZahtev(requestId);
         return ResponseEntity.ok(true);
     }
+
+    @GetMapping(value = "/search-by-string")
+    public String searchByString(@RequestParam String searchedString) {
+        return zahtevService.searchByString(searchedString);
+    }
 }

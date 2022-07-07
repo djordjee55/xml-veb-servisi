@@ -8,6 +8,10 @@
 
 package com.tim123.vaccinationportal.model.potvrda;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,6 +39,9 @@ import java.util.List;
  * 
  * 
  */
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TVakcinacija", propOrder = {
     "doza"

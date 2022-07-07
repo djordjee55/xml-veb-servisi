@@ -1,5 +1,7 @@
 package com.tim123.vaccinationportal;
 
+import com.tim123.vaccinationportal.service.InteresovanjeService;
+import com.tim123.vaccinationportal.service.SaglasnostService;
 import com.tim123.vaccinationportal.service.SertifikatService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
@@ -18,12 +20,18 @@ public class VaccinationPortalApplication implements CommandLineRunner {
 	@Autowired
 	private SertifikatService sertifikatService;
 
+	@Autowired
+	private InteresovanjeService interesovanjeService;
+
+	@Autowired
+	private SaglasnostService saglasnostService;
+
 	@Override
 	public void run(String... args) throws Exception {
 		//za testiranje
 //		System.out.println("Generisem html");
-//		sertifikatService.generisiHTML("1");
+//		saglasnostService.generisiHTML("1");
 //		System.out.println("Generisem pdf");
-//		sertifikatService.generisiPDF("1");
+//		saglasnostService.generisiPDF("1");
 	}
 }

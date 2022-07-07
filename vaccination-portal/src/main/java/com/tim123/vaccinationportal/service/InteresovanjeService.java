@@ -16,4 +16,6 @@ public interface InteresovanjeService extends CRUDService<Interesovanje> {
 
     Boolean dozvoljenoDodavanje(String name);
     Interesovanje dobaviZaKorisnika(String email);
+
+    String searchByString(String searchedString);
 }

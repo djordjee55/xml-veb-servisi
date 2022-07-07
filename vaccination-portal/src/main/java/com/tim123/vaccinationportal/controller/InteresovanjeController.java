@@ -44,6 +44,8 @@ public class InteresovanjeController {
     @GetMapping(value = "/html/{id}")
     public ResponseEntity<InputStreamResource> generisiHTML(@PathVariable UUID id) throws Exception {
         ByteArrayInputStream stream = interesovanjeService.generisiHTML(id.toString());
+        if(stream == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=details.html");
@@ -69,5 +71,10 @@ public class InteresovanjeController {
     @GetMapping(value = "/count/{startDate}/{endDate}")
     public int prebrojInteresovanjaZaPeriod(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
         return interesovanjeService.prebrojInteresovanjaZaPeriod(startDate, endDate);
+    }
+
+    @GetMapping(value = "/search-by-string")
+    public String searchByString(@RequestParam String searchedString) {
+        return interesovanjeService.searchByString(searchedString);
     }
 }

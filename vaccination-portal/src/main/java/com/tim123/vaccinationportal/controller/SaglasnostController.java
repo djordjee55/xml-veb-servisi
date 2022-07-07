@@ -53,6 +53,8 @@ public class SaglasnostController {
     @GetMapping(value = "/html/{id}")
     public ResponseEntity<InputStreamResource> generisiHTML(@PathVariable UUID id) throws Exception {
         ByteArrayInputStream stream = saglasnostService.generisiHTML(id.toString());
+        if(stream == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=details.html");
@@ -85,5 +87,8 @@ public class SaglasnostController {
         return ResponseEntity.ok(saglasnostService.ustanovaByUsername(userEmail));
     }
 
-
+    @GetMapping(value = "/search-by-string")
+    public String searchByString(@RequestParam String searchedString) {
+        return saglasnostService.searchByString(searchedString);
+    }
 }

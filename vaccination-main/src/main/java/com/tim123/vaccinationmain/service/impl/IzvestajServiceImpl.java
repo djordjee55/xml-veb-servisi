@@ -8,20 +8,28 @@ import com.tim123.vaccinationmain.service.IzvestajService;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
 import com.tim123.vaccinationmain.service.PotvrdaService;
 import com.tim123.vaccinationmain.service.SertifikatService;
+import com.tim123.vaccinationmain.util.HTMLTransformer;
+import com.tim123.vaccinationmain.util.PDFTransformer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +40,30 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
     private final RestTemplate restTemplate;
     private final SertifikatService sertifikatService;
     private final PotvrdaService potvdraService;
+    private final PDFTransformer pdfTransformer;
+    private final HTMLTransformer htmlTransformer;
 
     @Override
     protected CRUDRepository<Izvestaj> getRepository() {
         return null;
+    }
+
+    @Override
+    public ByteArrayInputStream generisiHTML(String id) throws JAXBException {
+        return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(dobaviIzvestaj(id), Izvestaj.class), Izvestaj.class);
+    }
+
+    @Override
+    public ByteArrayInputStream generisiPDF(String id) throws JAXBException {
+        return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(dobaviIzvestaj(id), Izvestaj.class), Izvestaj.class);
+    }
+
+    private Izvestaj dobaviIzvestaj(String id) {
+        var interesovanje = this.findById(id);
+        if (interesovanje.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Interesovanje nije pronadjeno");
+        }
+        return interesovanje.get();
     }
 
     @Override
