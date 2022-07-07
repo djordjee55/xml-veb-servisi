@@ -1,6 +1,6 @@
 package com.tim123.vaccinationmain.service.impl;
 
-import com.tim123.vaccinationmain.model.cekanje.Cekanje;
+import com.tim123.vaccinationmain.exception.NotFoundException;
 import com.tim123.vaccinationmain.model.termin.Termin;
 import com.tim123.vaccinationmain.model.termin.TerminUstanova;
 import com.tim123.vaccinationmain.model.vakcina.ZeljenaVakcina;
@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -59,24 +61,61 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
     }
 
     @Override
-    public List<String> ustanovaByUsername(String userEmail) {
+    public List<String> ustanovaByUsername(String userEmail) throws NotFoundException {
+        List<ZdravstvenaUstanova> ustanove = zdravstvenaUstanovaRepository.getByPacijentEmail(userEmail);
 
-        List<Cekanje> cekanje = cekanjeService.getCekanjeByEmail(userEmail);
-        Cekanje finalCekanje;
-        if(cekanje == null || cekanje.size() != 1) {
-            return List.of("ZDR UST 1");
-        }
-        finalCekanje = cekanje.get(0);
+        if (ustanove.isEmpty())
+            throw new NotFoundException("Korisnik nema zakazani termin...");
 
-        return List.of("ZDR UST 1");
+        List<Termin> sviTermini = new ArrayList<>();
+        List<Termin> finalSviTermini = sviTermini;
+        ustanove.forEach(u -> finalSviTermini.addAll(u.getTermini()));
+
+        sviTermini = sviTermini.stream().filter(t -> t.getPacijent().equals(userEmail)).collect(Collectors.toList());
+        sviTermini.sort((t1, t2) -> t2.getDatumVreme().compare(t1.getDatumVreme()));
+        Termin termin = sviTermini.get(0);
+
+        ZdravstvenaUstanova ustanova = ustanove.stream().filter(u -> u.getTermini()
+                .contains(termin))
+                .findFirst()
+                .orElseThrow(
+                    () -> new NotFoundException("Korisnik nema zakazan termin"));
+
+        return List.of(ustanova.getNaziv());
 
     }
 
     @Override
     public List<String> vakcinaByUsername(String userEmail) {
-//        Termin termin = terminService.getTerminByUserEmail(userEmail);
-//        return List.of(termin.getVakcina());
-        return List.of("Sinopharm/WUHAN-CHINA");
+        List<ZdravstvenaUstanova> ustanove = zdravstvenaUstanovaRepository.getByPacijentEmail(userEmail);
+        ZdravstvenaUstanova ustanova;
 
+        if (ustanove.isEmpty())
+            throw new NotFoundException("Korisnik nema zakazani termin...");
+
+        List<Termin> sviTermini = new ArrayList<>();
+        List<Termin> finalSviTermini = sviTermini;
+        ustanove.forEach(u -> finalSviTermini.addAll(u.getTermini()));
+
+        sviTermini = sviTermini.stream().filter(t -> t.getPacijent().equals(userEmail)).collect(Collectors.toList());
+        sviTermini.sort((t1, t2) -> t2.getDatumVreme().compare(t1.getDatumVreme()));
+        Termin termin = sviTermini.get(0);
+
+
+        switch (termin.getVakcina()) {
+            case "PHIZER_BIONTECH":
+                return List.of("Pfizer-BioNTech/Pfizer Inc.");
+            case "SPUTNIK_V":
+                return List.of("Sputnik V/NRCEM GAMALEYA");
+            case "SINOPHARM":
+                return List.of("Sinopharm/China National Pharmaceutical Group (CNPGC)");
+            case "ASTRA_ZENECA":
+                return List.of("AstraZeneca/AstraZeneca L.T.D.");
+            case "MODERNA":
+                return List.of("Sinopharm/Moderna, Inc");
+            default:
+                throw new NotFoundException("U terminu nije pronadjena odgovarajuca vakcina");
+
+        }
     }
 }

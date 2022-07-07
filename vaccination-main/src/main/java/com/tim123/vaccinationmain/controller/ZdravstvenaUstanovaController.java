@@ -6,6 +6,7 @@ import com.tim123.vaccinationmain.model.termin.TerminUstanova;
 import com.tim123.vaccinationmain.model.vakcina.ZeljeneVakcine;
 import com.tim123.vaccinationmain.service.ZdravstvenaUstanovaService;
 import lombok.RequiredArgsConstructor;
+import org.exist.http.NotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,12 @@ public class ZdravstvenaUstanovaController {
 
     @GetMapping(value = "/ustanova-za-vakcinisanje/{userEmail}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<?> ustanovaByUsername(@PathVariable String userEmail) {
-        List<String> retVal = zdravstvenaUstanovaService.ustanovaByUsername(userEmail);
+        List<String> retVal = null;
+        try {
+            retVal = zdravstvenaUstanovaService.ustanovaByUsername(userEmail);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.ok(new GetVakcinaStringDto(retVal));
 
     }

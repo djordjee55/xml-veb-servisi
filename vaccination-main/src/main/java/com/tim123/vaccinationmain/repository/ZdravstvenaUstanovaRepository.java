@@ -67,4 +67,22 @@ public class ZdravstvenaUstanovaRepository implements CRUDRepository<Zdravstvena
         }
         return resultSet.get(0).getOpstina();
     }
+
+    public List<ZdravstvenaUstanova> getByPacijentEmail(String email) {
+        List<ZdravstvenaUstanova> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(ustanoveCollection,
+                    String.format("//ZdravstvenaUstanova[Termini[@pacijent='%s']]", email), "");
+
+            resultSet = converterService.convert(result, ZdravstvenaUstanova.class);
+
+            if (resultSet.isEmpty())
+                return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+
+    }
 }
