@@ -7,7 +7,9 @@ import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.saglasnost.TEvidencija;
 import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
+import com.tim123.vaccinationportal.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationportal.model.termin.Termin;
+import com.tim123.vaccinationportal.model.termin.TerminUstanova;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.KorisnikRepository;
@@ -44,6 +46,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     private final HTMLTransformer htmlTransformer;
     private final MarshallUnmarshallServiceImpl<Saglasnost> marshallUnmarshallService;
     private final SearchUtil searchUtil;
+    private final EmailService emailService;
 
     @Override
     protected CRUDRepository<Saglasnost> getRepository() {
@@ -60,6 +63,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
 
         try {
             var i = this.save(saglasnost);
+            sendSaglasnostEmail(saglasnost);
             rdfService.extractMetadata(saglasnost, Saglasnost.class, saglasnostPath);
             return i;
         } catch (Exception e) {
@@ -137,11 +141,14 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         Saglasnost saglasnost = dobaviSaglasnost(id);
 
         List<Saglasnost> stareSaglasnosti = saglasnostRepository.getForUserEmail(saglasnost.getPacijent().getKontakt().getEMail());
-        //izbaci najnoviju
-        stareSaglasnosti = stareSaglasnosti.stream().filter(sgl -> sgl.getId() != id).collect(Collectors.toList());
-        //sortirano descending pa mi je najstarija na 0. poziciji...
-        Collections.sort(stareSaglasnosti, (sgl1, sgl2) -> sgl2.getDatum().getValue().compare(sgl1.getDatum().getValue()));
-        Saglasnost staraSaglasnost = stareSaglasnosti.get(0);
+        //izbaci najnoviju, postojace barem jedna
+        stareSaglasnosti = stareSaglasnosti.stream().filter(sgl -> !sgl.getId().equals(id)).collect(Collectors.toList());
+
+
+        //ako nema jos napravi evidenciju
+        if (saglasnost.getEvidencijaOVakcinaciji()== null) {
+            saglasnost.setEvidencijaOVakcinaciji(new TEvidencija());
+        }
 
         //ako nema jos napravi vakcine
         if (saglasnost.getEvidencijaOVakcinaciji().getVakcine() == null) {
@@ -150,9 +157,19 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
             saglasnost.getEvidencijaOVakcinaciji().setVakcine(vakc);
         }
 
-        //ubacivanje svih straih vakcina
-        for (TVakcina v : staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina())
-            saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(v);
+        if(stareSaglasnosti != null && !stareSaglasnosti.isEmpty()) {
+            //sortirano descending pa mi je najstarija na 0. poziciji...
+            Collections.sort(stareSaglasnosti, (sgl1, sgl2) -> sgl2.getDatum().getValue().compare(sgl1.getDatum().getValue()));
+            Saglasnost staraSaglasnost = stareSaglasnosti.get(0);
+            if(staraSaglasnost.getEvidencijaOVakcinaciji() != null
+                    && staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine() != null
+                    && staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina() != null) {
+                //ubacivanje svih straih vakcina
+                for (TVakcina v : staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina())
+                    saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(v);
+            }
+        }
+
 
 
         GregorianCalendar gc = new GregorianCalendar();
@@ -190,7 +207,6 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
             saglasnost.getEvidencijaOVakcinaciji().getPrivremeneKontraindikacije().getPrivremenaKontraindikacija().add(ki);
         }
 
-        // TODO promeni u servis, ovo je zakrpa
         Korisnik doktor = korisnikRepository.findByEmail(doctorEmail);
         if (saglasnost.getEvidencijaOVakcinaciji().getLekar() == null) {
             TEvidencija.Lekar lekar = new TEvidencija.Lekar();
@@ -198,7 +214,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         }
         saglasnost.getEvidencijaOVakcinaciji().getLekar().setIme(doktor.getIme());
         saglasnost.getEvidencijaOVakcinaciji().getLekar().setPrezime(doktor.getPrezime());
-        //saglasnost.getEvidencijaOVakcinaciji().getLekar().setBrojTelefona(doktor.getBrojTelefona());
+        saglasnost.getEvidencijaOVakcinaciji().getLekar().setBrojTelefona("0649536995");
 
         saglasnostRepository.save(saglasnost);
 
@@ -250,12 +266,26 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
     }
 
 
-    private Object makeNoviTermin(Saglasnost saglasnost) {
+    private void makeNoviTermin(Saglasnost saglasnost) {
 
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForObject("http://localhost:8081/api/zdravstvena-ustanova/napravi-novi-termin",
+        ResponseEntity<TerminUstanova> terminUstanova = restTemplate.postForEntity("http://localhost:8081/api/zdravstvena-ustanova/napravi-novi-termin",
                 saglasnost,
-                Object.class);
+                TerminUstanova.class);
+        System.out.println("BLa");
+    }
+
+    private void sendSaglasnostEmail(Saglasnost saglasnost) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Postovani,\nUspešno Ste podneli saglasnost za vakcinaciju protiv COVID-19.");
+        stringBuilder.append("\nId Vašeg dokumenta saglasnosti je:\n\t\t")
+                .append(saglasnost.getId())
+                .append("\n\n");
+        stringBuilder.append("\n\n\nSrdačan pozdrav,\nSistem za imunizaciju");
+
+        emailService.sendEmail("", saglasnost.getPacijent().getKontakt().getEMail(), "Uspešno podneta saglasnost!", stringBuilder.toString());
+
     }
 
 

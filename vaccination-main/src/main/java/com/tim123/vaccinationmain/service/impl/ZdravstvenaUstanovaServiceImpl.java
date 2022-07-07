@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,7 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
     private final VakcinaService vakcinaService;
     private final CekanjeService cekanjeService;
     private final TerminService terminService;
+    private final EmailService emailService;
 
     @Override
     protected CRUDRepository<ZdravstvenaUstanova> getRepository() {
@@ -109,15 +111,15 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
 
         switch (termin.getVakcina()) {
             case "PHIZER_BIONTECH":
-                return List.of("Pfizer-BioNTech/Pfizer Inc.");
+                return List.of("PHIZER_BIONTECH/Pfizer Inc.");
             case "SPUTNIK_V":
-                return List.of("Sputnik V/NRCEM GAMALEYA");
+                return List.of("SPUTNIK_V/NRCEM GAMALEYA");
             case "SINOPHARM":
-                return List.of("Sinopharm/China National Pharmaceutical Group (CNPGC)");
+                return List.of("SINOPHARM/China National Pharmaceutical Group (CNPGC)");
             case "ASTRA_ZENECA":
-                return List.of("AstraZeneca/AstraZeneca L.T.D.");
+                return List.of("ASTRA_ZENECA/AstraZeneca L.T.D.");
             case "MODERNA":
-                return List.of("Sinopharm/Moderna, Inc");
+                return List.of("MODERNA/Moderna, Inc");
             default:
                 throw new NotFoundException("U terminu nije pronadjena odgovarajuca vakcina");
 
@@ -145,6 +147,7 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
             tU.setPacijent(saglasnost.getPacijent().getKontakt().getEMail());
             tU.setVakcina(termin.getVakcina());
             tU.setDatumVreme(termin.getDatumVreme());
+            sendNoviTerminMail(tU);
             return tU;
         }
 
@@ -176,5 +179,25 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
         if (redniBrojVakcine == 1) return 21;
         else
             return 180;
+    }
+
+    private void sendNoviTerminMail(TerminUstanova tu) {
+        String[] splitovano =tu.getDatumVreme().toString().split("T");
+        String datum = splitovano[0];
+        String vreme = splitovano[1];
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Postovani,\nIzvršili Ste vakcinaciju protiv COVID-19.");
+        stringBuilder.append("\nTermin primanja sledeće doze je: ")
+                .append(datum)
+                .append(" u ")
+                .append(vreme)
+                .append(" u zdravstvenoj ustanovi: ")
+                .append(tu.getUstanova())
+                .append("\n\n");
+        stringBuilder.append("\n\tOdabrana vakcina:");
+        stringBuilder.append(tu.getVakcina());
+
+        stringBuilder.append("\n\n\nSrdačan pozdrav,\nSistem za imunizaciju");
+        emailService.sendEmail("", tu.getPacijent(), "Termin Revakcinacije", stringBuilder.toString());
     }
 }

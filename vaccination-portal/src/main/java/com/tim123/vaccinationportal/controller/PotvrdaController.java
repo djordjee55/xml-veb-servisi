@@ -51,4 +51,16 @@ public class PotvrdaController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(stream));
     }
+
+    @GetMapping(value = "/izdaj/{id}")
+    @PreAuthorize("hasAnyAuthority('ZDRAVSTVENI_RADNIK')")
+    public ResponseEntity<?> izdajPotvrdu(@PathVariable UUID id) throws Exception {
+        String potvrdaId = potvrdaService.izadaj(id.toString());
+        if(potvrdaId == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.TEXT_XML)
+                .body(potvrdaId);
+    }
 }

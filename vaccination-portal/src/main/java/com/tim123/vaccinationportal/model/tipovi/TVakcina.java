@@ -11,11 +11,12 @@ package com.tim123.vaccinationportal.model.tipovi;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+import java.util.List;
 
 
 /**
  * <p>Java class for TVakcina.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -29,7 +30,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "TVakcina")
 @XmlEnum
@@ -56,7 +56,36 @@ public enum TVakcina {
     }
 
     public static TVakcina fromValue(String v) {
-        for (TVakcina c: TVakcina.values()) {
+        for (TVakcina c : TVakcina.values()) {
+            if (c.value.equals(v)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException(v);
+    }
+
+    public static TVakcina fromVakcinaString(String v) {
+        switch (v) {
+            case "PHIZER_BIONTECH":
+                v = "Pfizer-BioNTech";
+                break;
+            case "SPUTNIK_V":
+                v = "Sputnik V";
+                break;
+            case "SINOPHARM":
+                v = "Sinopharm";
+                break;
+            case "ASTRA_ZENECA":
+                v = "AstraZeneca";
+                break;
+            case "MODERNA":
+                v = "Moderna";
+                break;
+            default:
+                throw new IllegalArgumentException(v);
+        }
+
+        for (TVakcina c : TVakcina.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

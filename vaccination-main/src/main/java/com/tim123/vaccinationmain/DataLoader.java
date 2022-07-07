@@ -1,5 +1,6 @@
 package com.tim123.vaccinationmain;
 
+import com.tim123.vaccinationmain.model.termin.Termin;
 import com.tim123.vaccinationmain.model.vakcina.TipVakcine;
 import com.tim123.vaccinationmain.model.vakcina.Vakcina;
 import com.tim123.vaccinationmain.model.zdravstvenaUstanova.ZdravstvenaUstanova;
@@ -9,8 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -26,12 +33,24 @@ public class DataLoader implements CommandLineRunner {
         ZdravstvenaUstanova zU3 = new ZdravstvenaUstanova(new ArrayList<>(), "Dom zdravlja Novi Beograd", "Novi Beograd", "DZ3", LocalTime.of(7, 0).toString(), LocalTime.of(20, 0).toString());
         ZdravstvenaUstanova zU4 = new ZdravstvenaUstanova(new ArrayList<>(), "Dom zdravlja Vozdovac", "Beograd", "DZ4", LocalTime.of(6, 0).toString(), LocalTime.of(20, 0).toString());
         ZdravstvenaUstanova zU5 = new ZdravstvenaUstanova(new ArrayList<>(), "Dom zdravlja Vracar", "Beograd", "DZ5", LocalTime.of(6, 0).toString(), LocalTime.of(20, 0).toString());
-        ZdravstvenaUstanova zU6 = new ZdravstvenaUstanova(new ArrayList<>(), "Klinicki centar Vojvodine", "Novi Sad", "DZ6", LocalTime.of(8, 0).toString(), LocalTime.of(20, 0).toString());
+        //ZdravstvenaUstanova zU6 = new ZdravstvenaUstanova(new ArrayList<>(), "Klinicki centar Vojvodine", "Novi Sad", "DZ6", LocalTime.of(8, 0).toString(), LocalTime.of(20, 0).toString());
         ZdravstvenaUstanova zU7 = new ZdravstvenaUstanova(new ArrayList<>(), "Vojna Bolnica", "Novi Sad", "DZ7", LocalTime.of(8, 0).toString(), LocalTime.of(20, 0).toString());
         ZdravstvenaUstanova zU8 = new ZdravstvenaUstanova(new ArrayList<>(), "Dom zdravlja Detelinara", "Novi Sad", "DZ8", LocalTime.of(8, 0).toString(), LocalTime.of(20, 0).toString());
         ZdravstvenaUstanova zU9 = new ZdravstvenaUstanova(new ArrayList<>(), "Dom zdravlja1", "Nis", "DZ9", LocalTime.of(8, 0).toString(), LocalTime.of(20, 0).toString());
         ZdravstvenaUstanova zU10 = new ZdravstvenaUstanova(new ArrayList<>(), "Dom zdravlja2", "Nis", "DZ10", LocalTime.of(8, 0).toString(), LocalTime.of(20, 0).toString());
         ZdravstvenaUstanova zU11 = new ZdravstvenaUstanova(new ArrayList<>(), "Poliklinika", "Kragujevac", "DZ11", LocalTime.of(8, 0).toString(), LocalTime.of(20, 0).toString());
+
+        ///Ovo obrisati posle
+        Termin t = new Termin();
+        t.setPacijent("lkureljusic@ymail.com");
+        t.setVakcina("PHIZER_BIONTECH");
+        LocalDateTime localDatetime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String formattedDate = localDatetime.format(formatter);
+        XMLGregorianCalendar xmlgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(formattedDate);
+        t.setDatumVreme(xmlgc);
+        ZdravstvenaUstanova zU6 = new ZdravstvenaUstanova(List.of(t), "Klinicki centar Vojvodine", "Novi Sad", "DZ6", LocalTime.of(8, 0).toString(), LocalTime.of(20, 0).toString());
+        //endBrisanje
 
         zdravstvenaUstanovaService.save(zU1);
         zdravstvenaUstanovaService.save(zU2);
@@ -44,6 +63,7 @@ public class DataLoader implements CommandLineRunner {
         zdravstvenaUstanovaService.save(zU9);
         zdravstvenaUstanovaService.save(zU10);
         zdravstvenaUstanovaService.save(zU11);
+
 
         Vakcina vakcina11 = new Vakcina(TipVakcine.PHIZER_BIONTECH, 100, "DZ1", "V11");
         Vakcina vakcina12 = new Vakcina(TipVakcine.SPUTNIK_V, 100, "DZ1", "V12");
