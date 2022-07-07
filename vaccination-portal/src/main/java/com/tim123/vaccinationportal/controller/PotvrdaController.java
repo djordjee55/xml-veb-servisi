@@ -25,7 +25,6 @@ public class PotvrdaController {
     private final PotvrdaService potvrdaService;
 
     @GetMapping(value = "/html/{id}")
-    @PreAuthorize("hasAnyAuthority('ZDRAVSTVENI_RADNIK')")
     public ResponseEntity<?> generisiHTML(@PathVariable UUID id) throws Exception {
         ByteArrayInputStream stream = potvrdaService.generisiHTML(id.toString());
         if(stream == null)
@@ -40,9 +39,10 @@ public class PotvrdaController {
     }
 
     @GetMapping(value = "/pdf/{id}")
-    @PreAuthorize("hasAnyAuthority('ZDRAVSTVENI_RADNIK')")
     public ResponseEntity<InputStreamResource> generisiPDF(@PathVariable UUID id) throws Exception {
         ByteArrayInputStream stream = potvrdaService.generisiPDF(id.toString());
+        if(stream == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=details.pdf");
         return ResponseEntity

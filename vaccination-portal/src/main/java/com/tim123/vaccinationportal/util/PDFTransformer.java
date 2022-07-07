@@ -45,7 +45,7 @@ public class PDFTransformer {
         else if (classOfDocument.equals(Sertifikat.class))
             XSL_FILE = "classpath:static/xsl-fo/sertifikat-fo.xsl";
         else if (classOfDocument.equals(Potvrda.class))
-            XSL_FILE = "classpath:static/xsl-fo/potvrda-fo.xsl";
+            XSL_FILE = "classpath:static/xsl-fo/potvrda_fo.xsl";
 
     }
 
