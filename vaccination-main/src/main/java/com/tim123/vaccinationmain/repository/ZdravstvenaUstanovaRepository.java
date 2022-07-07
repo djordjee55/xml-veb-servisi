@@ -86,4 +86,21 @@ public class ZdravstvenaUstanovaRepository implements CRUDRepository<Zdravstvena
         return resultSet;
 
     }
+
+    public ZdravstvenaUstanova findByNaziv(String ustanova) {
+        List<ZdravstvenaUstanova> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(ustanoveCollection,
+                    String.format("//ZdravstvenaUstanova[@naziv='%s']", ustanova), "");
+
+            resultSet = converterService.convert(result, ZdravstvenaUstanova.class);
+
+            if (resultSet.isEmpty())
+                return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet.get(0);
+    }
 }
