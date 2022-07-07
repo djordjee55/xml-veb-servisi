@@ -1,5 +1,6 @@
 package com.tim123.vaccinationmain.util;
 
+import com.tim123.vaccinationmain.model.izvestaj.Izvestaj;
 import com.tim123.vaccinationmain.model.potvrda.Potvrda;
 import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import org.apache.commons.io.FileUtils;
@@ -56,5 +57,7 @@ public class HTMLTransformer {
             XSL_FILE = "classpath:static/xslt/sertifikat.xsl";
         else if (classOfDocument.equals(Potvrda.class))
             XSL_FILE = "classpath:static/xslt/potvrda.xsl";
+        else if (classOfDocument.equals(Izvestaj.class))
+            XSL_FILE = "classpath:static/xslt/izvestaj.xsl";
     }
 }

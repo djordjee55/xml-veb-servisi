@@ -103,4 +103,21 @@ public class ZdravstvenaUstanovaRepository implements CRUDRepository<Zdravstvena
         }
         return resultSet.get(0);
     }
+
+    public List<ZdravstvenaUstanova> findAll() {
+        List<ZdravstvenaUstanova> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(ustanoveCollection,
+                    "//ZdravstvenaUstanova", "");
+
+            resultSet = converterService.convert(result, ZdravstvenaUstanova.class);
+
+            if (resultSet.isEmpty())
+                return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
 }

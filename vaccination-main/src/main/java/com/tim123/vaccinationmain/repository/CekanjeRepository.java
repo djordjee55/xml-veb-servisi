@@ -45,7 +45,7 @@ public class CekanjeRepository implements CRUDRepository<Cekanje>{
             resultSet = converterService.convert(result, Cekanje.class);
 
             if (resultSet.isEmpty())
-                return null;
+                return new ArrayList<>();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,6 +1,9 @@
 package com.tim123.vaccinationportal.service.impl;
 
 import com.tim123.vaccinationportal.model.Korisnik;
+import com.tim123.vaccinationportal.model.dto.dokumenta.Dokument;
+import com.tim123.vaccinationportal.model.dto.dokumenta.ListaDokumenata;
+import com.tim123.vaccinationportal.model.dto.dokumenta.TipDokumenta;
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationportal.model.tipovi.TCBrojPasosa;
@@ -253,6 +256,12 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
         }).collect(Collectors.toList());
 
         return searchUtil.parseSearchResult(zahteviConverted, "zahtev", searchedString);
+    }
+
+    @Override
+    public ListaDokumenata getNoviZahtevi() {
+        List<Zahtev> noviZahtevi = zahtevRepository.getNoviZahtevi();
+        return new ListaDokumenata(noviZahtevi.stream().map(z->new Dokument(TipDokumenta.ZAHTEV,z.getDatum().getValue(), z.getId())).collect(Collectors.toList()));
     }
 
     private void odbijZahtevEmail(String email, String reason) {

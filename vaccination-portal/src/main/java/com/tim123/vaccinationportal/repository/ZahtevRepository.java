@@ -70,4 +70,17 @@ public class ZahtevRepository implements CRUDRepository<Zahtev> {
         }
         return resultSet;
     }
+
+    public List<Zahtev> getNoviZahtevi() {
+        List<Zahtev> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(zahtevCollection, "//*[local-name()='Zahtev']", "");
+            resultSet = converterService.convert(result, Zahtev.class);
+            resultSet = resultSet.stream().filter(res -> res.getId() != null).collect(Collectors.toList());
+            resultSet = resultSet.stream().filter(res -> !res.isObradjen()).collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
 }

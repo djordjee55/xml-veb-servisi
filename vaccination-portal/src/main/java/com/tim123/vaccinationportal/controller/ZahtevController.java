@@ -1,6 +1,7 @@
 package com.tim123.vaccinationportal.controller;
 
 import com.tim123.vaccinationportal.model.dto.OdbijZahtevDto;
+import com.tim123.vaccinationportal.model.dto.dokumenta.ListaDokumenata;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.service.ZahtevService;
 import lombok.RequiredArgsConstructor;
@@ -81,5 +82,10 @@ public class ZahtevController {
     @GetMapping(value = "/search-by-string")
     public String searchByString(@RequestParam String searchedString) {
         return zahtevService.searchByString(searchedString);
+    }
+
+    @GetMapping(value = "/novi")
+    public ListaDokumenata noviZahtevi() {
+        return zahtevService.getNoviZahtevi();
     }
 }

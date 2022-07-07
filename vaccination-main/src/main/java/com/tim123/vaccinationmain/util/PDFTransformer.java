@@ -1,5 +1,6 @@
 package com.tim123.vaccinationmain.util;
 
+import com.tim123.vaccinationmain.model.izvestaj.Izvestaj;
 import com.tim123.vaccinationmain.model.potvrda.Potvrda;
 import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import net.sf.saxon.TransformerFactoryImpl;
@@ -36,6 +37,8 @@ public class PDFTransformer {
             XSL_FILE = "classpath:static/xsl-fo/sertifikat-fo.xsl";
         else if (classOfDocument.equals(Potvrda.class))
             XSL_FILE = "classpath:static/xsl-fo/potvrda-fo.xsl";
+        else if (classOfDocument.equals(Izvestaj.class))
+            XSL_FILE = "classpath:static/xsl-fo/izvestaj_fo.xsl";
 
     }
 

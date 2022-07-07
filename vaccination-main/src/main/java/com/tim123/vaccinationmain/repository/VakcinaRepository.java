@@ -70,4 +70,21 @@ public class VakcinaRepository implements CRUDRepository<Vakcina> {
         }
         return resultSet.get(0);
     }
+
+    public List<Vakcina> getVakcineZaUstanovu(String id) {
+        List<Vakcina> resultSet = new ArrayList<>();
+
+        ResourceSet result;
+        try {
+            result = xPathService.executeXPath(vakcinaCollection,
+                    String.format("//Vakcina[@ustanova='%s']", id), "");
+            resultSet = converterService.convert(result, Vakcina.class);
+
+            if (resultSet.isEmpty())
+                return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
 }
