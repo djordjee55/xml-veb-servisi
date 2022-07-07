@@ -1,5 +1,6 @@
 package com.tim123.vaccinationmain.service;
 
+import com.tim123.vaccinationmain.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationmain.model.termin.Termin;
 import com.tim123.vaccinationmain.model.termin.TerminUstanova;
 import com.tim123.vaccinationmain.model.vakcina.ZeljeneVakcine;
@@ -14,4 +15,6 @@ public interface ZdravstvenaUstanovaService extends CRUDService<ZdravstvenaUstan
     List<String> ustanovaByUsername(String userEmail) throws NotFoundException;
 
     List<String> vakcinaByUsername(String userEmail);
+
+    TerminUstanova napraviNoviTerminRevakcinacije(Saglasnost saglasnost);
 }

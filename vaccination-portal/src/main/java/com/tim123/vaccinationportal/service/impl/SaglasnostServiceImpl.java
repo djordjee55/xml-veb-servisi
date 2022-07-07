@@ -7,6 +7,7 @@ import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.saglasnost.TEvidencija;
 import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
+import com.tim123.vaccinationportal.model.termin.Termin;
 import com.tim123.vaccinationportal.model.tipovi.TCJMBG;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.KorisnikRepository;
@@ -121,15 +122,15 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identifikator mora da postoji");
         }
         return total.stream().filter(s ->
-                    s.getPacijent() != null &&
-                    s.getPacijent().getDrzavljanstvo() != null &&
-                            ((s.getPacijent().getDrzavljanstvo().getJMBG() != null &&
-                    s.getPacijent().getDrzavljanstvo().getJMBG().getValue().equals(jmbg)) ||
-                            (s.getPacijent().getDrzavljanstvo().getBrojPasosa() != null &&
-                    s.getPacijent().getDrzavljanstvo().getBrojPasosa().getValue().equals(passport)) ||
-                            (s.getPacijent().getDrzavljanstvo().getEBS() != null &&
-                    s.getPacijent().getDrzavljanstvo().getEBS().getValue().equals(passport))))
-                    .collect(Collectors.toList());
+                        s.getPacijent() != null &&
+                                s.getPacijent().getDrzavljanstvo() != null &&
+                                ((s.getPacijent().getDrzavljanstvo().getJMBG() != null &&
+                                        s.getPacijent().getDrzavljanstvo().getJMBG().getValue().equals(jmbg)) ||
+                                        (s.getPacijent().getDrzavljanstvo().getBrojPasosa() != null &&
+                                                s.getPacijent().getDrzavljanstvo().getBrojPasosa().getValue().equals(passport)) ||
+                                        (s.getPacijent().getDrzavljanstvo().getEBS() != null &&
+                                                s.getPacijent().getDrzavljanstvo().getEBS().getValue().equals(passport))))
+                .collect(Collectors.toList());
     }
 
     public void dopuniEvidenciju(String id, DopuniEvidencijuDto dopuniEvidencijuDto, String doctorEmail) throws Exception {
@@ -150,7 +151,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         }
 
         //ubacivanje svih straih vakcina
-        for(TVakcina v : staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina())
+        for (TVakcina v : staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina())
             saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(v);
 
 
@@ -191,7 +192,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
 
         // TODO promeni u servis, ovo je zakrpa
         Korisnik doktor = korisnikRepository.findByEmail(doctorEmail);
-        if(saglasnost.getEvidencijaOVakcinaciji().getLekar()==null) {
+        if (saglasnost.getEvidencijaOVakcinaciji().getLekar() == null) {
             TEvidencija.Lekar lekar = new TEvidencija.Lekar();
             saglasnost.getEvidencijaOVakcinaciji().setLekar(lekar);
         }
@@ -199,9 +200,11 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         saglasnost.getEvidencijaOVakcinaciji().getLekar().setPrezime(doktor.getPrezime());
         //saglasnost.getEvidencijaOVakcinaciji().getLekar().setBrojTelefona(doktor.getBrojTelefona());
 
-
         saglasnostRepository.save(saglasnost);
+
+        makeNoviTermin(saglasnost);
     }
+
 
     @Override
     public GetVakcinaStringDto vakcinaByUsername(String username) {
@@ -245,4 +248,15 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
 
         return searchUtil.parseSearchResult(saglasnostiConverted, "saglasnost", searchedString);
     }
+
+
+    private Object makeNoviTermin(Saglasnost saglasnost) {
+
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.postForObject("http://localhost:8081/api/zdravstvena-ustanova/napravi-novi-termin",
+                saglasnost,
+                Object.class);
+    }
+
+
 }

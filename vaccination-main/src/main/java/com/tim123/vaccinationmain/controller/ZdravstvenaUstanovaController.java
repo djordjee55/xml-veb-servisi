@@ -1,6 +1,7 @@
 package com.tim123.vaccinationmain.controller;
 
 import com.tim123.vaccinationmain.dto.GetVakcinaStringDto;
+import com.tim123.vaccinationmain.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationmain.model.termin.Termin;
 import com.tim123.vaccinationmain.model.termin.TerminUstanova;
 import com.tim123.vaccinationmain.model.vakcina.ZeljeneVakcine;
@@ -40,6 +41,12 @@ public class ZdravstvenaUstanovaController {
             e.printStackTrace();
         }
         return ResponseEntity.ok(new GetVakcinaStringDto(retVal));
+
+    }
+
+    @GetMapping(value = "/napravi-novi-termin", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    public TerminUstanova napraviNoviTerminRevakcinacije(@RequestBody Saglasnost saglasnost) {
+        return zdravstvenaUstanovaService.napraviNoviTerminRevakcinacije(saglasnost);
 
     }
 }

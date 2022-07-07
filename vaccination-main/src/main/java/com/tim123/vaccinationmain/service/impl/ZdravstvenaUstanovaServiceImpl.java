@@ -1,6 +1,7 @@
 package com.tim123.vaccinationmain.service.impl;
 
 import com.tim123.vaccinationmain.exception.NotFoundException;
+import com.tim123.vaccinationmain.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationmain.model.termin.Termin;
 import com.tim123.vaccinationmain.model.termin.TerminUstanova;
 import com.tim123.vaccinationmain.model.vakcina.ZeljenaVakcina;
@@ -117,5 +118,12 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
                 throw new NotFoundException("U terminu nije pronadjena odgovarajuca vakcina");
 
         }
+    }
+
+    @Override
+    public TerminUstanova napraviNoviTerminRevakcinacije(Saglasnost saglasnost) {
+
+    return null;
+
     }
 }
