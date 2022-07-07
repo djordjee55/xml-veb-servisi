@@ -11,6 +11,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Service
@@ -51,7 +52,12 @@ public class TerminService {
     public Termin napraviTerminZaREvakcinaciju(ZdravstvenaUstanova zU, String eMail, String nazivVakcine, int brojDanaDoSledece, XMLGregorianCalendar datumZadnjegDavanja) throws DatatypeConfigurationException {
         LocalDateTime novi = datumZadnjegDavanja.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
         novi = novi.plusDays(brojDanaDoSledece);
-        Termin noviTermin = new Termin(DatatypeFactory.newInstance().newXMLGregorianCalendar(novi.toString()), eMail, nazivVakcine);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String formattedDate = novi.format(formatter);
+        XMLGregorianCalendar xmlgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(formattedDate);
+
+        Termin noviTermin = new Termin(xmlgc, eMail, nazivVakcine);
         zU.getTermini().add(noviTermin);
         try {
             zdravstvenaUstanovaRepository.save(zU);
