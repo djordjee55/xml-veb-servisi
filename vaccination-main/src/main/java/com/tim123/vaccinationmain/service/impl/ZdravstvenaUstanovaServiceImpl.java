@@ -77,10 +77,10 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
         Termin termin = sviTermini.get(0);
 
         ZdravstvenaUstanova ustanova = ustanove.stream().filter(u -> u.getTermini()
-                .contains(termin))
+                        .contains(termin))
                 .findFirst()
                 .orElseThrow(
-                    () -> new NotFoundException("Korisnik nema zakazan termin"));
+                        () -> new NotFoundException("Korisnik nema zakazan termin"));
 
         return List.of(ustanova.getNaziv());
 
@@ -122,8 +122,34 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
 
     @Override
     public TerminUstanova napraviNoviTerminRevakcinacije(Saglasnost saglasnost) {
+        String ustanova = saglasnost.getEvidencijaOVakcinaciji().getZdravstvenaUstanova();
+        String nazivVakcine = saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().get(0).getNaziv();
+        int redniBrojVakcine = saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().size();
 
-    return null;
+        ZdravstvenaUstanova zU = zdravstvenaUstanovaRepository.findByNaziv(ustanova);
 
+        if (vakcinaService.dostupnaVakcina(nazivVakcine, zU.getId())) {
+            Termin termin = null;
+            try {
+                termin = terminService.napraviTerminZaREvakcinaciju(zU, saglasnost.getPacijent().getKontakt().getEMail(), nazivVakcine, getBrojDanaDoSledece(redniBrojVakcine), saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().get(saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().size() - 1).getDatumDavanja());
+            } catch (DatatypeConfigurationException e) {
+                e.printStackTrace();
+            }
+            vakcinaService.smanjiKolicinu(nazivVakcine, zU.getId());
+            TerminUstanova tU = new TerminUstanova();
+            tU.setUstanova(zU.getNaziv() + " u " + zU.getOpstina());
+            tU.setPacijent(saglasnost.getPacijent().getKontakt().getEMail());
+            tU.setVakcina(termin.getVakcina());
+            tU.setDatumVreme(termin.getDatumVreme());
+            return tU;
+        }
+
+        return null;
+    }
+
+    private int getBrojDanaDoSledece(int redniBrojVakcine) {
+        if (redniBrojVakcine == 1) return 21;
+        else
+            return 180;
     }
 }

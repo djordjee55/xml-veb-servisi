@@ -44,7 +44,7 @@ public class ZdravstvenaUstanovaController {
 
     }
 
-    @GetMapping(value = "/napravi-novi-termin", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    @PostMapping(value = "/napravi-novi-termin", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public TerminUstanova napraviNoviTerminRevakcinacije(@RequestBody Saglasnost saglasnost) {
         return zdravstvenaUstanovaService.napraviNoviTerminRevakcinacije(saglasnost);
 
