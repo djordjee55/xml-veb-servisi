@@ -137,11 +137,14 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         Saglasnost saglasnost = dobaviSaglasnost(id);
 
         List<Saglasnost> stareSaglasnosti = saglasnostRepository.getForUserEmail(saglasnost.getPacijent().getKontakt().getEMail());
-        //izbaci najnoviju
-        stareSaglasnosti = stareSaglasnosti.stream().filter(sgl -> sgl.getId() != id).collect(Collectors.toList());
-        //sortirano descending pa mi je najstarija na 0. poziciji...
-        Collections.sort(stareSaglasnosti, (sgl1, sgl2) -> sgl2.getDatum().getValue().compare(sgl1.getDatum().getValue()));
-        Saglasnost staraSaglasnost = stareSaglasnosti.get(0);
+        //izbaci najnoviju, postojace barem jedna
+        stareSaglasnosti = stareSaglasnosti.stream().filter(sgl -> !sgl.getId().equals(id)).collect(Collectors.toList());
+
+
+        //ako nema jos napravi evidenciju
+        if (saglasnost.getEvidencijaOVakcinaciji()== null) {
+            saglasnost.setEvidencijaOVakcinaciji(new TEvidencija());
+        }
 
         //ako nema jos napravi vakcine
         if (saglasnost.getEvidencijaOVakcinaciji().getVakcine() == null) {
@@ -150,9 +153,19 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
             saglasnost.getEvidencijaOVakcinaciji().setVakcine(vakc);
         }
 
-        //ubacivanje svih straih vakcina
-        for (TVakcina v : staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina())
-            saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(v);
+        if(stareSaglasnosti != null && !stareSaglasnosti.isEmpty()) {
+            //sortirano descending pa mi je najstarija na 0. poziciji...
+            Collections.sort(stareSaglasnosti, (sgl1, sgl2) -> sgl2.getDatum().getValue().compare(sgl1.getDatum().getValue()));
+            Saglasnost staraSaglasnost = stareSaglasnosti.get(0);
+            if(staraSaglasnost.getEvidencijaOVakcinaciji() != null
+                    && staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine() != null
+                    && staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina() != null) {
+                //ubacivanje svih straih vakcina
+                for (TVakcina v : staraSaglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina())
+                    saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina().add(v);
+            }
+        }
+
 
 
         GregorianCalendar gc = new GregorianCalendar();
@@ -198,11 +211,11 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
         }
         saglasnost.getEvidencijaOVakcinaciji().getLekar().setIme(doktor.getIme());
         saglasnost.getEvidencijaOVakcinaciji().getLekar().setPrezime(doktor.getPrezime());
-        //saglasnost.getEvidencijaOVakcinaciji().getLekar().setBrojTelefona(doktor.getBrojTelefona());
+        saglasnost.getEvidencijaOVakcinaciji().getLekar().setBrojTelefona("0649536995");
 
         saglasnostRepository.save(saglasnost);
 
-        makeNoviTermin(saglasnost);
+        //makeNoviTermin(saglasnost);
     }
 
 
