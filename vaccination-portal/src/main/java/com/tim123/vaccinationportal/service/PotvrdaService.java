@@ -18,4 +18,6 @@ public interface PotvrdaService extends CRUDService<Potvrda> {
     TDoza makeDozaFromTVakcina(TVakcina tvakc, int redniBroj);
 
     List<Potvrda> dobaviZaKorisnika(String email);
+
+    String izadaj(String saglasnostId);
 }

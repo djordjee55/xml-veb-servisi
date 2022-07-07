@@ -61,12 +61,11 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
 
     @Override
     public ByteArrayInputStream generisiHTML(String id) {
-        Potvrda potvrda = generisiPotvrdu(id);
-        if(potvrda.getDoze() == null)
-            return null;
+        Potvrda potvrda;
         try {
+            potvrda = potvrdaRepository.findById(id);
             return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(potvrda, Potvrda.class), Potvrda.class);
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -76,10 +75,11 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
     @Override
     public ByteArrayInputStream generisiPDF(String id) {
 
-        Potvrda potvrda = generisiPotvrdu(id);
+        Potvrda potvrda;
         try {
+            potvrda = potvrdaRepository.findById(id);
             return pdfTransformer.generatePDF(marshallUnmarshallService.marshall(potvrda, Potvrda.class), Potvrda.class);
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -124,6 +124,9 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
         potvrda.setQrKod("NEMAZASAD");
         potvrda.setPrimalac(pacijent);
 
+        if(saglasnost.getEvidencijaOVakcinaciji() == null)
+            return null;
+
 
         if(saglasnost.getEvidencijaOVakcinaciji().getVakcine() != null) {
             List<TVakcina> sveDateVakcine = saglasnost.getEvidencijaOVakcinaciji().getVakcine().getVakcina();
@@ -141,6 +144,7 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
             potvrda.setZdravstvenaUstanova(saglasnost.getEvidencijaOVakcinaciji().getZdravstvenaUstanova());
 
         }
+        else return null;
         try {
             potvrdaRepository.save(potvrda);
         } catch (Exception e) {
@@ -167,7 +171,7 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
         TCVakcina tipVakcine = new TCVakcina();
         tipVakcine.setProperty("pred:nazivVakcine");
         tipVakcine.setDatatype("xs:string");
-        tipVakcine.setValue(com.tim123.vaccinationportal.model.tipovi.TVakcina.fromValue(tvakc.getNaziv()));
+        tipVakcine.setValue(com.tim123.vaccinationportal.model.tipovi.TVakcina.fromVakcinaString(tvakc.getNaziv()));
 
 
         doza.setDatumDavanja(vacDatum);
@@ -181,5 +185,13 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
     @Override
     public List<Potvrda> dobaviZaKorisnika(String email) {
         return potvrdaRepository.getForUserEmail(email);
+    }
+
+    @Override
+    public String izadaj(String saglasnostId) {
+        Potvrda potvrda = generisiPotvrdu(saglasnostId);
+        if (potvrda == null)
+            return null;
+        return potvrda.getSifra();
     }
 }
