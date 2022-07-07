@@ -1,9 +1,13 @@
 package com.tim123.vaccinationmain.service.impl;
 
+import com.tim123.vaccinationmain.dto.UstanovaVakcineDto;
+import com.tim123.vaccinationmain.dto.UstanoveDto;
+import com.tim123.vaccinationmain.dto.VakcinaKolicinaDto;
 import com.tim123.vaccinationmain.exception.NotFoundException;
 import com.tim123.vaccinationmain.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationmain.model.termin.Termin;
 import com.tim123.vaccinationmain.model.termin.TerminUstanova;
+import com.tim123.vaccinationmain.model.vakcina.Vakcina;
 import com.tim123.vaccinationmain.model.vakcina.ZeljenaVakcina;
 import com.tim123.vaccinationmain.model.vakcina.ZeljeneVakcine;
 import com.tim123.vaccinationmain.model.zdravstvenaUstanova.ZdravstvenaUstanova;
@@ -148,6 +152,27 @@ public class ZdravstvenaUstanovaServiceImpl extends CRUDServiceImpl<ZdravstvenaU
         }
 
         return null;
+    }
+
+    @Override
+    public UstanoveDto getUstanove() {
+        List<ZdravstvenaUstanova> ustanove = zdravstvenaUstanovaRepository.findAll();
+        UstanoveDto ustanoveDto = new UstanoveDto();
+        List<UstanovaVakcineDto> uVDto = new ArrayList<>();
+        ustanove.forEach(ustanova -> {
+            UstanovaVakcineDto ustanovaVakcineDto = new UstanovaVakcineDto();
+            ustanovaVakcineDto.setId(ustanova.getId());
+            ustanovaVakcineDto.setUstanova(ustanova.getNaziv());
+            ustanovaVakcineDto.setOpstina(ustanova.getOpstina());
+            List<Vakcina> vakcine = vakcinaService.getVakcineZaUstanovu(ustanova.getId());
+            ustanovaVakcineDto.setVakcine(vakcine.stream().map(v -> new VakcinaKolicinaDto(v.getId(), v.getNaziv(), v.getKolicina())
+            ).collect(Collectors.toList()));
+
+            uVDto.add(ustanovaVakcineDto);
+        });
+
+        ustanoveDto.setUstanovaVakcineDtoList(uVDto);
+        return ustanoveDto;
     }
 
     private int getBrojDanaDoSledece(int redniBrojVakcine) {

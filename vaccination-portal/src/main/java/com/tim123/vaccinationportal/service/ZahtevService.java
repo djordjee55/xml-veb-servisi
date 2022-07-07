@@ -2,6 +2,7 @@ package com.tim123.vaccinationportal.service;
 
 import com.tim123.vaccinationportal.model.Korisnik;
 import com.tim123.vaccinationportal.model.dto.OdbijZahtevDto;
+import com.tim123.vaccinationportal.model.dto.dokumenta.ListaDokumenata;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 
 import java.io.ByteArrayInputStream;
@@ -23,4 +24,6 @@ public interface ZahtevService extends CRUDService<Zahtev> {
     ByteArrayInputStream generisiHTML(Zahtev zahtev);
 
     String searchByString(String searchedString);
+
+    ListaDokumenata getNoviZahtevi();
 }
