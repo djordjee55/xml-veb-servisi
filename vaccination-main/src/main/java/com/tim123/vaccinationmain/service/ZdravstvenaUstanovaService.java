@@ -1,5 +1,6 @@
 package com.tim123.vaccinationmain.service;
 
+import com.tim123.vaccinationmain.dto.UstanoveDto;
 import com.tim123.vaccinationmain.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationmain.model.termin.Termin;
 import com.tim123.vaccinationmain.model.termin.TerminUstanova;
@@ -17,4 +18,6 @@ public interface ZdravstvenaUstanovaService extends CRUDService<ZdravstvenaUstan
     List<String> vakcinaByUsername(String userEmail);
 
     TerminUstanova napraviNoviTerminRevakcinacije(Saglasnost saglasnost);
+
+    UstanoveDto getUstanove();
 }

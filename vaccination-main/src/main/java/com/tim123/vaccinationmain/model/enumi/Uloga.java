@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum Uloga {
     GRADJANIN,
-    ZDRAVSTVENI_RADNIK
+    ZDRAVSTVENI_RADNIK,
+    SLUZBENIK
 }
 

@@ -1,28 +1,27 @@
 package com.tim123.vaccinationmain.dto;
 
 import com.tim123.vaccinationmain.model.vakcina.TipVakcine;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@Data
+@AllArgsConstructor
 @NoArgsConstructor
-@XmlRootElement(name = "azuriranje")
+@Getter
+@Setter
+@XmlRootElement(name = "Vakcina")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AzurirajVakcinuDTO {
-    @XmlElement(name="vakcina")
-    private TipVakcine vakcina;
-
-    @XmlElement(name="kolicina")
-    private int kolicina;
-
-    @XmlElement(name="ustanova")
-    private String ustanova;
-
+public class VakcinaKolicinaDto {
     @XmlElement(name="id")
     private String id;
+    @XmlElement(name = "TipVakcine")
+    private TipVakcine tipVakcine;
+    @XmlElement(name = "Kolicina")
+    private Integer kolicina;
 }

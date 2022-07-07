@@ -45,7 +45,7 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
 
     @Override
     protected CRUDRepository<Izvestaj> getRepository() {
-        return null;
+        return izvestajRepository;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
 
         Izvestaj existingIzvestaj = izvestajRepository.findByPeriod(startDate, endDate);
         if (existingIzvestaj != null) {
-            return marshallUnmarshallService.marshall(existingIzvestaj, Izvestaj.class);
+            return existingIzvestaj.getId();
         }
 
         XMLGregorianCalendar currentDate = getCurrentDate();
@@ -104,7 +104,7 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
 
         izvestajRepository.save(izvestaj);
 
-        return marshallUnmarshallService.marshall(izvestaj, Izvestaj.class);
+        return izvestaj.getId();
     }
 
     private Izvestaj.RaspodelaPoProizvodjacima getVaccineManufacturerDistribution(String startDate, String endDate) throws ParseException {
