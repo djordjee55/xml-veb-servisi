@@ -4,6 +4,7 @@ import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationmain.service.ConverterService;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
 import com.tim123.vaccinationmain.service.XPathService;
+import com.tim123.vaccinationmain.util.QRUtil;
 import com.tim123.vaccinationmain.util.RepositoryUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -34,6 +35,8 @@ public class SertifikatRepository implements CRUDRepository<Sertifikat> {
             documentId = uuid.toString();
             entity.setBrojSertifikata(documentId);
             entity.setAbout(String.format("%s#%s", sertifikatBase, documentId));
+            entity.setQrKod(QRUtil.getQRImage("http://localhost:8082/api/sertifikat/html/"+uuid));
+
         }
         repositoryUtil.save(sertifikatCollection, documentId, marshallUnmarshallService.marshall(entity, Sertifikat.class));
         return entity;

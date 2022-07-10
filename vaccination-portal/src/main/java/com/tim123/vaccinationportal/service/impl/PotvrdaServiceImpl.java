@@ -146,7 +146,7 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
         }
         else return null;
         try {
-            potvrdaRepository.save(potvrda);
+            potvrda = potvrdaRepository.save(potvrda);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nije moguce sacuvati potvrdu");
         }
