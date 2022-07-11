@@ -34,28 +34,41 @@ public class DokumentaService {
     public ListaDokumenata mojaDokumenta(String email) {
         ListaDokumenata listaDokumenata = new ListaDokumenata(new ArrayList<>());
         Interesovanje interesovanje = interesovanjeService.dobaviZaKorisnika(email);
-        if(interesovanje != null) listaDokumenata.getDokumenta().add(new Dokument(TipDokumenta.INTERESOVANJE, interesovanje.getDatum().getValue(), interesovanje.getId()));
+        if (interesovanje != null)
+            listaDokumenata.getDokumenta().add(new Dokument(TipDokumenta.INTERESOVANJE, interesovanje.getDatum().getValue(), interesovanje.getId()));
 
         List<Saglasnost> saglasnosti = saglasnostService.dobaviZaKorisnika(email);
-        for(Saglasnost saglasnost : saglasnosti) {
+        for (Saglasnost saglasnost : saglasnosti) {
             listaDokumenata.getDokumenta().add(new Dokument(TipDokumenta.SAGLASNOST, saglasnost.getDatum().getValue(), saglasnost.getId()));
         }
         List<Zahtev> zahtevi = zahtevService.dobaviZaKorisnika(email);
-        for(Zahtev zahtev : zahtevi) {
+        for (Zahtev zahtev : zahtevi) {
             listaDokumenata.getDokumenta().add(new Dokument(TipDokumenta.ZAHTEV, zahtev.getDatum().getValue(), zahtev.getId()));
         }
 
         List<Potvrda> potvrde = potvrdaService.dobaviZaKorisnika(email);
-        for(Potvrda potvrda : potvrde) {
+        for (Potvrda potvrda : potvrde) {
             listaDokumenata.getDokumenta().add(new Dokument(TipDokumenta.POTVRDA, potvrda.getDatumIzdavanja().getValue(), potvrda.getSifra()));
         }
         Korisnik korisnik = korisnikRepository.findByEmail(email);
         ListaDokumenata listaSertifikata = dobaviSertifikate(korisnik.getJmbg(), korisnik.getPasos());
-
+        for (Dokument dokument : listaSertifikata.getDokumenta()) {
+            listaDokumenata.getDokumenta().add(dokument);
+        }
         return listaDokumenata;
     }
 
     private ListaDokumenata dobaviSertifikate(String jmbg, String pasos) {
-        return restTemplate.getForObject("http://localhost:8081/api/sertifikat/moji-sertifikati?jmbg="+jmbg+"&pasos=" + pasos, ListaDokumenata.class);
+        if (jmbg == null) jmbg = "";
+        if (pasos == null) pasos = "";
+        return restTemplate.getForObject("http://localhost:8081/api/sertifikat/moji-sertifikati?jmbg=" + jmbg + "&pasos=" + pasos, ListaDokumenata.class);
+    }
+
+    public ListaDokumenata korisnikovaDokumenta(String id) {
+        Zahtev zahtev = zahtevService.dobaviZahtev(id);
+        Korisnik korisnik = korisnikRepository.findByJMBGorPassport(zahtev.getPodnosilac().getJMBG().getValue(),
+                zahtev.getPodnosilac().getBrojPasosa().getValue());
+
+        return mojaDokumenta(korisnik.getEmail());
     }
 }
