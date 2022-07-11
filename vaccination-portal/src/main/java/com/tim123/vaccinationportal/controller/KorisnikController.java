@@ -17,9 +17,9 @@ public class KorisnikController {
     private final KorisnikService korisnikService;
 
     @GetMapping(value = "/vakcine")
-    public ResponseEntity<TVakcinacija> dobaviVakcine(@RequestParam(required = false) String jmbg,
+    public TVakcinacija dobaviVakcine(@RequestParam(required = false) String jmbg,
                                                       @RequestParam(required = false) String pasos) {
         var v = korisnikService.dobaviVakcine(jmbg, pasos);
-        return ResponseEntity.ok(v);
+        return v;
     }
 }

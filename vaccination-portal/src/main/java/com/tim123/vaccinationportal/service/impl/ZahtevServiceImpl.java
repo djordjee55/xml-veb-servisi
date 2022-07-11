@@ -292,7 +292,7 @@ public class ZahtevServiceImpl extends CRUDServiceImpl<Zahtev> implements Zahtev
 
     private Sertifikat kreirajSertifikat(Zahtev zahtev) {
         ResponseEntity<Sertifikat> sertifikat = restTemplate.postForEntity(
-                "http://localhost:8081/api/sertifikat/",
+                "http://localhost:8081/api/sertifikat",
                 zahtev.getPodnosilac(),
                 Sertifikat.class);
         return Objects.requireNonNull(sertifikat.getBody());

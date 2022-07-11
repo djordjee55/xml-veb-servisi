@@ -1,8 +1,6 @@
 package com.tim123.vaccinationmain.controller;
 
-import com.tim123.vaccinationmain.dto.dokumenta.Dokument;
 import com.tim123.vaccinationmain.dto.dokumenta.ListaDokumenata;
-import com.tim123.vaccinationmain.dto.dokumenta.TipDokumenta;
 import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationmain.model.tipovi.TVakcinisanoLice;
 import com.tim123.vaccinationmain.service.SertifikatService;
@@ -13,10 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,10 +21,10 @@ public class SertifikatController {
 
     private final SertifikatService sertifikatService;
 
-    @PostMapping(value = "/", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<Sertifikat> generisiSertifikat(@RequestBody TVakcinisanoLice lice) {
+    @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
+    public Sertifikat generisiSertifikat(@RequestBody TVakcinisanoLice lice) {
         var s = sertifikatService.generisiSertifikat(lice);
-        return ResponseEntity.ok(s);
+        return s;
     }
 
     @GetMapping(value = "/pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
@@ -45,7 +40,7 @@ public class SertifikatController {
     }
 
     @GetMapping(value = "/moji-sertifikati", produces = MediaType.APPLICATION_XML_VALUE)
-    public ListaDokumenata getZaKorisnika(@RequestParam(value="jmbg", required = false) String jmbg, @RequestParam(value="pasos", required = false, defaultValue = "") String pasos) {
+    public ListaDokumenata getZaKorisnika(@RequestParam(value = "jmbg", required = false) String jmbg, @RequestParam(value = "pasos", required = false, defaultValue = "") String pasos) {
         return sertifikatService.getZaKorisnika(jmbg, pasos);
     }
 }
