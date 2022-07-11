@@ -36,7 +36,7 @@ public class PotvrdaRepository implements CRUDRepository<Potvrda> {
             documentId = uuid.toString();
             entity.setSifra(documentId);
             entity.setAbout(String.format("%s#%s", potvrdaBase, documentId));
-            entity.setQrKod(QRUtil.getQRImage("http://localhost:8082/api/potvrda/html/"+uuid));
+            entity.setQrKod(QRUtil.getQRImage("http://localhost:8082/api/potvrda/html/" + uuid));
         }
         repositoryUtil.save(potvrdaCollection, documentId, marshallUnmarshallService.marshall(entity, Potvrda.class));
         return entity;

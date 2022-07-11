@@ -164,7 +164,7 @@
                             bez potpisa i pecata / This certification is valid without signatures and seals
                         </p>
                     </div>
-                    <xsl:variable name="qrcode" select="//p:Qr_code/text()"/>
+                    <xsl:variable name="qrcode" select="//p:Qr_kod/text()"/>
                     <image src="data:image/jpeg;base64,{$qrcode}" style="width: 15vw; margin-right: 10vw; margin-bottom: 10vh;"/>
                 </div>
             </body>

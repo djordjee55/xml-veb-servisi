@@ -181,7 +181,7 @@
                         </fo:block-container>
                         <fo:block-container width="25%" left="75%" top="0in" position="absolute">
                             <fo:block>
-                                <xsl:variable name="qrcode" select="//p:Qr_code/text()"/>
+                                <xsl:variable name="qrcode" select="//p:Qr_kod/text()"/>
                                 <fo:external-graphic src="url('data:image/jpeg;base64,{$qrcode}')"/>
                             </fo:block>
                         </fo:block-container>
