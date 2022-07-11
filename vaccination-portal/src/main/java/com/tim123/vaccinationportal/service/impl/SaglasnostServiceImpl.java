@@ -178,7 +178,7 @@ public class SaglasnostServiceImpl extends CRUDServiceImpl<Saglasnost> implement
 
         TVakcina.Ekstremitet ekstremitet = new TVakcina.Ekstremitet();
         ekstremitet.setDR(dopuniEvidencijuDto.REkstremitet);
-        ekstremitet.setDR(dopuniEvidencijuDto.LEkstremitet);
+        ekstremitet.setLR(dopuniEvidencijuDto.LEkstremitet);
 
         TVakcina vakcina = new TVakcina();
         vakcina.setDatumDavanja(xmlgc);
