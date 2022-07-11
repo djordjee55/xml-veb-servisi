@@ -11,6 +11,7 @@ import com.tim123.vaccinationmain.repository.CRUDRepository;
 import com.tim123.vaccinationmain.repository.SertifikatRepository;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
 import com.tim123.vaccinationmain.service.SertifikatService;
+import com.tim123.vaccinationmain.util.HTMLTransformer;
 import com.tim123.vaccinationmain.util.PDFTransformer;
 import com.tim123.vaccinationmain.util.SearchUtil;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
     private final MarshallUnmarshallService<Sertifikat> marshallUnmarshallService;
     private final RestTemplate restTemplate;
     private final PDFTransformer pdfTransformer;
+    private final HTMLTransformer htmlTransformer;
     private final SearchUtil searchUtil;
 
     @Override
@@ -140,6 +142,19 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
         }).collect(Collectors.toList());
 
         return searchUtil.parseSearchResult(sertifikatiConverted, "sertifikat", searchedString);
+    }
+
+    @Override
+    public ByteArrayInputStream generisiHTML(String id) {
+        try {
+            Sertifikat sertifikat = sertifikatRepository.findById(id);
+            return htmlTransformer.generateHTML(marshallUnmarshallService.marshall(sertifikat, Sertifikat.class), Sertifikat.class);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
     private TVakcinacija dobaviVakcinaciju(String jmbg, String pasos) {

@@ -18,4 +18,6 @@ public interface SertifikatService extends CRUDService<Sertifikat> {
     ListaDokumenata getZaKorisnika(String jmbg, String pasos);
 
     String searchByString(String searchedString);
+
+    ByteArrayInputStream generisiHTML(String id);
 }

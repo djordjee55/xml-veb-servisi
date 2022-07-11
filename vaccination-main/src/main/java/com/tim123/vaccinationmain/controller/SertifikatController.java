@@ -39,6 +39,18 @@ public class SertifikatController {
                 .body(new InputStreamResource(stream));
     }
 
+    @GetMapping(value = "/html/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> generisiHTML(@PathVariable UUID id) {
+        ByteArrayInputStream stream = sertifikatService.generisiHTML(id.toString());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=details.pdf");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(stream));
+    }
+
     @GetMapping(value = "/moji-sertifikati", produces = MediaType.APPLICATION_XML_VALUE)
     public ListaDokumenata getZaKorisnika(@RequestParam(value = "jmbg", required = false) String jmbg, @RequestParam(value = "pasos", required = false, defaultValue = "") String pasos) {
         return sertifikatService.getZaKorisnika(jmbg, pasos);
