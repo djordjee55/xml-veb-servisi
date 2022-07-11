@@ -11,6 +11,7 @@ import org.xmldb.api.base.ResourceSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.tim123.vaccinationportal.util.Constants.korisnikCollection;
 
@@ -91,6 +92,25 @@ public class KorisnikRepository implements CRUDRepository<Korisnik> {
                     korisnikCollection,
                     String.format("//Korisnik[%s='%s']", elementName, elementValue), "");
             resultSet = converterService.convert(result, Korisnik.class);
+
+            if (resultSet.isEmpty())
+                return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet.get(0);
+    }
+
+    public Korisnik findByJMBGorPassport(String jmbg, String pasos) {
+        List<Korisnik> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(
+                    korisnikCollection,
+                    "//Korisnik", "");
+            resultSet = converterService.convert(result, Korisnik.class);
+
+            resultSet = resultSet.stream().filter(korisnik -> korisnik.getPasos() == pasos || korisnik.getJmbg().equals(jmbg)).collect(Collectors.toList());
 
             if (resultSet.isEmpty())
                 return null;

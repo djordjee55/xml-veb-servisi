@@ -67,16 +67,16 @@ public class ZahtevController {
                 .body(new InputStreamResource(stream));
     }
                 
-    @PostMapping(value = "/reject/{requestId}", consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<Boolean> rejectRequest(@PathVariable String requestId, @RequestBody OdbijZahtevDto odbijZahtevDto) {
-        zahtevService.odbijZahtev(requestId, odbijZahtevDto.getRazlog());
-        return ResponseEntity.ok(true);
+    @PostMapping(value = "/reject/{requestId}/{razlog}")
+    public Boolean rejectRequest(@PathVariable String requestId, @PathVariable String razlog) {
+        zahtevService.odbijZahtev(requestId, razlog);
+        return Boolean.TRUE;
     }
 
-    @PostMapping(value = "/accept/{requestId}")
-        public ResponseEntity<Boolean> acceptRequest(@PathVariable String requestId) {
+    @PostMapping(value = "/accept/{requestId}", produces = MediaType.APPLICATION_XML_VALUE)
+        public Boolean acceptRequest(@PathVariable String requestId) {
         zahtevService.prihvatiZahtev(requestId);
-        return ResponseEntity.ok(true);
+        return Boolean.TRUE;
     }
 
     @GetMapping(value = "/search-by-string")
@@ -84,7 +84,7 @@ public class ZahtevController {
         return zahtevService.searchByString(searchedString);
     }
 
-    @GetMapping(value = "/novi")
+    @GetMapping(value = "/novi", produces = MediaType.APPLICATION_XML_VALUE)
     public ListaDokumenata noviZahtevi() {
         return zahtevService.getNoviZahtevi();
     }
