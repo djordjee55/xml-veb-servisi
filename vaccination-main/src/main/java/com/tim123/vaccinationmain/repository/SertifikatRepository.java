@@ -35,7 +35,7 @@ public class SertifikatRepository implements CRUDRepository<Sertifikat> {
             documentId = uuid.toString();
             entity.setBrojSertifikata(documentId);
             entity.setAbout(String.format("%s#%s", sertifikatBase, documentId));
-            entity.setQrKod(QRUtil.getQRImage("http://localhost:8082/api/sertifikat/html/"+uuid));
+            entity.setQrKod(QRUtil.getQRImage("http://localhost:8081/api/sertifikat/html/"+uuid));
 
         }
         repositoryUtil.save(sertifikatCollection, documentId, marshallUnmarshallService.marshall(entity, Sertifikat.class));

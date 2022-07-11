@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class ZahtevController {
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping(value ="/novi", produces = MediaType.APPLICATION_XML_VALUE)
     public ListaDokumenata noviZahtevi() {
@@ -27,7 +27,7 @@ public class ZahtevController {
 
     @PostMapping(value = "/accept/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     public Boolean prihvatiZahtev(@PathVariable String id) {
-        return restTemplate.postForObject("http://localhost:8082/api/zahtev/accept/"+id, null, Boolean.class);
+        return restTemplate.getForObject("http://localhost:8082/api/zahtev/accept/"+id,  Boolean.class);
     }
 
     @PostMapping(value = "/reject/{id}/{razlog}")

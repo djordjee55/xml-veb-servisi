@@ -27,7 +27,7 @@ public class KorisnikRepository implements CRUDRepository<Korisnik> {
         UUID uuid = UUID.randomUUID();
         String documentId = uuid.toString();
         entity.setId(documentId);
-        repositoryUtil.save("db/vakcinisanje/korisnik", documentId, marshallUnmarshallService.marshall(entity, Korisnik.class));
+        repositoryUtil.save("db/imunizacioni_sistem/sluzbenik", documentId, marshallUnmarshallService.marshall(entity, Korisnik.class));
         return entity;
     }
 
@@ -39,7 +39,7 @@ public class KorisnikRepository implements CRUDRepository<Korisnik> {
     public Korisnik findByEmail(String email) {
         List<Korisnik> resultSet = new ArrayList<>();
         try {
-            ResourceSet result = xPathService.executeXPath("db/vakcinisanje/korisnik", String.format("//Korisnik[Email='%s']", email), "");
+            ResourceSet result = xPathService.executeXPath("db/imunizacioni_sistem/sluzbenik", String.format("//Korisnik[Email='%s']", email), "");
             resultSet = converterService.convert(result, Korisnik.class);
 
             if (resultSet.isEmpty())
