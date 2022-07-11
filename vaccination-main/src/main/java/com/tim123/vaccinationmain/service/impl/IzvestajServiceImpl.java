@@ -6,7 +6,6 @@ import com.tim123.vaccinationmain.repository.CRUDRepository;
 import com.tim123.vaccinationmain.repository.IzvestajRepository;
 import com.tim123.vaccinationmain.service.IzvestajService;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
-import com.tim123.vaccinationmain.service.PotvrdaService;
 import com.tim123.vaccinationmain.service.SertifikatService;
 import com.tim123.vaccinationmain.util.HTMLTransformer;
 import com.tim123.vaccinationmain.util.PDFTransformer;
@@ -39,7 +38,6 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
     private final IzvestajRepository izvestajRepository;
     private final RestTemplate restTemplate;
     private final SertifikatService sertifikatService;
-    private final PotvrdaService potvdraService;
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
 
@@ -111,27 +109,27 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
 
         Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac1 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
                 .naziv(TVakcina.SPUTNIK_V)
-                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.SPUTNIK_V, startDate, endDate)))
+                .brojDoza(countDosesByManufacturer(startDate, endDate, TVakcina.SPUTNIK_V.value()))
                 .build();
 
         Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac2 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
                 .naziv(TVakcina.ASTRA_ZENECA)
-                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.ASTRA_ZENECA, startDate, endDate)))
+                .brojDoza(countDosesByManufacturer(startDate, endDate, TVakcina.ASTRA_ZENECA.value()))
                 .build();
 
         Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac3 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
                 .naziv(TVakcina.MODERNA)
-                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.MODERNA, startDate, endDate)))
+                .brojDoza(countDosesByManufacturer(startDate, endDate, TVakcina.MODERNA.value()))
                 .build();
 
         Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac4 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
                 .naziv(TVakcina.PFIZER_BIO_N_TECH)
-                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.PFIZER_BIO_N_TECH, startDate, endDate)))
+                .brojDoza(countDosesByManufacturer(startDate, endDate, TVakcina.PFIZER_BIO_N_TECH.value()))
                 .build();
 
         Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac proizvodjac5 = Izvestaj.RaspodelaPoProizvodjacima.Proizvodjac.builder()
                 .naziv(TVakcina.SINOPHARM)
-                .brojDoza(BigInteger.valueOf(potvdraService.countDozeByManufacturer(TVakcina.SINOPHARM, startDate, endDate)))
+                .brojDoza(countDosesByManufacturer(startDate, endDate, TVakcina.SINOPHARM.value()))
                 .build();
 
         return Izvestaj.RaspodelaPoProizvodjacima.builder()
@@ -143,12 +141,12 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
 
         Izvestaj.Doze.Doza dose1 = Izvestaj.Doze.Doza.builder()
                 .redniBroj(BigInteger.valueOf(1))
-                .brojDatihDoza(BigInteger.valueOf(potvdraService.countDozeByNo(1, startDate, endDate)))
+                .brojDatihDoza(countDosesByNo(startDate, endDate, 1))
                 .build();
 
         Izvestaj.Doze.Doza dose2 = Izvestaj.Doze.Doza.builder()
                 .redniBroj(BigInteger.valueOf(2))
-                .brojDatihDoza(BigInteger.valueOf(potvdraService.countDozeByNo(2, startDate, endDate)))
+                .brojDatihDoza(countDosesByNo(startDate, endDate, 2))
                 .build();
 
         return List.of(dose1, dose2);
@@ -185,9 +183,7 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
 
     private BigInteger countInteresovanjeForPeriod(String startDate, String endDate) {
 
-        System.out.println("SALJEM");
         ResponseEntity<Integer> response = restTemplate.getForEntity("http://localhost:8082/api/interesovanje/count/" + startDate + "/" + endDate, Integer.class);
-        System.out.println("POSLATO");
 
         return BigInteger.valueOf(response.getBody());
     }
@@ -204,5 +200,19 @@ public class IzvestajServiceImpl extends CRUDServiceImpl<Izvestaj> implements Iz
         int numberOfDocuments = sertifikatService.prebrojSertifikateZaPeriod(startDate, endDate);
 
         return BigInteger.valueOf(numberOfDocuments);
+    }
+
+    private BigInteger countDosesByNo(String startDate, String endDate, Integer numberOfDose) {
+
+        ResponseEntity<Integer> response = restTemplate.getForEntity("http://localhost:8082/api/potvrda/count-doses?startDate=" + startDate + "&endDate=" + endDate + "&numberOfDose=" + numberOfDose, Integer.class);
+
+        return BigInteger.valueOf(response.getBody());
+    }
+
+    private BigInteger countDosesByManufacturer(String startDate, String endDate, String manufacturer) {
+
+        ResponseEntity<Integer> response = restTemplate.getForEntity("http://localhost:8082/api/potvrda/count-doses-by-manufacturer?startDate=" + startDate + "&endDate=" + endDate + "&manufacturer=" + manufacturer, Integer.class);
+
+        return BigInteger.valueOf(response.getBody());
     }
 }

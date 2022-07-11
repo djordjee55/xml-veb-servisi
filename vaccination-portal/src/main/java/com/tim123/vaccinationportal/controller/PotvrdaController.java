@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
@@ -62,5 +59,20 @@ public class PotvrdaController {
                 .ok()
                 .contentType(MediaType.TEXT_XML)
                 .body(potvrdaId);
+    }
+
+    @GetMapping(value = "/count-doses")
+    public Integer countDosesByNo(@RequestParam String startDate, @RequestParam String endDate, @RequestParam int numberOfDose) throws Exception {
+        return potvrdaService.countDosesByNo(startDate, endDate, numberOfDose);
+    }
+
+    @GetMapping(value = "/count-doses-by-manufacturer")
+    public Integer countDosesByManufacturer(@RequestParam String startDate, @RequestParam String endDate, @RequestParam String manufacturer) throws Exception {
+        return potvrdaService.countDosesByManufacturer(startDate, endDate, manufacturer);
+    }
+
+    @GetMapping(value = "/search-by-string")
+    public String searchByString(@RequestParam String searchedString) {
+        return potvrdaService.searchByString(searchedString);
     }
 }
