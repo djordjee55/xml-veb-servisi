@@ -32,6 +32,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.tim123.vaccinationmain.util.Constants.sertifikatBase;
 import static com.tim123.vaccinationmain.util.QRUtil.getQRImage;
 
 @Service
@@ -77,6 +78,7 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
     @Override
     public Sertifikat generisiSertifikat(TVakcinisanoLice podnosilac) {
         var broj = UUID.randomUUID().toString();
+        var about = String.format("%s#%s", sertifikatBase, broj);
         var dv = Sertifikat.DatumVreme.builder()
                 .value(CalendarUtil.toXmlGregorianCalendar(System.currentTimeMillis()))
                 .property("pred:datumIzdavanja")
@@ -93,6 +95,7 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
                 podnosilac.getBrojPasosa().getValue());
         var sertifikat = Sertifikat.builder()
                 .brojSertifikata(broj)
+                .about(about)
                 .datumVreme(dv)
                 .primalac(podnosilac)
                 .qrKod(QRImage)

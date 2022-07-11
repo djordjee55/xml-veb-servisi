@@ -39,15 +39,15 @@ public class SertifikatController {
                 .body(new InputStreamResource(stream));
     }
 
-    @GetMapping(value = "/html/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/html/{id}")
     public ResponseEntity<InputStreamResource> generisiHTML(@PathVariable UUID id) {
         ByteArrayInputStream stream = sertifikatService.generisiHTML(id.toString());
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "inline; filename=details.pdf");
+        headers.add("Content-Disposition", "inline; filename=details.html");
         return ResponseEntity
                 .ok()
                 .headers(headers)
-                .contentType(MediaType.APPLICATION_PDF)
+                .contentType(MediaType.TEXT_HTML)
                 .body(new InputStreamResource(stream));
     }
 
