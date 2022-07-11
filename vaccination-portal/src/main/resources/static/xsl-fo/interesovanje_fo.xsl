@@ -48,7 +48,7 @@
                                 ЈМБГ:
                                 <fo:inline font-weight="bold">
                                     <xsl:value-of select="concat(' ', //tip:JMBG)"/>
-                                </fo:inline>>
+                                </fo:inline>
                             </fo:block>
                         </xsl:when>
                         <xsl:otherwise>

@@ -104,7 +104,7 @@
                     <fo:block font-family="Times" font-size="12px" padding="5px">
                         <fo:inline>Адреса (улица и број)</fo:inline>
                         <fo:inline>
-                            <xsl:value-of select="concat(' ', //s:Adresa, ' ', //s:Adresa/s:Broj, ' | ')"/>
+                            <xsl:value-of select="concat(' ', //s:Adresa/s:Ulica, ' ', //s:Adresa/s:Broj, ' | ')"/>
                         </fo:inline>
                         <fo:inline>Место/Насеље</fo:inline>
                         <fo:inline>
