@@ -37,7 +37,7 @@
                             <fo:block font-size="14px" font-weight="bold" font-family="Times" text-align="center"
                                       linefeed-treatment="preserve" margin="0">
                                 DIGITAL GREEN CERTIFICATE&#xA;<fo:inline font-weight="normal" font-size="13px" margin="0"
-                                                                         linefeed-treatment="preserve"
+                                                                         linefeed-treatment="preserve" font-family="Times"
                                                                          >Certificate of vaccination against
                                 COVID-19&#xA;and test results
                             </fo:inline>
@@ -154,87 +154,87 @@
                     </fo:block>
                     <fo:block-container font-family="Times" margin-top="10px">
                         <fo:block-container left="0in" position="absolute" top="0in" width="50%">
-                            <fo:block font-weight="bold" font-size="12px" >Doza / Dose: 1 / 2</fo:block>
-                            <fo:block font-weight="bold" font-size="12px" >Tip / Type:</fo:block>
+                            <fo:block font-weight="bold" font-size="12px" font-family="Times">Доза / Dose: 1 / 2</fo:block>
+                            <fo:block font-weight="bold" font-size="12px" font-family="Times">Тип / Type:</fo:block>
                             <fo:block padding-top="10px" font-size="12px">
                                 <fo:inline font-weight="normal">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 1]/d:Tip_vakcine)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="11px" font-weight="bold" padding-top="10px">Произвођач и серија /
+                            <fo:block font-size="11px" font-weight="bold" padding-top="10px" font-family="Times">Произвођач и серија /
                                 Manufacturer and batch number:
                             </fo:block>
                             <fo:block font-size="12px" padding-top="10px">
-                                <fo:inline font-weight="normal">
+                                <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 1]/d:Proizvodjac)"/>
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 1]/d:Serija)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="12px" padding-top="10px" font-weight="bold">
+                            <fo:block font-size="12px" padding-top="10px" font-weight="bold" font-family="Times">
                                 Датум / Date:
-                                <fo:inline font-weight="normal">
+                                <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 1]/d:Datum)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="11px" font-weight="bold" padding-top="10px">Здравствена установа /
+                            <fo:block font-size="11px" font-weight="bold" padding-top="10px" font-family="Times">Здравствена установа /
                                 Health care insitution:
                             </fo:block>
-                            <fo:block font-size="12px" padding-top="10px" border-bottom="1px solid black">
-                                <fo:inline font-weight="normal">
+                            <fo:block font-size="12px" padding-top="10px" border-bottom="1px solid black" font-family="Times">
+                                <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 1]/d:Zdravstvena_ustanova)"/>
                                 </fo:inline>
                             </fo:block>
                         </fo:block-container>
                         <fo:block-container width="50%" left="50%" top="0in" position="absolute">
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black"
+                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
                                       padding-left="10px">Доза / Dose: 2 / 2
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black"
+                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
                                       padding-left="10px">Тип / Type:
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black"
+                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
                                       padding-left="10px" padding-top="10px">
-                                <fo:inline font-weight="normal">
+                                <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Tip_vakcine)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="11px" font-weight="bold" border-left="1px solid black"
+                            <fo:block font-size="11px" font-weight="bold" border-left="1px solid black" font-family="Times"
                                       padding-left="10px" padding-top="10px">Произвођач и серија / Manufacturer and
                                 batch number:
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black"
+                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
                                       padding-left="10px" padding-top="10px">
-                                <fo:inline font-weight="normal">
+                                <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Proizvodjac)"/>
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Serija)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black"
+                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
                                       padding-left="10px" padding-top="10px">
                                 Датум / Date:
                                 <fo:inline font-weight="normal">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Datum)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="11px" font-weight="bold" border-left="1px solid black"
+                            <fo:block font-size="11px" font-weight="bold" border-left="1px solid black" font-family="Times"
                                       padding-left="10px" padding-top="10px">Здравствена установа / Health care
                                 insitution:
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black"
+                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
                                       border-bottom="1px solid black" padding-left="10px" padding-top="10px">
-                                <fo:inline font-weight="normal">
+                                <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Zdravstvena_ustanova)"/>
                                 </fo:inline>
                             </fo:block>
                         </fo:block-container>
                     </fo:block-container>
-                    <fo:block font-size="10px" font-weight="bold">
+                    <fo:block font-size="10px" font-weight="bold" font-family="Times">
                         <fo:table font-family="Times" margin="173px auto 2px auto" border-bottom="1px solid #e7e9eb">
                             <fo:table-column column-width="33.3%" border="1px solid black"/>
                             <fo:table-column column-width="33.3%" border="1px solid black"/>
                             <fo:table-column column-width="33.3%" border="1px solid black"/>
                             <fo:table-body>
-                                <fo:table-row border-bottom="1px solid darkgrey" font-size="12px">
+                                <fo:table-row border-bottom="1px solid darkgrey" font-size="12px" font-family="Times">
                                     <fo:table-cell padding="2px" font-family="Times">
                                         <fo:block>SARS-Co-2 RT Real-time PCR</fo:block>
                                     </fo:table-cell>
