@@ -3,9 +3,10 @@ package com.tim123.vaccinationmain.service.impl;
 import com.tim123.vaccinationmain.dto.dokumenta.Dokument;
 import com.tim123.vaccinationmain.dto.dokumenta.ListaDokumenata;
 import com.tim123.vaccinationmain.dto.dokumenta.TipDokumenta;
+import com.tim123.vaccinationmain.model.potvrda.TVakcinacija;
 import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
+import com.tim123.vaccinationmain.model.sertifikat.TDoza;
 import com.tim123.vaccinationmain.model.sertifikat.TTestovi;
-import com.tim123.vaccinationmain.model.sertifikat.TVakcinacija;
 import com.tim123.vaccinationmain.model.tipovi.TVakcinisanoLice;
 import com.tim123.vaccinationmain.repository.CRUDRepository;
 import com.tim123.vaccinationmain.repository.SertifikatRepository;
@@ -25,6 +26,7 @@ import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -94,7 +96,7 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
                 .datumVreme(dv)
                 .primalac(podnosilac)
                 .qrKod(QRImage)
-                .vakcinacija(vakcinacija)
+                .vakcinacija(convertVakcinacija(vakcinacija))
                 .testovi(testovi)
                 .build();
         try {
@@ -104,6 +106,22 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
         }
 
         return sertifikat;
+    }
+
+    private com.tim123.vaccinationmain.model.sertifikat.TVakcinacija convertVakcinacija(TVakcinacija vakcinacija) {
+        List<TDoza> doze = new ArrayList<>();
+        vakcinacija.getDoza().forEach(doza -> {
+            TDoza newDoza = new TDoza();
+            newDoza.setDatum(doza.getDatumDavanja().getValue());
+            newDoza.setSerija(doza.getBrojSerije());
+            newDoza.setRedniBroj(doza.getRedniBroj().getValue());
+            newDoza.setTipVakcine(doza.getTipVakcine().getValue().value());
+            newDoza.setZdravstvenaUstanova("");
+            newDoza.setProizvodjac("");
+            doze.add(newDoza);
+        });
+
+        return com.tim123.vaccinationmain.model.sertifikat.TVakcinacija.builder().doza(doze).build();
     }
 
     @Override

@@ -66,15 +66,15 @@ public class ZahtevController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(stream));
     }
-                
+
     @PostMapping(value = "/reject/{requestId}/{razlog}")
     public Boolean rejectRequest(@PathVariable String requestId, @PathVariable String razlog) {
         zahtevService.odbijZahtev(requestId, razlog);
         return Boolean.TRUE;
     }
 
-    @PostMapping(value = "/accept/{requestId}", produces = MediaType.APPLICATION_XML_VALUE)
-        public Boolean acceptRequest(@PathVariable String requestId) {
+    @GetMapping(value = "/accept/{requestId}", produces = MediaType.APPLICATION_XML_VALUE)
+    public Boolean acceptRequest(@PathVariable String requestId) {
         zahtevService.prihvatiZahtev(requestId);
         return Boolean.TRUE;
     }

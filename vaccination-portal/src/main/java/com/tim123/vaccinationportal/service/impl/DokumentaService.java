@@ -52,9 +52,12 @@ public class DokumentaService {
         }
         Korisnik korisnik = korisnikRepository.findByEmail(email);
         ListaDokumenata listaSertifikata = dobaviSertifikate(korisnik.getJmbg(), korisnik.getPasos());
-        for (Dokument dokument : listaSertifikata.getDokumenta()) {
-            listaDokumenata.getDokumenta().add(dokument);
+        if (listaSertifikata.getDokumenta() != null) {
+            for (Dokument dokument : listaSertifikata.getDokumenta()) {
+                listaDokumenata.getDokumenta().add(dokument);
+            }
         }
+
         return listaDokumenata;
     }
 

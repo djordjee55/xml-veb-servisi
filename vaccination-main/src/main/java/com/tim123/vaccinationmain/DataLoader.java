@@ -1,9 +1,14 @@
 package com.tim123.vaccinationmain;
 
+import com.tim123.vaccinationmain.model.Korisnik;
+import com.tim123.vaccinationmain.model.enumi.Drzavljanstvo;
+import com.tim123.vaccinationmain.model.enumi.Uloga;
 import com.tim123.vaccinationmain.model.termin.Termin;
+import com.tim123.vaccinationmain.model.tipovi.TPol;
 import com.tim123.vaccinationmain.model.vakcina.TipVakcine;
 import com.tim123.vaccinationmain.model.vakcina.Vakcina;
 import com.tim123.vaccinationmain.model.zdravstvenaUstanova.ZdravstvenaUstanova;
+import com.tim123.vaccinationmain.service.KorisnikService;
 import com.tim123.vaccinationmain.service.VakcinaService;
 import com.tim123.vaccinationmain.service.ZdravstvenaUstanovaService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +19,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -25,6 +31,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final ZdravstvenaUstanovaService zdravstvenaUstanovaService;
     private final VakcinaService vakcinaService;
+    private final KorisnikService korisnikService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -197,5 +204,19 @@ public class DataLoader implements CommandLineRunner {
         vakcinaService.save(vakcina114);
         vakcinaService.save(vakcina115);
 
+
+        //Dodavanje sluzbenika
+        Korisnik sluzbenik = new Korisnik();
+        sluzbenik.setId("sluzbenik1");
+        sluzbenik.setDrzavljanstvo(Drzavljanstvo.DRZAVLJANIN_REPUBLIKE_SRBIJE);
+        sluzbenik.setEmail("sluzbenik@gmail.com");
+        sluzbenik.setIme("Sluzbenik");
+        sluzbenik.setPrezime("Sluzbenikovic");
+        sluzbenik.setJmbg("2904999183926");
+        sluzbenik.setPasos("");
+        sluzbenik.setPol(TPol.M);
+        sluzbenik.setLozinka("$2a$10$X49twdNbOSwROo2MaHDczu/yb8yoshE1dn/6AAPinBNtcF7qH3rsG"); // lozinka1
+        sluzbenik.setUloga(Uloga.SLUZBENIK);
+        korisnikService.save(sluzbenik);
     }
 }
