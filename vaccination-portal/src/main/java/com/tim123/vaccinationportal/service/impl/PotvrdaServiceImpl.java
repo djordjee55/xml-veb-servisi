@@ -12,6 +12,7 @@ import com.tim123.vaccinationportal.service.PotvrdaService;
 import com.tim123.vaccinationportal.service.SaglasnostService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
+import com.tim123.vaccinationportal.util.SearchUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,12 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +39,7 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
     private final MarshallUnmarshallServiceImpl<Potvrda> marshallUnmarshallService;
+    private final SearchUtil searchUtil;
 
     @Override
     public Potvrda save(Potvrda entity) throws Exception {
@@ -193,5 +200,69 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
         if (potvrda == null)
             return null;
         return potvrda.getSifra();
+    }
+
+    @Override
+    public Integer countDosesByNo(String startDate, String endDate, int numberOfDose) throws ParseException {
+
+        List<Potvrda> potvrde = potvrdaRepository.findAll();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate intervalStart = LocalDate.parse(startDate, formatter);
+        LocalDate intervalEnd = LocalDate.parse(endDate, formatter);
+
+        int doseCounter = 0;
+        for (Potvrda potvrda : potvrde) {
+            LocalDate documentDate = potvrda.getDatumIzdavanja().getValue().toGregorianCalendar().toZonedDateTime().toLocalDate();
+            if (documentDate.compareTo(intervalStart) > 0 && documentDate.compareTo(intervalEnd) < 0) {
+                if (potvrda.getDoze().getDoza().size() == numberOfDose) {
+                    doseCounter++;
+                }
+            }
+        }
+        return doseCounter;
+    }
+
+    @Override
+    public Integer countDosesByManufacturer(String startDate, String endDate, String manufacturer) throws ParseException {
+
+        List<Potvrda> potvrde = potvrdaRepository.findAll();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate intervalStart = LocalDate.parse(startDate, formatter);
+        LocalDate intervalEnd = LocalDate.parse(endDate, formatter);
+
+        int manufacturerCounter = 0;
+        for (Potvrda potvrda : potvrde) {
+            LocalDate documentDate = potvrda.getDatumIzdavanja().getValue().toGregorianCalendar().toZonedDateTime().toLocalDate();
+            if (documentDate.compareTo(intervalStart) > 0 && documentDate.compareTo(intervalEnd) < 0) {
+                List<TDoza> doses = potvrda.getDoze().getDoza();
+                if (doses.get(doses.size() - 1).getTipVakcine().getValue() == com.tim123.vaccinationportal.model.tipovi.TVakcina.fromValue(manufacturer)) {
+                    manufacturerCounter++;
+                }
+            }
+        }
+        return manufacturerCounter;
+    }
+
+    @Override
+    public String searchByString(String searchedString) {
+
+        List<Potvrda> potvrde = potvrdaRepository.findAll();
+
+        potvrde = potvrde.stream().filter(potvrda -> potvrda.getSifra() != null).collect(Collectors.toList());
+
+        List<String> potvrdeConverted = potvrde.stream().map(potvrda -> {
+            try {
+                return marshallUnmarshallService.marshall(potvrda, Potvrda.class);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).collect(Collectors.toList());
+
+        return searchUtil.parseSearchResult(potvrdeConverted, "potvrda", searchedString);
     }
 }

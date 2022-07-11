@@ -1,6 +1,7 @@
 package com.tim123.vaccinationportal.repository;
 
 import com.tim123.vaccinationportal.model.Korisnik;
+import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.potvrda.Potvrda;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.service.ConverterService;
@@ -46,6 +47,17 @@ public class PotvrdaRepository implements CRUDRepository<Potvrda> {
     public Potvrda findById(String id) throws Exception {
         var result = repositoryUtil.findByDocumentId(potvrdaCollection, id);
         return marshallUnmarshallService.unmarshall(result, Potvrda.class);
+    }
+
+    public List<Potvrda> findAll() {
+        List<Potvrda> resultSet = new ArrayList<>();
+        try {
+            ResourceSet result = xPathService.executeXPath(potvrdaCollection, "//*[local-name()='Potvrda']", "");
+            resultSet = converterService.convert(result, Potvrda.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 
     public List<Potvrda> getForUserEmail(String email) {

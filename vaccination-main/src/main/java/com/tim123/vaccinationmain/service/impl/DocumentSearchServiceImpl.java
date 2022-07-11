@@ -1,7 +1,6 @@
 package com.tim123.vaccinationmain.service.impl;
 
 import com.tim123.vaccinationmain.service.DocumentSearchService;
-import com.tim123.vaccinationmain.service.PotvrdaService;
 import com.tim123.vaccinationmain.service.SertifikatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 public class DocumentSearchServiceImpl implements DocumentSearchService {
 
     private final RestTemplate restTemplate;
-    private final PotvrdaService potvrdaService;
     private final SertifikatService sertifikatService;
 
     @Override
@@ -22,8 +20,8 @@ public class DocumentSearchServiceImpl implements DocumentSearchService {
         ResponseEntity<String> interesovanja = searchInteresovanjaByString(searchedString);
         ResponseEntity<String> saglasnosti = searchSaglasnostiByString(searchedString);
         ResponseEntity<String> zahtevi = searchZahteviByString(searchedString);
+        ResponseEntity<String> potvrde = searchPotvrdeByString(searchedString);
 
-        String potvrde = searchPotvrdeByString(searchedString);
         String sertifikati = searchSertifikatiByString(searchedString);
 
         return parseResults(interesovanja, potvrde, saglasnosti, zahtevi, sertifikati);
@@ -42,20 +40,20 @@ public class DocumentSearchServiceImpl implements DocumentSearchService {
         return restTemplate.getForEntity("http://localhost:8082/api/zahtev/search-by-string?searchedString=" + searchedString, String.class);
     }
 
-    private String searchPotvrdeByString(String searchedString) {
-        return potvrdaService.searchByString(searchedString);
+    private ResponseEntity<String> searchPotvrdeByString(String searchedString) {
+        return restTemplate.getForEntity("http://localhost:8082/api/potvrda/search-by-string?searchedString=" + searchedString, String.class);
     }
 
     private String searchSertifikatiByString(String searchedString) {
         return sertifikatService.searchByString(searchedString);
     }
 
-    private String parseResults(ResponseEntity<String> interesovanja, String potvrde, ResponseEntity<String> saglasnosti,
+    private String parseResults(ResponseEntity<String> interesovanja, ResponseEntity<String> potvrde, ResponseEntity<String> saglasnosti,
                                 ResponseEntity<String> zahtevi, String sertifikati) {
 
         return "<Documents>" +
                 interesovanja.getBody() +
-                potvrde +
+                potvrde.getBody() +
                 saglasnosti.getBody() +
                 zahtevi.getBody() +
                 sertifikati +

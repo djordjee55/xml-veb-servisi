@@ -5,6 +5,7 @@ import com.tim123.vaccinationportal.model.potvrda.TDoza;
 import com.tim123.vaccinationportal.model.saglasnost.TVakcina;
 
 import java.io.ByteArrayInputStream;
+import java.text.ParseException;
 import java.util.List;
 
 public interface PotvrdaService extends CRUDService<Potvrda> {
@@ -20,4 +21,10 @@ public interface PotvrdaService extends CRUDService<Potvrda> {
     List<Potvrda> dobaviZaKorisnika(String email);
 
     String izadaj(String saglasnostId);
+
+    Integer countDosesByNo(String startDate, String endDate, int numberOfDose) throws ParseException;
+
+    Integer countDosesByManufacturer(String startDate, String endDate, String manufacturer) throws ParseException;
+
+    String searchByString(String searchedString);
 }
