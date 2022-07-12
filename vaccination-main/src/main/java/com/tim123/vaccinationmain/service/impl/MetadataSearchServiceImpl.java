@@ -41,8 +41,8 @@ public class MetadataSearchServiceImpl implements MetadataSearchService {
                 mdFilter.append(c);
             }
             // Kada naidjes na '^' kreni da vadis exp koji se nalazi do sledeceg '^'
-            else if (c == '#') {
-                var end = query.indexOf('#', idx + 1);
+            else if (c == '*') {
+                var end = query.indexOf('*', idx + 1);
                 var exp = query.substring(idx + 1, end);
                 // Obradi izraz tako da kreira oblik pogodan za sparql upit i dodaj u filter
                 mdFilter.append(parseExp(type, exp));
