@@ -49,10 +49,9 @@ public class KorisnikServiceImpl extends CRUDServiceImpl<Korisnik> implements Ko
     public TVakcinacija dobaviVakcine(String jmbg, String pasos) {
         var total = saglasnostService.dobaviZaKorisnika(jmbg, pasos);
         total = total.stream().filter(s -> s.getEvidencijaOVakcinaciji() != null).collect(Collectors.toList());
-        total.sort((o1, o2) -> o1.getDatum().getValue().compare(o2.getDatum().getValue()));
+        total.sort((o1, o2) -> o2.getDatum().getValue().compare(o1.getDatum().getValue()));
         List<TDoza> dozeList = new ArrayList<>();
         if (total.size() > 0) {
-            // TODO first or last
             var poslednja = total.get(0);
             if(poslednja.getEvidencijaOVakcinaciji().getVakcine() != null) {
                 List<TVakcina> sveDateVakcine = poslednja.getEvidencijaOVakcinaciji().getVakcine().getVakcina();
