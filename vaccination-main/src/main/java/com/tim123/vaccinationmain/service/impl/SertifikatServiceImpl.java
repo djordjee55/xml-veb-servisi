@@ -3,6 +3,7 @@ package com.tim123.vaccinationmain.service.impl;
 import com.tim123.vaccinationmain.dto.dokumenta.Dokument;
 import com.tim123.vaccinationmain.dto.dokumenta.ListaDokumenata;
 import com.tim123.vaccinationmain.dto.dokumenta.TipDokumenta;
+import com.tim123.vaccinationmain.model.Korisnik;
 import com.tim123.vaccinationmain.model.potvrda.TVakcinacija;
 import com.tim123.vaccinationmain.model.sertifikat.Sertifikat;
 import com.tim123.vaccinationmain.model.sertifikat.TDoza;
@@ -10,6 +11,7 @@ import com.tim123.vaccinationmain.model.sertifikat.TTestovi;
 import com.tim123.vaccinationmain.model.tipovi.TVakcinisanoLice;
 import com.tim123.vaccinationmain.repository.CRUDRepository;
 import com.tim123.vaccinationmain.repository.SertifikatRepository;
+import com.tim123.vaccinationmain.service.KorisnikService;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
 import com.tim123.vaccinationmain.service.SertifikatService;
 import com.tim123.vaccinationmain.util.HTMLTransformer;
@@ -45,6 +47,7 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
     private final PDFTransformer pdfTransformer;
     private final HTMLTransformer htmlTransformer;
     private final SearchUtil searchUtil;
+    private final KorisnikService korisnikService;
 
     @Override
     protected CRUDRepository<Sertifikat> getRepository() {
@@ -81,18 +84,31 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
         var about = String.format("%s#%s", sertifikatBase, broj);
         var dv = Sertifikat.DatumVreme.builder()
                 .value(CalendarUtil.toXmlGregorianCalendar(System.currentTimeMillis()))
-                .property("pred:datumIzdavanja")
+                .property("http://www.xws.org/vacc/#datumIzdavanja")
+                .datatype("http://www.w3.org/2001/XMLSchema#date")
                 .build();
         var QRPath = String.format("http://localhost:8081/api/sertifikat/pdf/%s", broj);
         var QRImage = "";
         try {
             QRImage = getQRImage(QRPath);
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
         var testovi = TTestovi.builder().build();
         var vakcinacija = dobaviVakcinaciju(
                 podnosilac.getJMBG().getValue(),
                 podnosilac.getBrojPasosa().getValue());
+        var jmbg = podnosilac.getJMBG();
+        var pasos = podnosilac.getBrojPasosa();
+
+        Korisnik korisnik = korisnikService.dobaviKorisika(jmbg.getValue(), pasos.getValue());
+
+        jmbg.setHref("http://www.xws.org/korisnici#" + korisnik.getId());
+        jmbg.setRel("http://www.xws.org/vacc/#identifikatorKorisnika");
+
+        pasos.setHref("http://www.xws.org/korisnici#" + korisnik.getId());
+        pasos.setRel("http://www.xws.org/vacc/#identifikatorKorisnika");
+
+        podnosilac.setJMBG(jmbg);
+        podnosilac.setBrojPasosa(pasos);
         var sertifikat = Sertifikat.builder()
                 .brojSertifikata(broj)
                 .about(about)

@@ -74,9 +74,9 @@ public class ZahtevController {
     }
 
     @GetMapping(value = "/accept/{requestId}", produces = MediaType.APPLICATION_XML_VALUE)
-    public Boolean acceptRequest(@PathVariable String requestId) {
+    public ResponseEntity<Boolean> acceptRequest(@PathVariable String requestId) {
         zahtevService.prihvatiZahtev(requestId);
-        return Boolean.TRUE;
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 
     @GetMapping(value = "/search-by-string")
