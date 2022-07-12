@@ -18,10 +18,7 @@ public class MetadataSearchServiceImpl implements MetadataSearchService {
     @Override
     public ListaDokumenata search(TipDokumenta type, String query) {
         String filter = parseQuery(type, query);
-        // Nadji o kom se dokumentu radi
-        // Uputi zahtev ka bazi
-        // Vrati rezultat
-        return new ListaDokumenata();
+        return metadataUtil.sparqlQuery(type, filter);
     }
 
     private String parseQuery(TipDokumenta type, String query) {
