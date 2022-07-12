@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/metadata-search")
+@RequestMapping("/api/metadata-search")
 @RequiredArgsConstructor
 public class MetadataSearchController {
 
     private final MetadataSearchService metadataSearchService;
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<ListaDokumenata> search(@RequestParam TipDokumenta type, @RequestParam String query) {
         var result = metadataSearchService.search(type, query);
         return ResponseEntity.ok(result);
