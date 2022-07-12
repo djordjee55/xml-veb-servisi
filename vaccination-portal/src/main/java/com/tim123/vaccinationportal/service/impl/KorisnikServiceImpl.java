@@ -50,6 +50,7 @@ public class KorisnikServiceImpl extends CRUDServiceImpl<Korisnik> implements Ko
         var total = saglasnostService.dobaviZaKorisnika(jmbg, pasos);
         total = total.stream().filter(s -> s.getEvidencijaOVakcinaciji() != null).collect(Collectors.toList());
         total.sort((o1, o2) -> o2.getDatum().getValue().compare(o1.getDatum().getValue()));
+
         List<TDoza> dozeList = new ArrayList<>();
         if (total.size() > 0) {
             var poslednja = total.get(0);

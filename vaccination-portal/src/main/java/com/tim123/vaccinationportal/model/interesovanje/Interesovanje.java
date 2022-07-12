@@ -196,6 +196,8 @@ public class Interesovanje {
     protected String id;
     @XmlAttribute(name = "about", required = true)
     protected String about;
+    @XmlAttribute(name = "xmlns:pred")
+    protected String pred = "http://www.xws.org/vacc/#";
 
     /**
      * Gets the value of the datum property.

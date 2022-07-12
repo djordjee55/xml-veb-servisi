@@ -3,7 +3,9 @@ package com.tim123.vaccinationportal.controller;
 import com.tim123.vaccinationportal.model.dto.DopuniEvidencijuDto;
 import com.tim123.vaccinationportal.model.dto.vakcine.GetUstanovaStringDto;
 import com.tim123.vaccinationportal.model.dto.vakcine.GetVakcinaStringDto;
+import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
+import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import com.tim123.vaccinationportal.service.SaglasnostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -15,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.List;
 public class SaglasnostController {
 
     private final SaglasnostService saglasnostService;
+    private final MarshallUnmarshallService<Saglasnost> saglasnostMarshallUnmarshallService;
 
     @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     @PreAuthorize("hasAnyAuthority('GRADJANIN')")
@@ -36,6 +40,13 @@ public class SaglasnostController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Saglasnost> dobaviSaglasnost(@PathVariable String id) {
         return ResponseEntity.ok(saglasnostService.dobaviSaglasnost(id));
+    }
+
+    @GetMapping(value = "/str/{id}")
+    public ResponseEntity<String> dobaviInteresovanjeStr(@PathVariable String id) throws JAXBException {
+        var i = saglasnostService.dobaviSaglasnost(id);
+        var s = saglasnostMarshallUnmarshallService.marshall(i, Saglasnost.class);
+        return ResponseEntity.ok(s);
     }
 
     @PostMapping(value = "/evidencija/{id}", consumes = MediaType.APPLICATION_XML_VALUE)

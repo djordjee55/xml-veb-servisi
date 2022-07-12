@@ -4,4 +4,5 @@ import com.tim123.vaccinationmain.model.Korisnik;
 
 public interface KorisnikService extends CRUDService<Korisnik> {
     Korisnik findByEmail(String email);
+    Korisnik dobaviKorisika(String value, String value1);
 }

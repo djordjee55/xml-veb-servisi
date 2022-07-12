@@ -26,8 +26,9 @@ public class ZahtevController {
     }
 
     @PostMapping(value = "/accept/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-    public Boolean prihvatiZahtev(@PathVariable String id) {
-        return restTemplate.getForObject("http://localhost:8082/api/zahtev/accept/"+id,  Boolean.class);
+    public ResponseEntity<Boolean> prihvatiZahtev(@PathVariable String id) {
+        var b = restTemplate.getForObject("http://localhost:8082/api/zahtev/accept/"+id,  Boolean.class);
+        return ResponseEntity.ok(b);
     }
 
     @PostMapping(value = "/reject/{id}/{razlog}")

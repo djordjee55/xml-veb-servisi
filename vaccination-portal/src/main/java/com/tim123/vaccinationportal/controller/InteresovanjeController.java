@@ -2,6 +2,7 @@ package com.tim123.vaccinationportal.controller;
 
 import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.service.InteresovanjeService;
+import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.util.UUID;
@@ -22,6 +24,7 @@ import java.util.UUID;
 public class InteresovanjeController {
 
     private final InteresovanjeService interesovanjeService;
+    private final MarshallUnmarshallService<Interesovanje> interesovanjeMarshallUnmarshallService;
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,6 +42,13 @@ public class InteresovanjeController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     public Interesovanje dobaviInteresovanje(@PathVariable String id) {
         return interesovanjeService.dobaviInteresovanje(id);
+    }
+
+    @GetMapping(value = "/str/{id}")
+    public ResponseEntity<String> dobaviInteresovanjeStr(@PathVariable String id) throws JAXBException {
+        var i = interesovanjeService.dobaviInteresovanje(id);
+        var s = interesovanjeMarshallUnmarshallService.marshall(i, Interesovanje.class);
+        return ResponseEntity.ok(s);
     }
 
     @GetMapping(value = "/html/{id}")
