@@ -1,6 +1,8 @@
 package com.tim123.vaccinationportal.controller;
 
 
+import com.tim123.vaccinationportal.model.potvrda.Potvrda;
+import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import com.tim123.vaccinationportal.service.PotvrdaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
@@ -20,6 +23,14 @@ import java.util.UUID;
 public class PotvrdaController {
 
     private final PotvrdaService potvrdaService;
+    private final MarshallUnmarshallService<Potvrda> potvrdaMarshallUnmarshallService;
+
+    @GetMapping(value = "/str/{id}")
+    public ResponseEntity<String> dobaviInteresovanjeStr(@PathVariable String id) throws JAXBException {
+        var i = potvrdaService.dobaviPotvrdu(id);
+        var s = potvrdaMarshallUnmarshallService.marshall(i, Potvrda.class);
+        return ResponseEntity.ok(s);
+    }
 
     @GetMapping(value = "/html/{id}")
     public ResponseEntity<?> generisiHTML(@PathVariable UUID id) throws Exception {

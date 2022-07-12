@@ -30,7 +30,7 @@ public class MetadataController {
         var stream = metadataExtractorService.extractMetadata(tip, vrsta, id);
 
         HttpHeaders headers = new HttpHeaders();
-        var name = id + "-meta.rdf";
+        var name = id + "-meta.xml";
         if (vrsta == Metapodatak.JSON) {
             name = id + "-meta.json";
         }

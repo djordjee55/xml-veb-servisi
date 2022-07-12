@@ -69,6 +69,8 @@ public class Zahtev {
     protected String about;
     @XmlAttribute(name = "obradjen", required = true)
     protected Boolean obradjen = false;
+    @XmlAttribute(name = "xmlns:pred")
+    protected String pred = "http://www.xws.org/vacc/#";
 
     /**
      * Gets the value of the datum property.

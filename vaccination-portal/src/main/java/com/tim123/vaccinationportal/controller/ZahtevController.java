@@ -2,7 +2,9 @@ package com.tim123.vaccinationportal.controller;
 
 import com.tim123.vaccinationportal.model.dto.OdbijZahtevDto;
 import com.tim123.vaccinationportal.model.dto.dokumenta.ListaDokumenata;
+import com.tim123.vaccinationportal.model.interesovanje.Interesovanje;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
+import com.tim123.vaccinationportal.service.MarshallUnmarshallService;
 import com.tim123.vaccinationportal.service.ZahtevService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -14,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.util.UUID;
@@ -24,6 +27,7 @@ import java.util.UUID;
 public class ZahtevController {
 
     private final ZahtevService zahtevService;
+    private final MarshallUnmarshallService<Zahtev> zahtevMarshallUnmarshallService;
 
     @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     @PreAuthorize("hasAnyAuthority('GRADJANIN')")
@@ -35,6 +39,13 @@ public class ZahtevController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Zahtev> dobaviZahtev(@PathVariable String id) {
         return ResponseEntity.ok(zahtevService.dobaviZahtev(id));
+    }
+
+    @GetMapping(value = "/str/{id}")
+    public ResponseEntity<String> dobaviInteresovanjeStr(@PathVariable String id) throws JAXBException {
+        var i = zahtevService.dobaviZahtev(id);
+        var s = zahtevMarshallUnmarshallService.marshall(i, Zahtev.class);
+        return ResponseEntity.ok(s);
     }
 
     @GetMapping(value = "/count/{startDate}/{endDate}")

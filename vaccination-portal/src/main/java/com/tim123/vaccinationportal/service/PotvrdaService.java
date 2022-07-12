@@ -27,4 +27,6 @@ public interface PotvrdaService extends CRUDService<Potvrda> {
     Integer countDosesByManufacturer(String startDate, String endDate, String manufacturer) throws ParseException;
 
     String searchByString(String searchedString);
+
+    Potvrda dobaviPotvrdu(String id);
 }

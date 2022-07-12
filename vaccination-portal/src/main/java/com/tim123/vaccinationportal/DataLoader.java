@@ -61,7 +61,6 @@ public class DataLoader implements CommandLineRunner {
                 "<Saglasnost  xmlns:tip=\"http://www.xws.org/tipovi\"\n" +
                 "             xmlns:vc=\"http://www.w3.org/2007/XMLSchema-versioning\"\n" +
                 "             xmlns=\"http://www.xws.org/saglasnost\"\n" +
-                "             xmlns:pred=\"http://www.xws.org/predicate\"\n" +
                 "             xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
                 "             xsi:schemaLocation=\"http://www.xws.org/saglasnost file:../xsd/saglasnost.xsd\"\n" +
                 "             id=\"40413fba-bee8-42ff-8870-b1d688a65503\"\n" +
@@ -114,7 +113,6 @@ public class DataLoader implements CommandLineRunner {
                 "         xmlns:tip=\"http://www.xws.org/tipovi\"\n" +
                 "         xmlns:vc=\"http://www.w3.org/2007/XMLSchema-versioning\"\n" +
                 "         xmlns:xs=\"http://www.w3.org/2001/XMLSchema#\"\n" +
-                "         xmlns:pred=\"http://www.xws.org/vacc/#\"\n" +
                 "         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
                 "         xsi:schemaLocation=\"http://www.xws.org/interesovanje file:../xsd/interesovanje.xsd\"\n" +
                 "         id=\"99350e11-8a92-4c53-a55d-bc4545b02e90\"\n" +
@@ -143,6 +141,6 @@ public class DataLoader implements CommandLineRunner {
                 "</Interesovanje>\n";
 
         Interesovanje interesovanje = interesovanjemarshallUnmarshallService.unmarshall(interesovanjeString, Interesovanje.class);
-        interesovanjeRepository.save(interesovanje);
+//        interesovanjeRepository.save(interesovanje);
     }
 }

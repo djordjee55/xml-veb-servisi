@@ -265,4 +265,13 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
 
         return searchUtil.parseSearchResult(potvrdeConverted, "potvrda", searchedString);
     }
+
+    @Override
+    public Potvrda dobaviPotvrdu(String id) {
+        try {
+            return potvrdaRepository.findById(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
