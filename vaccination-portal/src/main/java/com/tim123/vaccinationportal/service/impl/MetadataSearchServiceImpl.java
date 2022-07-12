@@ -4,9 +4,8 @@ import com.tim123.vaccinationportal.model.dto.dokumenta.Dokument;
 import com.tim123.vaccinationportal.model.dto.dokumenta.ListaDokumenata;
 import com.tim123.vaccinationportal.model.dto.dokumenta.TipDokumenta;
 import com.tim123.vaccinationportal.service.MetadataSearchService;
-import com.tim123.vaccinationportal.util.SparqlUtil;
 import com.tim123.vaccinationportal.util.JenaAuthenticationUtilities;
-import lombok.RequiredArgsConstructor;
+import com.tim123.vaccinationportal.util.SparqlUtil;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
@@ -18,7 +17,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tim123.vaccinationportal.util.Constants.interesovanjePath;
+import static com.tim123.vaccinationportal.util.Constants.*;
 
 @Service
 public class MetadataSearchServiceImpl implements MetadataSearchService {
@@ -47,6 +46,52 @@ public class MetadataSearchServiceImpl implements MetadataSearchService {
                                 "}", filter
                 );
         return execQuery(interesovanjePath, condition, TipDokumenta.INTERESOVANJE);
+    }
+
+    @Override
+    public ListaDokumenata searchSaglasnost(String filter) {
+        var condition =
+                String.format(
+                        "SELECT DISTINCT ?s ?datumIzdavanja\n" +
+                                "WHERE {\n" +
+                                "  ?s \n" +
+                                "    <http://www.xws.org/vacc/#datumIzdavanja> ?datumIzdavanja ;\n" +
+                                "  FILTER (%s)" +
+                                "}", filter
+                );
+        return execQuery(saglasnostPath, condition, TipDokumenta.SAGLASNOST);
+    }
+
+    @Override
+    public ListaDokumenata searchPotvrda(String filter) {
+        var condition =
+                String.format(
+                        "SELECT DISTINCT ?s ?datumIzdavanja\n" +
+                                "WHERE {\n" +
+                                "  ?s \n" +
+                                "    <http://www.xws.org/vacc/#datumIzdavanja> ?datumIzdavanja ;\n" +
+                                "    <http://www.xws.org/vacc/#nazivVakcine> ?nazivVakcine ;\n" +
+                                "    <http://www.xws.org/vacc/#datumVakcinisanja> ?datumVakcinisanja ;\n" +
+                                "    <http://www.xws.org/vacc/#brojVakcine> ?brojVakcine ;\n" +
+                                "    \n" +
+                                "  FILTER (%s)" +
+                                "}", filter
+                );
+        return execQuery(potvrdaPath, condition, TipDokumenta.POTVRDA);
+    }
+
+    @Override
+    public ListaDokumenata searchZahtev(String filter) {
+        var condition =
+                String.format(
+                        "SELECT DISTINCT ?s ?datumIzdavanja\n" +
+                                "WHERE {\n" +
+                                "  ?s \n" +
+                                "    <http://www.xws.org/vacc/#datumIzdavanja> ?datumIzdavanja ;\n" +
+                                "  FILTER (%s)" +
+                                "}", filter
+                );
+        return execQuery(zahtevPath, condition, TipDokumenta.ZAHTEV);
     }
 
     private ListaDokumenata execQuery(String path, String condition, TipDokumenta tip) {

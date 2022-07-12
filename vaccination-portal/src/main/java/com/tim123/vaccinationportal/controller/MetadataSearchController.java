@@ -27,4 +27,28 @@ public class MetadataSearchController {
         } catch (Exception ignore) {}
         return ResponseEntity.ok(metadataSearchService.searchInteresovanje(filter));
     }
+
+    @GetMapping(value = "/saglasnost", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<ListaDokumenata> searchSaglasnost(@RequestParam String filter) {
+        try {
+            filter = URLDecoder.decode(filter, StandardCharsets.UTF_8);
+        } catch (Exception ignore) {}
+        return ResponseEntity.ok(metadataSearchService.searchSaglasnost(filter));
+    }
+
+    @GetMapping(value = "/potvrda", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<ListaDokumenata> searchPotvrda(@RequestParam String filter) {
+        try {
+            filter = URLDecoder.decode(filter, StandardCharsets.UTF_8);
+        } catch (Exception ignore) {}
+        return ResponseEntity.ok(metadataSearchService.searchPotvrda(filter));
+    }
+
+    @GetMapping(value = "/zahtev", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<ListaDokumenata> searchZahtev(@RequestParam String filter) {
+        try {
+            filter = URLDecoder.decode(filter, StandardCharsets.UTF_8);
+        } catch (Exception ignore) {}
+        return ResponseEntity.ok(metadataSearchService.searchZahtev(filter));
+    }
 }
