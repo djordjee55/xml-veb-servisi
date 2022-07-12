@@ -3,7 +3,6 @@
                 xmlns:d="http://www.xws.org/sertifikat"
                 xmlns:tip="http://www.xws.org/tipovi"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format" version="2.0">
-
     <xsl:template match="/">
         <fo:root>
             <fo:layout-master-set>
@@ -26,20 +25,20 @@
                             </fo:block>
                         </fo:block-container>
                         <fo:block-container width="50%" position="absolute" left="25%" top="0in">
-                            <fo:block font-size="14px" font-weight="bold" font-family="Times" text-align="center"
+                            <fo:block font-size="14px" font-weight="bold"  font-family="Times" text-align="center"
                                       linefeed-treatment="preserve" margin="0">
-                                ДИГИТАЛНИ ЗЕЛЕНИ СЕРТИФИКАТ&#xA;<fo:inline font-weight="normal" font-size="13px" margin="0"
-                                                                           linefeed-treatment="preserve"
-                                                                           >Потврда о
-                                извршеној вакцинацији против&#xA;COVID-19 и резултатима тестирања&#xA;
-                            </fo:inline>
+                                        <fo:inline font-weight="normal" font-size="13px" margin="0"
+                                                   linefeed-treatment="preserve">ДИГИТАЛНИ ЗЕЛЕНИ СЕРТИФИКАТ&#xA;</fo:inline>
+                                        <fo:inline font-weight="normal" font-size="13px" margin="0"
+                                                                                   linefeed-treatment="preserve"
+                                                                                   >Потврда o извршеној вакцинацији против&#xA;COVID-19 и резултатима тестирања&#xA;
+                                        </fo:inline>
                             </fo:block>
                             <fo:block font-size="14px" font-weight="bold" font-family="Times" text-align="center"
                                       linefeed-treatment="preserve" margin="0">
                                 DIGITAL GREEN CERTIFICATE&#xA;<fo:inline font-weight="normal" font-size="13px" margin="0"
                                                                          linefeed-treatment="preserve" font-family="Times"
-                                                                         >Certificate of vaccination against
-                                COVID-19&#xA;and test results
+                                                                         >Certificate of vaccination against COVID-19&#xA;and test results
                             </fo:inline>
                             </fo:block>
                         </fo:block-container>
@@ -51,8 +50,10 @@
                         </fo:block-container>
                     </fo:block-container>
                     <fo:block-container margin-top="150px">
-                        <fo:block-container width="50%" position="absolute" left="0in" top="0in" >
-                            <fo:block font-size="11px" font-weight="bold" font-family="Times">Број сертификата /
+                        <fo:block-container width="50%" position="absolute" left="0in" top="0in" font-family="Times" >
+                            <fo:block font-size="11px" font-weight="bold" font-family="Times">
+                                <fo:inline font-weight="normal" font-size="11px" margin="0"
+                                           linefeed-treatment="preserve">Број сертификата /</fo:inline>
                             </fo:block>
                             <fo:block font-size="11px" font-weight="bold" font-family="Times">
                                 Certificate ID:
@@ -62,7 +63,9 @@
                             </fo:block>
                         </fo:block-container>
                         <fo:block-container width="50%" position="absolute" left="50%" top="0in">
-                            <fo:block font-size="11px" font-weight="bold" font-family="Times">Датум и време издавања сертификата /
+                            <fo:block font-size="11px" font-weight="bold" font-family="Times">
+                                <fo:inline font-weight="normal" font-size="11px" margin="0"
+                                           linefeed-treatment="preserve">Датум и време издавања сертификата /</fo:inline>
                             </fo:block>
                             <fo:block font-size="11px" font-weight="bold" font-family="Times">
                                 Certificate issuing date and time:
@@ -74,8 +77,9 @@
                     </fo:block-container>
                     <fo:block-container margin-top="35px">
                         <fo:block-container width="35%"  position="absolute" left="0in" top="0in">
-                            <fo:block font-size="11px" font-weight="bold" font-family="Times">Име и презиме / Name
-                                and surname:
+                            <fo:block font-size="11px" font-weight="bold" font-family="Times">
+                                <fo:inline font-weight="normal" font-size="11px" margin="0"
+                                           linefeed-treatment="preserve">Име и презиме / Name and surname:</fo:inline>
                             </fo:block>
                         </fo:block-container>
                         <fo:block-container width="65%"  position="absolute" left="35%" top="0in">
@@ -88,7 +92,9 @@
                     </fo:block-container>
                     <fo:block-container margin-top="20px">
                         <fo:block-container width="35%" position="absolute" left="0in" top="0in">
-                            <fo:block font-size="11px" font-weight="bold" font-family="Times">Пол / Gender:
+                            <fo:block font-size="11px" font-weight="bold" font-family="Times">
+                                <fo:inline font-weight="normal" font-size="11px" margin="0"
+                                           linefeed-treatment="preserve">Пол / Gender:</fo:inline>
                             </fo:block>
                         </fo:block-container>
                         <fo:block-container width="65%" position="absolute" left="35%" top="0in" >
@@ -101,8 +107,9 @@
                     </fo:block-container>
                     <fo:block-container margin-top="20px">
                         <fo:block-container width="35%" position="absolute" left="0in" top="0in">
-                            <fo:block font-size="11px" font-weight="bold" font-family="Times">Датум рођења / Date
-                                of birth:
+                            <fo:block font-size="11px" font-weight="bold" font-family="Times">
+                                <fo:inline font-weight="normal" font-size="11px" margin="0"
+                                           linefeed-treatment="preserve">Датум рођења / Date of birth:</fo:inline>
                             </fo:block>
                         </fo:block-container>
                         <fo:block-container width="65%" position="absolute" left="35%" top="0in">
@@ -118,7 +125,9 @@
                             <fo:block-container margin-top="20px">
                                 <fo:block-container width="35%" position="absolute"  left="0in" top="0in">
                                     <fo:block font-size="11px" font-weight="bold" font-family="Times"
-                                              border-bottom="1px solid black">ЈМБГ / Personal No. / EBS:
+                                              border-bottom="1px solid black">
+                                        <fo:inline font-weight="normal" font-size="11px" margin="0"
+                                                   linefeed-treatment="preserve">ЈМБГ / Personal No. / EBS:</fo:inline>
                                     </fo:block>
                                 </fo:block-container>
                                 <fo:block-container width="65%" position="absolute"  left="35%" top="0in">
@@ -149,20 +158,29 @@
                             </fo:block-container>
                         </xsl:otherwise>
                     </xsl:choose>
-                    <fo:block font-size="13px" font-weight="bold" text-align="center" font-family="Times"
-                              margin-top="25px">Вакцинација / Vaccination
+                    <fo:block-container font-family="Times">
+                    <fo:block font-size="13px"  text-align="center" font-family="Times"
+                              margin-top="25px">
+                        <fo:inline  font-size="13px" margin="0" font-family="Times"
+                                   linefeed-treatment="preserve">Вакцинација / Vaccination</fo:inline>
                     </fo:block>
+                    </fo:block-container>
                     <fo:block-container font-family="Times" margin-top="10px">
                         <fo:block-container left="0in" position="absolute" top="0in" width="50%">
-                            <fo:block font-weight="bold" font-size="12px" font-family="Times">Доза / Dose: 1 / 2</fo:block>
-                            <fo:block font-weight="bold" font-size="12px" font-family="Times">Тип / Type:</fo:block>
+                            <fo:block  font-size="12px" font-family="Times">
+                                <fo:inline  font-size="12px" margin="0"
+                                           linefeed-treatment="preserve">Доза / Dose: 1 / 2</fo:inline></fo:block>
+                            <fo:block  font-size="12px" font-family="Times">
+                                <fo:inline  font-size="12px" margin="0"
+                                           linefeed-treatment="preserve">Тип / Type:</fo:inline></fo:block>
                             <fo:block padding-top="10px" font-size="12px">
                                 <fo:inline font-weight="normal">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 1]/d:Tip_vakcine)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="11px" font-weight="bold" padding-top="10px" font-family="Times">Произвођач и серија /
-                                Manufacturer and batch number:
+                            <fo:block font-size="11px"  padding-top="10px" font-family="Times">
+                                <fo:inline font-size="12px" margin="0"
+                                           linefeed-treatment="preserve">Произвођач и серија / Manufacturer and batch number:</fo:inline>
                             </fo:block>
                             <fo:block font-size="12px" padding-top="10px">
                                 <fo:inline font-weight="normal" font-family="Times">
@@ -170,14 +188,16 @@
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 1]/d:Serija)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="12px" padding-top="10px" font-weight="bold" font-family="Times">
-                                Датум / Date:
+                            <fo:block font-size="12px" padding-top="10px"  font-family="Times">
+                                <fo:inline  font-size="12px" margin="0"
+                                           linefeed-treatment="preserve">Датум / Date:</fo:inline>
                                 <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 1]/d:Datum)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="11px" font-weight="bold" padding-top="10px" font-family="Times">Здравствена установа /
-                                Health care insitution:
+                            <fo:block font-size="11px"  padding-top="10px" font-family="Times">
+                                <fo:inline  font-size="12px" margin="0"
+                                           linefeed-treatment="preserve">Здравствена установа / Health care insitution:</fo:inline>
                             </fo:block>
                             <fo:block font-size="12px" padding-top="10px" border-bottom="1px solid black" font-family="Times">
                                 <fo:inline font-weight="normal" font-family="Times">
@@ -186,41 +206,47 @@
                             </fo:block>
                         </fo:block-container>
                         <fo:block-container width="50%" left="50%" top="0in" position="absolute">
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
-                                      padding-left="10px">Доза / Dose: 2 / 2
+                            <fo:block font-size="12px"  border-left="1px solid black" font-family="Times"
+                                      padding-left="10px">
+                                <fo:inline font-size="12px" margin="0"
+                                           linefeed-treatment="preserve">Доза / Dose: 2 / 2</fo:inline>
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
-                                      padding-left="10px">Тип / Type:
+                            <fo:block font-size="12px"  border-left="1px solid black" font-family="Times"
+                                      padding-left="10px">
+                                <fo:inline  font-size="12px" margin="0"
+                                           linefeed-treatment="preserve">Тип / Type:</fo:inline>
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
+                            <fo:block font-size="12px"  border-left="1px solid black" font-family="Times"
                                       padding-left="10px" padding-top="10px">
                                 <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Tip_vakcine)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="11px" font-weight="bold" border-left="1px solid black" font-family="Times"
-                                      padding-left="10px" padding-top="10px">Произвођач и серија / Manufacturer and
-                                batch number:
+                            <fo:block font-size="11px"  border-left="1px solid black" font-family="Times"
+                                      padding-left="10px" padding-top="10px">
+                                <fo:inline  font-size="12px" margin="0"
+                                           linefeed-treatment="preserve">Произвођач и серија / Manufacturer and batch number:</fo:inline>
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
+                            <fo:block font-size="12px"  border-left="1px solid black" font-family="Times"
                                       padding-left="10px" padding-top="10px">
                                 <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Proizvodjac)"/>
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Serija)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
+                            <fo:block font-size="12px"  border-left="1px solid black" font-family="Times"
                                       padding-left="10px" padding-top="10px">
                                 Датум / Date:
                                 <fo:inline font-weight="normal">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Datum)"/>
                                 </fo:inline>
                             </fo:block>
-                            <fo:block font-size="11px" font-weight="bold" border-left="1px solid black" font-family="Times"
-                                      padding-left="10px" padding-top="10px">Здравствена установа / Health care
-                                insitution:
+                            <fo:block font-size="11px"  border-left="1px solid black" font-family="Times"
+                                      padding-left="10px" padding-top="10px">
+                                <fo:inline  font-size="12px" margin="0"
+                                           linefeed-treatment="preserve">Здравствена установа / Health care insitution:</fo:inline>
                             </fo:block>
-                            <fo:block font-size="12px" font-weight="bold" border-left="1px solid black" font-family="Times"
+                            <fo:block font-size="12px"  border-left="1px solid black" font-family="Times"
                                       border-bottom="1px solid black" padding-left="10px" padding-top="10px">
                                 <fo:inline font-weight="normal" font-family="Times">
                                     <xsl:value-of select="concat(' ', //d:Vakcinacija/d:Doza[@redni_broj = 2]/d:Zdravstvena_ustanova)"/>
@@ -228,7 +254,7 @@
                             </fo:block>
                         </fo:block-container>
                     </fo:block-container>
-                    <fo:block font-size="10px" font-weight="bold" font-family="Times">
+                    <fo:block font-size="10px"  font-family="Times">
                         <fo:table font-family="Times" margin="173px auto 2px auto" border-bottom="1px solid #e7e9eb">
                             <fo:table-column column-width="33.3%" border="1px solid black"/>
                             <fo:table-column column-width="33.3%" border="1px solid black"/>
@@ -267,7 +293,7 @@
                                         <fo:block>N/A</fo:block>
                                     </fo:table-cell>
                                 </fo:table-row>
-                                <fo:table-row font-weight="bold">
+                                <fo:table-row >
                                     <fo:table-cell padding="2px" font-family="Times">
                                         <fo:block>Произвођач теста / Test manufacturer</fo:block>
                                     </fo:table-cell>
@@ -289,7 +315,7 @@
                                         <fo:block>N/A</fo:block>
                                     </fo:table-cell>
                                 </fo:table-row>
-                                <fo:table-row font-weight="bold">
+                                <fo:table-row >
                                     <fo:table-cell padding="2px" font-family="Times">
                                         <fo:block>Датум и време узорковања / Date and time of sampling</fo:block>
                                     </fo:table-cell>
@@ -311,7 +337,7 @@
                                         <fo:block>N/A</fo:block>
                                     </fo:table-cell>
                                 </fo:table-row>
-                                <fo:table-row font-weight="bold">
+                                <fo:table-row >
                                     <fo:table-cell padding="2px" font-family="Times">
                                         <fo:block>Датум и време издавања резултата / Date and time of result</fo:block>
                                     </fo:table-cell>
@@ -333,7 +359,7 @@
                                         <fo:block>N/A</fo:block>
                                     </fo:table-cell>
                                 </fo:table-row>
-                                <fo:table-row font-weight="bold" background-color="#e7e9eb">
+                                <fo:table-row background-color="#e7e9eb">
                                     <fo:table-cell padding="2px" font-family="Times">
                                         <fo:block>Резултат / Result:</fo:block>
                                     </fo:table-cell>
@@ -355,7 +381,7 @@
                                         <fo:block>N/A</fo:block>
                                     </fo:table-cell>
                                 </fo:table-row>
-                                <fo:table-row font-weight="bold" background-color="#e7e9eb">
+                                <fo:table-row  background-color="#e7e9eb">
                                     <fo:table-cell padding="2px" font-family="Times">
                                         <fo:block>Лабораторија / Laboratoty:</fo:block>
                                     </fo:table-cell>
