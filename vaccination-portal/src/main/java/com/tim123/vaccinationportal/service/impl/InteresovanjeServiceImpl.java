@@ -23,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -105,7 +104,7 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
     }
 
     @Override
-    public int prebrojInteresovanjaZaPeriod(String startDate, String endDate) throws ParseException {
+    public int prebrojInteresovanjaZaPeriod(String startDate, String endDate) {
 
         List<Interesovanje> interesovanja = interesovanjeRepository.findAll();
 
@@ -179,15 +178,27 @@ public class InteresovanjeServiceImpl extends CRUDServiceImpl<Interesovanje> imp
         Interesovanje.Drzavljanstvo drzavljanstvo = new Interesovanje.Drzavljanstvo();
         switch (korisnik.getDrzavljanstvo()) {
             case DRZAVLJANIN_REPUBLIKE_SRBIJE: {
-                drzavljanstvo.setDrzavljaninRepublikeSrbije(new Interesovanje.Drzavljanstvo.DrzavljaninRepublikeSrbije());
+                var d = new Interesovanje.Drzavljanstvo.DrzavljaninRepublikeSrbije();
+                d.setProperty("pred:drzavljanin");
+//                d.setDatatype("http://www.w3.org/2001/XMLSchema#string");
+                d.setValue("Drzavljanin_Republike_Srbije");
+                drzavljanstvo.setDrzavljaninRepublikeSrbije(d);
                 break;
             }
             case STRANI_DRZAVLJANIN_BEZ_BORAVKA_U_RS: {
-                drzavljanstvo.setStraniDrzavljaninBezBoravkaURS(new Interesovanje.Drzavljanstvo.StraniDrzavljaninBezBoravkaURS());
+                var d = new Interesovanje.Drzavljanstvo.StraniDrzavljaninBezBoravkaURS();
+                d.setProperty("pred:drzavljanin");
+//                d.setDatatype("http://www.w3.org/2001/XMLSchema#string");
+                d.setValue("Strani_drzavljanin_bez_boravka_u_RS");
+                drzavljanstvo.setStraniDrzavljaninBezBoravkaURS(d);
                 break;
             }
             case STRANI_DRZAVLJANIN_SA_BORAVKOM_U_RS: {
-                drzavljanstvo.setStraniDrzavljaninSaBoravkomURS(new Interesovanje.Drzavljanstvo.StraniDrzavljaninSaBoravkomURS());
+                var d = new Interesovanje.Drzavljanstvo.StraniDrzavljaninSaBoravkomURS();
+                d.setProperty("pred:drzavljanin");
+//                d.setDatatype("http://www.w3.org/2001/XMLSchema#string");
+                d.setValue("Strani_drzavljanin_sa_boravkom_u_RS");
+                drzavljanstvo.setStraniDrzavljaninSaBoravkomURS(d);
                 break;
             }
         }

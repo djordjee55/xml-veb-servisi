@@ -9,10 +9,7 @@ import com.tim123.vaccinationportal.model.potvrda.Potvrda;
 import com.tim123.vaccinationportal.model.saglasnost.Saglasnost;
 import com.tim123.vaccinationportal.model.zahtev.Zahtev;
 import com.tim123.vaccinationportal.repository.KorisnikRepository;
-import com.tim123.vaccinationportal.service.InteresovanjeService;
-import com.tim123.vaccinationportal.service.PotvrdaService;
-import com.tim123.vaccinationportal.service.SaglasnostService;
-import com.tim123.vaccinationportal.service.ZahtevService;
+import com.tim123.vaccinationportal.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +27,7 @@ public class DokumentaService {
     private final PotvrdaService potvrdaService;
     private final RestTemplate restTemplate;
     private final KorisnikRepository korisnikRepository;
+    private final KorisnikService korisnikService;
 
     public ListaDokumenata mojaDokumenta(String email) {
         ListaDokumenata listaDokumenata = new ListaDokumenata(new ArrayList<>());
@@ -69,7 +67,7 @@ public class DokumentaService {
 
     public ListaDokumenata korisnikovaDokumenta(String id) {
         Zahtev zahtev = zahtevService.dobaviZahtev(id);
-        Korisnik korisnik = korisnikRepository.findByJMBGorPassport(zahtev.getPodnosilac().getJMBG().getValue(),
+        Korisnik korisnik = korisnikService.findByDocumentId(zahtev.getPodnosilac().getJMBG().getValue(),
                 zahtev.getPodnosilac().getBrojPasosa().getValue());
 
         return mojaDokumenta(korisnik.getEmail());

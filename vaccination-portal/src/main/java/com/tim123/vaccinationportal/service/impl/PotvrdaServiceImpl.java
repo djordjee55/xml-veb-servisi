@@ -9,6 +9,7 @@ import com.tim123.vaccinationportal.model.tipovi.*;
 import com.tim123.vaccinationportal.repository.CRUDRepository;
 import com.tim123.vaccinationportal.repository.PotvrdaRepository;
 import com.tim123.vaccinationportal.service.PotvrdaService;
+import com.tim123.vaccinationportal.service.RDFService;
 import com.tim123.vaccinationportal.service.SaglasnostService;
 import com.tim123.vaccinationportal.util.HTMLTransformer;
 import com.tim123.vaccinationportal.util.PDFTransformer;
@@ -23,12 +24,12 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.tim123.vaccinationportal.util.Constants.potvrdaPath;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,7 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
     private final HTMLTransformer htmlTransformer;
     private final MarshallUnmarshallServiceImpl<Potvrda> marshallUnmarshallService;
     private final SearchUtil searchUtil;
+    private final RDFService rdfService;
 
     @Override
     public Potvrda save(Potvrda entity) throws Exception {
@@ -104,7 +106,7 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
             gc.setTime(new Date());
             XMLGregorianCalendar xmlgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
             danasnjiDatum.setValue(xmlgc);
-            danasnjiDatum.setDatatype("xs:date");
+            danasnjiDatum.setDatatype("http://www.w3.org/2001/XMLSchema#date");
             danasnjiDatum.setProperty("pred:datumIzdavanja");
         } catch (Exception e) {
             return null;
@@ -117,8 +119,8 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
         pacijent.setPrezime(saglasnost.getPacijent().getPrezime());
         pacijent.setDatumRodjenja(saglasnost.getPacijent().getDatumRodjenja());
         pacijent.setPol(saglasnost.getPacijent().getPol());
-        //if(saglasnost.getPacijent().getDrzavljanstvo().getJMBG() == null)
-            //pacijent.setJMBG(saglasnost.getPacijent().getDrzavljanstvo().getBrojPasosa());
+        // if(saglasnost.getPacijent().getDrzavljanstvo().getJMBG() == null)
+        // pacijent.setJMBG(saglasnost.getPacijent().getDrzavljanstvo().getBrojPasosa());
         pacijent.setJMBG(saglasnost.getPacijent().getDrzavljanstvo().getJMBG());
 
         //Doze vakcinacije
@@ -154,6 +156,7 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
         else return null;
         try {
             potvrda = potvrdaRepository.save(potvrda);
+            rdfService.extractMetadata(potvrda, Potvrda.class, potvrdaPath);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nije moguce sacuvati potvrdu");
         }
@@ -166,20 +169,18 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
 
         TDatumVakcinacije vacDatum = new TDatumVakcinacije();
         vacDatum.setValue(tvakc.getDatumDavanja());
-        vacDatum.setDatatype("xs:date");
-        vacDatum.setProperty("pred:datumIzdavanja");
+        vacDatum.setDatatype("http://www.w3.org/2001/XMLSchema#date");
+        vacDatum.setProperty("pred:datumVakcinisanja");
 
         TCRedniBrojVakcine redniBrojVakcine = new TCRedniBrojVakcine();
         redniBrojVakcine.setProperty("pred:brojVakcine");
         redniBrojVakcine.setValue(BigInteger.valueOf(redniBroj));
-        redniBrojVakcine.setDatatype("xs:positiveInteger");
-
+        redniBrojVakcine.setDatatype("http://www.w3.org/2001/XMLSchema#positiveInteger");
 
         TCVakcina tipVakcine = new TCVakcina();
         tipVakcine.setProperty("pred:nazivVakcine");
-        tipVakcine.setDatatype("xs:string");
+        tipVakcine.setDatatype("http://www.w3.org/2001/XMLSchema#string");
         tipVakcine.setValue(com.tim123.vaccinationportal.model.tipovi.TVakcina.fromVakcinaString(tvakc.getNaziv()));
-
 
         doza.setDatumDavanja(vacDatum);
         doza.setRedniBroj(redniBrojVakcine);
@@ -203,7 +204,7 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
     }
 
     @Override
-    public Integer countDosesByNo(String startDate, String endDate, int numberOfDose) throws ParseException {
+    public Integer countDosesByNo(String startDate, String endDate, int numberOfDose) {
 
         List<Potvrda> potvrde = potvrdaRepository.findAll();
 
@@ -225,7 +226,7 @@ public class PotvrdaServiceImpl extends CRUDServiceImpl<Potvrda> implements Potv
     }
 
     @Override
-    public Integer countDosesByManufacturer(String startDate, String endDate, String manufacturer) throws ParseException {
+    public Integer countDosesByManufacturer(String startDate, String endDate, String manufacturer) {
 
         List<Potvrda> potvrde = potvrdaRepository.findAll();
 

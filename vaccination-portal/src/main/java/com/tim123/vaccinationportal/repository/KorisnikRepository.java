@@ -110,7 +110,7 @@ public class KorisnikRepository implements CRUDRepository<Korisnik> {
                     "//Korisnik", "");
             resultSet = converterService.convert(result, Korisnik.class);
 
-            resultSet = resultSet.stream().filter(korisnik -> korisnik.getPasos() == pasos || korisnik.getJmbg().equals(jmbg)).collect(Collectors.toList());
+            resultSet = resultSet.stream().filter(korisnik -> korisnik.getPasos().equals(pasos) || korisnik.getJmbg().equals(jmbg)).collect(Collectors.toList());
 
             if (resultSet.isEmpty())
                 return null;

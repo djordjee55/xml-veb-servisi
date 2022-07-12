@@ -102,9 +102,9 @@ public class DataLoader implements CommandLineRunner {
 
 
         Saglasnost saglasnost = saglasnostmarshallUnmarshallService.unmarshall(saglasnostString, Saglasnost.class);
-        saglasnostRepository.save(saglasnost);
+        // saglasnostRepository.save(saglasnost);
         Saglasnost saglasnost2 = saglasnostmarshallUnmarshallService.unmarshall(saglasnostString2, Saglasnost.class);
-        saglasnostRepository.save(saglasnost2);
+        // saglasnostRepository.save(saglasnost2);
 
 
         String interesovanjeString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +

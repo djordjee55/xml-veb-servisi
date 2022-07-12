@@ -13,6 +13,7 @@ import com.tim123.vaccinationmain.repository.CRUDRepository;
 import com.tim123.vaccinationmain.repository.SertifikatRepository;
 import com.tim123.vaccinationmain.service.KorisnikService;
 import com.tim123.vaccinationmain.service.MarshallUnmarshallService;
+import com.tim123.vaccinationmain.service.RDFService;
 import com.tim123.vaccinationmain.service.SertifikatService;
 import com.tim123.vaccinationmain.util.HTMLTransformer;
 import com.tim123.vaccinationmain.util.PDFTransformer;
@@ -35,6 +36,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.tim123.vaccinationmain.util.Constants.sertifikatBase;
+import static com.tim123.vaccinationmain.util.Constants.sertifikatPath;
 import static com.tim123.vaccinationmain.util.QRUtil.getQRImage;
 
 @Service
@@ -48,6 +50,7 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
     private final HTMLTransformer htmlTransformer;
     private final SearchUtil searchUtil;
     private final KorisnikService korisnikService;
+    private final RDFService rdfService;
 
     @Override
     protected CRUDRepository<Sertifikat> getRepository() {
@@ -84,7 +87,7 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
         var about = String.format("%s#%s", sertifikatBase, broj);
         var dv = Sertifikat.DatumVreme.builder()
                 .value(CalendarUtil.toXmlGregorianCalendar(System.currentTimeMillis()))
-                .property("http://www.xws.org/vacc/#datumIzdavanja")
+                .property("pred:datumIzdavanja")
                 .datatype("http://www.w3.org/2001/XMLSchema#date")
                 .build();
         var QRPath = String.format("http://localhost:8081/api/sertifikat/pdf/%s", broj);
@@ -102,10 +105,10 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
         Korisnik korisnik = korisnikService.dobaviKorisika(jmbg.getValue(), pasos.getValue());
 
         jmbg.setHref("http://www.xws.org/korisnici#" + korisnik.getId());
-        jmbg.setRel("http://www.xws.org/vacc/#identifikatorKorisnika");
+        jmbg.setRel("pred:identifikatorKorisnika");
 
         pasos.setHref("http://www.xws.org/korisnici#" + korisnik.getId());
-        pasos.setRel("http://www.xws.org/vacc/#identifikatorKorisnika");
+        pasos.setRel("pred:identifikatorKorisnika");
 
         podnosilac.setJMBG(jmbg);
         podnosilac.setBrojPasosa(pasos);
@@ -117,9 +120,11 @@ public class SertifikatServiceImpl extends CRUDServiceImpl<Sertifikat> implement
                 .qrKod(QRImage)
                 .vakcinacija(convertVakcinacija(vakcinacija))
                 .testovi(testovi)
+                .pred("http://www.xws.org/vacc/#")
                 .build();
         try {
             sertifikatRepository.save(sertifikat);
+            rdfService.extractMetadata(sertifikat, Sertifikat.class, sertifikatPath);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nije moguce sacuvati sertifikat");
         }
